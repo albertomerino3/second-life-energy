@@ -1,69 +1,41 @@
-import { Bicycle } from "./user.model.js";
-import { Brand } from "../resources/resource.model.js"
-import { BicycleDetail } from "../articles/article.model.js";
-import { FindOptions } from "sequelize";
+import { User } from "./user.model.js";
 
-export class BicycleService {
+export class UserService {
     static async findAll() {
-        return Bicycle.findAll({
+        return User.findAll({
+            attributes: { exclude: ["passwordHash"] },
             order: [["id", "ASC"]],
         });
     }
-    
-    static async findEagerlyById(id: number) {
-        return Bicycle.findByPk(id, {
-            include: [
-                {
-                    model: Brand,
-                    as: 'brand'
-                }
-            ]
+
+    static async findById(id: number) {
+        return User.findByPk(id, {
+            attributes: { exclude: ["passwordHash"] },
         });
     }
 
-    static async findAllEagerlyByFrameMaterial(frameMaterial: string) {
-        return Bicycle.findAll({
-            include: [
-                {
-                    model: BicycleDetail,
-                    as: 'detail',
-                    where: {
-                        frameMaterial
-                    }
-                }
-            ],
-            order: [["id", "ASC"]]
-        });
-    }
-
-    static async findById(id: number, options?: FindOptions) {
-        return Bicycle.findByPk(id, options);
-    }
-    
     static async create(data: {
-        brandId: number;
-        model: string;
-        description?: string | null;
-        price: number;
-        stock: number;
+        name: string;
+        email: string;
+        passwordHash: string;
+        isActive?: boolean;
     }) {
-        return Bicycle.create(data);
+        return User.create(data);
     }
-    
+
     static async update(
-        bicycle: Bicycle,
+        user: User,
         data: {
-            brandId?: number;
-            model?: string;
-            description?: string | null;
-            price?: number;
-            stock?: number;
+            name?: string;
+            email?: string;
+            passwordHash?: string;
+            isActive?: boolean;
         }
     ) {
-        return bicycle.update(data);
+        return user.update(data);
     }
-    
-    static async delete(bicycle: Bicycle) {
-        await bicycle.destroy();
+
+    static async delete(user: User) {
+        await user.destroy();
     }
 }

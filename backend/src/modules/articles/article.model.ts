@@ -8,51 +8,68 @@ import {
 
 import { sequelize } from "../../config/database.js";
 
-export class BicycleDetail extends Model<
-    InferAttributes<BicycleDetail>,
-    InferCreationAttributes<BicycleDetail>
+export class Article extends Model<
+    InferAttributes<Article>,
+    InferCreationAttributes<Article>
 > {
     declare id: CreationOptional<number>;
-    declare bicycleId: number;
-    declare frameMaterial: "Aluminum" | "Carbon" | "Steel" | "Titanium";
-    declare wheelSize: number;
-    declare weight: number;
-    declare suspension: CreationOptional<string | null>;
+    declare categoryId: number;
+    declare createdById: number;
+    declare name: string;
+    declare description: string;
+    declare type: string;
+    declare specifications: string;
+    declare stock: number;
+    declare status: string;
     declare createdAt: CreationOptional<Date>;
     declare updatedAt: CreationOptional<Date>;
 }
-BicycleDetail.init(
+Article.init(
     {
         id: {
             type: DataTypes.INTEGER.UNSIGNED,
             autoIncrement: true,
             primaryKey: true,
         },
-        bicycleId: {
+        categoryId: {
             type: DataTypes.INTEGER.UNSIGNED,
             allowNull: false,
         },
-        frameMaterial: {
-            type: DataTypes.ENUM("Aluminum", "Carbon", "Steel", "Titanium")
-        },
-        wheelSize: {
-            type: DataTypes.DECIMAL(4, 1),
+        createdById: {
+            type: DataTypes.INTEGER.UNSIGNED,
             allowNull: false,
         },
-        weight: {
-            type: DataTypes.DECIMAL(5, 2)
+        name: {
+            type: DataTypes.STRING(150),
+            allowNull: false,
         },
-        suspension: {
-            type: DataTypes.STRING(80),
-            allowNull: true,
+        description: {
+            type: DataTypes.STRING(150),
+            allowNull: false,
+        },
+        type: {
+            type: DataTypes.STRING(150),
+            allowNull: false,
+        },
+        specifications: {
+            type: DataTypes.STRING(150),
+            allowNull: false,
+        },
+        stock: {
+            type: DataTypes.INTEGER.UNSIGNED,
+            allowNull: false,
+        },
+        status: {
+            type: DataTypes.STRING(150),
+            allowNull: false,
         },
         createdAt: DataTypes.DATE,
         updatedAt: DataTypes.DATE,
     },
     {
         sequelize,
-        tableName: "bicycle-details",
-        modelName: "BicycleDetail",
+        tableName: "articles",
+        modelName: "Article",
         timestamps: true,
     }
 );
