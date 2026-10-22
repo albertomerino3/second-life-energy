@@ -1,113 +1,90 @@
 import { Request, Response, NextFunction } from "express";
-import { BicycleService } from "./user.service.js";
+import { UserService } from "./user.service.js";
 
-export class BicycleController {
-    
+export class UserController {
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const bicycles = await BicycleService.findAll();
-            res.json(bicycles);
+            const users = await UserService.findAll();
+            res.json(users);
         } catch (error) {
             next(error);
         }
     }
-    
+
     static async getById(req: Request, res: Response, next: NextFunction) {
         try {
             const id = Number(req.params.id);
-            const bicycles = await BicycleService.findById(id);
-            if (!bicycles) {
+            const user = await UserService.findById(id);
+            if (!user) {
                 res.status(404).json({
-                    message: "Bicycle not found",
+                    message: "User not found",
                 });
                 return;
             }
-            res.json(bicycles);
+            res.json(user);
         } catch (error) {
             next(error);
         }
     }
 
-    static async getAllEagerlyByFrameMaterial(req: Request, res: Response, next: NextFunction) {
-        try {
-            const frameMaterial = String(req.params.frameMaterial);
-            const bicycles = await BicycleService.findAllEagerlyByFrameMaterial(frameMaterial);
-
-            res.json(bicycles);
-        } catch (error) {
-            next(error);
-        }
-    }
-
-    static async getEagerlyById(req: Request, res: Response, next: NextFunction) {
-        try {
-            const id = Number(req.params.id);
-            const bicycles = await BicycleService.findEagerlyById(id);
-            if (!bicycles) {
-                res.status(404).json({
-                    message: "Bicycle not found",
-                });
-                return;
-            }
-            res.json(bicycles);
-        } catch (error) {
-            next(error);
-        }
-    }
-    
     static async create(req: Request, res: Response, next: NextFunction) {
         try {
-            const { brandId, model, description, price, stock } = req.body;
-            if (!brandId || !model || price === undefined) {
+            const { name, email, passwordHash, isActive } = req.body;
+            if (!name || !email || !passwordHash) {
                 res.status(400).json({
-                    message: "Brand, model and price are required",
+                    message: "Name, email and passwordHash are required",
                 });
                 return;
             }
-            const bicycles = await BicycleService.create({
-                brandId,
-                model,
-                description,
-                price,
-                stock,
+            if (isActive !== undefined && typeof isActive !== "boolean") {
+                res.status(400).json({
+                    message: "isActive must be a boolean",
+                });
+                return;
+            }
+            const user = await UserService.create({
+                name, 
+                email, 
+                passwordHash, 
+                isActive,
             });
-            res.status(201).json(bicycles);
+            res.status(201).json(user);
         } catch (error) {
             next(error);
         }
     }
-    
+
     static async update(req: Request, res: Response, next: NextFunction) {
         try {
             const id = Number(req.params.id);
-            const bicycles = await BicycleService.findById(id);
-            if (!bicycles) {
+            const user = await UserService.findById(id);
+            if (!user) {
                 res.status(404).json({
-                    message: "Bicycle not found",
+                    message: "User not found",
                 });
                 return;
             }
-            const updatedBicycle = await BicycleService.update(
-                bicycles,
+            const updatedUser = await UserService.update(
+                user,
                 req.body
             );
-            res.json(updatedBicycle);
+            res.json(updatedUser);
         } catch (error) {
             next(error);
         }
     }
-    
+
     static async delete(req: Request, res: Response, next: NextFunction) {
         try {
             const id = Number(req.params.id);
-            const bicycles = await BicycleService.findById(id);
-            if (!bicycles) {
+            const user = await UserService.findById(id);
+            if (!user) {
                 res.status(404).json({
-                    message: "Bicycle not found",
+                    message: "User not found",
                 });
                 return;
             }
-            await BicycleService.delete(bicycles);
+            await UserService.delete(user);
             res.status(204).send();
         } catch (error) {
             next(error);

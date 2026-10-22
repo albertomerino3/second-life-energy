@@ -1,5 +1,5 @@
 import express from "express";
-import apiRouter from "./routes";
+import apiRouter from "./routes/index.js";
 import { notFoundMiddleware } from "./middlewares/not-found.middleware.js";
 import { errorMiddleware } from "./middlewares/error.middleware.js";
 

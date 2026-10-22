@@ -1,12 +1,18 @@
 import { Router } from "express";
-import bicycleRoutes from "../modules/users/user.routes.js";
-import brandRoutes from "../modules/resources/resource.routes.js";
-import bicycleDetailRoutes from "../modules/articles/article.routes.js";
+import articleRoutes from "../modules/articles/article.routes.js";
+import auditLogRoutes from "../modules/audit-logs/audit-log.routes.js";
+import invitationRoutes from "../modules/invitations/invitation.routes.js";
+import resourceRoutes from "../modules/resources/resource.routes.js";
+import simulationRoutes from "../modules/simulations/simulation.routes.js";
+import userRoutes from "../modules/users/user.routes.js";
 
 const router = Router();
 
-router.use("/bicycles", bicycleRoutes);
-router.use("/brands", brandRoutes);
-router.use("/bicycle-details", bicycleDetailRoutes);
+router.use("/articles", articleRoutes);
+router.use("/audit-logs", auditLogRoutes);
+router.use("/invitations", invitationRoutes);
+router.use("/resources", resourceRoutes);
+router.use("/simulations", simulationRoutes);
+router.use("/users", userRoutes);
 
 export default router;

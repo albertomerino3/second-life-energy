@@ -1,86 +1,88 @@
 import { Request, Response, NextFunction } from "express";
-import { BicycleDetailService } from "./article.service.js";
+import { ArticleService } from "./article.service.js";
 
-export class BicycleDetailController {
-    
+export class ArticleController {
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const bicycleDetail = await BicycleDetailService.findAll();
-            res.json(bicycleDetail);
+            const articles = await ArticleService.findAll();
+            res.json(articles);
         } catch (error) {
             next(error);
         }
     }
-    
+
     static async getById(req: Request, res: Response, next: NextFunction) {
         try {
             const id = Number(req.params.id);
-            const bicycleDetail = await BicycleDetailService.findById(id);
-            if (!bicycleDetail) {
+            const article = await ArticleService.findById(id);
+            if (!article) {
                 res.status(404).json({
-                    message: "Bicycle details not found",
+                    message: "Article not found",
                 });
                 return;
             }
-            res.json(bicycleDetail);
+            res.json(article);
         } catch (error) {
             next(error);
         }
     }
-    
+
     static async create(req: Request, res: Response, next: NextFunction) {
-            try {
-                const { bicycleId, frameMaterial, wheelSize, weight, suspension } = req.body;
-                if (bicycleId === undefined || !frameMaterial || wheelSize === undefined || weight === undefined) {
-                    res.status(400).json({
-                        message: "Bicycle ID, frame material and wheel size are required",
-                    });
-                    return;
-                }
-                const bicycleDetail = await BicycleDetailService.create({
-                    bicycleId,
-                    frameMaterial,
-                    wheelSize,
-                    weight,
-                    suspension,
+        try {
+            const { categoryId, createdById, name, description, type, specifications, stock, status } = req.body;
+            if (!categoryId || !createdById || !name || !description || !type || !specifications || stock === undefined || !status ) {
+                res.status(400).json({
+                    message: "CategoryId, createdById, name, description, type, specifications, stock and status are required",
                 });
-                res.status(201).json(bicycleDetail);
-            } catch (error) {
-                next(error);
+                return;
             }
+            const article = await ArticleService.create({
+                categoryId, 
+                createdById, 
+                name, 
+                description, 
+                type, 
+                specifications, 
+                stock, 
+                status,
+            });
+            res.status(201).json(article);
+        } catch (error) {
+            next(error);
         }
-    
+    }
+
     static async update(req: Request, res: Response, next: NextFunction) {
         try {
             const id = Number(req.params.id);
-            const bicycleDetail = await BicycleDetailService.findById(id);
-            if (!bicycleDetail) {
+            const article = await ArticleService.findById(id);
+            if (!article) {
                 res.status(404).json({
-                    message: "Bicycle details not found",
+                    message: "Article not found",
                 });
                 return;
             }
-            const updatedBicycleDetail = await BicycleDetailService.update(
-                bicycleDetail,
+            const updatedArticle = await ArticleService.update(
+                article,
                 req.body
             );
-            res.json(updatedBicycleDetail);
+            res.json(updatedArticle);
         } catch (error) {
             next(error);
         }
     }
-    
+
     static async delete(req: Request, res: Response, next: NextFunction) {
         try {
             const id = Number(req.params.id);
-            const bicycleDetail = await BicycleDetailService.findById(id);
-            if (!bicycleDetail) {
+            const article = await ArticleService.findById(id);
+            if (!article) {
                 res.status(404).json({
-                    message: "Bicycle details not found",
+                    message: "Article not found",
                 });
                 return;
             }
-            await BicycleDetailService.delete(bicycleDetail);
+            await ArticleService.delete(article);
             res.status(204).send();
         } catch (error) {
             next(error);
