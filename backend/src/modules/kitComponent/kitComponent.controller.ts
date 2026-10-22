@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { KitComponentService } from "./kitComponent.service.js";
 import { KitComponent } from "./kitComponent.model.js";
 
-export class RequestItemController {
+export class KitComponentController {
 
 
     static async getAll(req: Request, res: Response, next: NextFunction) {

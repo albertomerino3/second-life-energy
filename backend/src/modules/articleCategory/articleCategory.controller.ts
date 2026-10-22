@@ -18,7 +18,7 @@ export class ArticleCategoryController {
 
         try{
             const id = Number(req.params.id);
-            const articleCategory = await ArticleCategory.findById(id);
+            const articleCategory = await ArticleCategoryService.findById(id);
 
             if (!articleCategory) {
                 res.status(404).json({
@@ -37,15 +37,15 @@ export class ArticleCategoryController {
     static async create(req: Request, res: Response, next: NextFunction) {
 
         try{
-            const { kitId, componentId, quantity} = req.body;
+            const { name, description, parentCategoryId} = req.body;
         
-        const kitComponent = await KitComponentService.create({
-            kitId,
-            componentId,
-            quantity,
+        const articleCategory = await ArticleCategoryService.create({
+            name,
+            description,
+            parentCategoryId,
         });
         
-        res.status(201).json(kitComponent);
+        res.status(201).json(articleCategory);
 
         } catch (error) {
             next(error);
@@ -57,21 +57,21 @@ export class ArticleCategoryController {
         try{
             const id = Number(req.params.id);
 
-            const kitComponent = await KitComponentService.findById(id);
+            const articleCategory = await ArticleCategoryService.findById(id);
 
-            if (!kitComponent) {
+            if (!articleCategory) {
                 res.status(404).json({
-                    message: "Kit Component NOT FOUND",
+                    message: "Article Category NOT FOUND",
                 });
                 return;
             }
 
-            const updateKitComponent = await KitComponentService.update(
-                kitComponent,
+            const updateArticleCategory = await ArticleCategoryService.update(
+                articleCategory,
                 req.body
             );
 
-            res.json(updateKitComponent);
+            res.json(updateArticleCategory);
         } catch (error) {
             next(error);
         }
@@ -82,16 +82,16 @@ export class ArticleCategoryController {
         try {
             const id = Number(req.params.id);
 
-            const kitComponent = await KitComponentService.findById(id);
+            const articleCategory = await ArticleCategoryService.findById(id);
 
-            if (!kitComponent) {
+            if (!articleCategory) {
                 res.status(404).json({
-                    message: "Kit Component not found :(",
+                    message: "Article Category not found :(",
                 });
                 return;
             }
 
-            await KitComponentService.delete(kitComponent);
+            await ArticleCategoryService.delete(articleCategory);
 
             res.status(204).send();
         } catch (error) {
