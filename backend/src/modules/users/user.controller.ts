@@ -46,7 +46,7 @@ export class UserController {
                 name, 
                 email, 
                 passwordHash, 
-                isActive
+                isActive,
             });
             res.status(201).json(user);
         } catch (error) {

@@ -29,10 +29,10 @@ export class InvitationController {
     
     static async create(req: Request, res: Response, next: NextFunction) {
             try {
-                const { invitedById, roleId, email, tokenHash, expiresAt } = req.body;
-                if (invitedById === undefined || roleId === undefined || !email || !tokenHash) {
+                const { invitedById, roleId, email, tokenHash, expiresAt, usedAt } = req.body;
+                if (invitedById === undefined || roleId === undefined || !email || !tokenHash || !expiresAt) {
                     res.status(400).json({
-                        message: "InvitedByID, roleId, email and tokenHash are required",
+                        message: "InvitedByID, roleId, email, tokenHash and expiresAt are required",
                     });
                     return;
                 }
@@ -41,7 +41,8 @@ export class InvitationController {
                     roleId, 
                     email, 
                     tokenHash, 
-                    expiresAt
+                    expiresAt,
+                    usedAt,
                 });
                 res.status(201).json(invitation);
             } catch (error) {

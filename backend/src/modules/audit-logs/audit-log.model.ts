@@ -13,12 +13,12 @@ export class AuditLog extends Model<
     InferCreationAttributes<AuditLog>
 > {
     declare id: CreationOptional<number>;
-    declare userId: number;
+    declare userId: CreationOptional<number> | null;
     declare entity: string;
     declare entityId: number;
     declare action: string;
-    declare previousValues: object | null;;
-    declare newValues: object | null;;
+    declare previousValues: object | null;
+    declare newValues: object | null;
     declare createdAt: CreationOptional<Date>;
 }
 AuditLog.init(
@@ -30,7 +30,11 @@ AuditLog.init(
         },
         userId: {
             type: DataTypes.INTEGER.UNSIGNED,
-            allowNull: false,
+            allowNull: true,
+            references: {
+                model: "users",
+                key: "id",
+            },
         },
         entity: {
             type: DataTypes.STRING(150),
@@ -56,8 +60,10 @@ AuditLog.init(
     },
     {
         sequelize,
-        tableName: "audit-logs",
+        tableName: "audit_logs",
         modelName: "AuditLog",
         timestamps: true,
+        createdAt: "createdAt",
+        updatedAt: false,
     }
 );

@@ -34,17 +34,25 @@ Article.init(
         categoryId: {
             type: DataTypes.INTEGER.UNSIGNED,
             allowNull: false,
+            references: {
+                model: "article_categories",
+                key: "id",
+            },
         },
         createdById: {
             type: DataTypes.INTEGER.UNSIGNED,
             allowNull: false,
+            references: {
+                model: "users",
+                key: "id",
+            },
         },
         name: {
             type: DataTypes.STRING(150),
             allowNull: false,
         },
         description: {
-            type: DataTypes.STRING(150),
+            type: DataTypes.TEXT,
             allowNull: false,
         },
         type: {
@@ -52,7 +60,7 @@ Article.init(
             allowNull: false,
         },
         specifications: {
-            type: DataTypes.STRING(150),
+            type: DataTypes.TEXT,
             allowNull: false,
         },
         stock: {

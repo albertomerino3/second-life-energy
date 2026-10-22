@@ -17,6 +17,7 @@ export class InvitationService {
         email: string;
         tokenHash: string;
         expiresAt: Date;
+        usedAt?: Date | null;
     }) {
         return Invitation.create(data);
     }
@@ -29,6 +30,7 @@ export class InvitationService {
             email?: string;
             tokenHash?: string;
             expiresAt?: Date;
+            usedAt?: Date | null;
         }
     ) {
         return invitation.update(data);

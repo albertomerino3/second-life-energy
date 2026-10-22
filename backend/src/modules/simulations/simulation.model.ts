@@ -32,7 +32,7 @@ Simulation.init(
             allowNull: false,
         },
         description: {
-            type: DataTypes.STRING(150),
+            type: DataTypes.TEXT,
             allowNull: false,
         },
         platform: {
@@ -40,15 +40,15 @@ Simulation.init(
             allowNull: false,
         },
         url: {
-            type: DataTypes.STRING(150),
+            type: DataTypes.STRING(500),
             allowNull: false,
         },
         objectives: {
-            type: DataTypes.STRING(150),
+            type: DataTypes.TEXT,
             allowNull: false,
         },
         materials: {
-            type: DataTypes.STRING(150),
+            type: DataTypes.TEXT,
             allowNull: false,
         },
     },
@@ -56,6 +56,6 @@ Simulation.init(
         sequelize,
         tableName: "simulations",
         modelName: "Simulation",
-        timestamps: true,
+        timestamps: false,
     }
 );

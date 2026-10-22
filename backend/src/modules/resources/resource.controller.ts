@@ -29,7 +29,7 @@ export class ResourceController {
 
     static async create(req: Request, res: Response, next: NextFunction) {
         try {
-            const { authorId, title, description, type, topic, difficulty, url, status } = req.body;
+            const { authorId, title, description, type, topic, difficulty, url, status, publishedAt } = req.body;
             if (!authorId || !title || !description || !type || !topic || !difficulty || !url || !status ) {
                 res.status(400).json({
                     message: "AuthorId, title, description, type, topic, difficulty, url and status are required",
@@ -44,7 +44,8 @@ export class ResourceController {
                 topic, 
                 difficulty, 
                 url, 
-                status
+                status,
+                publishedAt
             });
             res.status(201).json(resource);
         } catch (error) {

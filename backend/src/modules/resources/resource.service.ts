@@ -20,6 +20,7 @@ export class ResourceService {
         difficulty: string;
         url: string;
         status: string;
+        publishedAt?: Date | null;
     }) {
         return Resource.create(data);
     }
@@ -35,6 +36,7 @@ export class ResourceService {
             difficulty?: string;
             url?: string;
             status?: string;
+            publishedAt?: Date | null;
         }
     ) {
         return resource.update(data);

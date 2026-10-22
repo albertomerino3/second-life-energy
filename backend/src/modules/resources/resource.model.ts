@@ -21,7 +21,7 @@ export class Resource extends Model<
     declare difficulty: string;
     declare url: string;
     declare status: string;
-    declare publishedAt: CreationOptional<Date>;
+    declare publishedAt: CreationOptional<Date> | null;
     declare createdAt: CreationOptional<Date>;
 }
 Resource.init(
@@ -34,13 +34,17 @@ Resource.init(
         authorId: {
             type: DataTypes.INTEGER.UNSIGNED,
             allowNull: false,
+            references: {
+                model: "users",
+                key: "id",
+            },
         },
         title: {
             type: DataTypes.STRING(150),
             allowNull: false,
         },
         description: {
-            type: DataTypes.STRING(150),
+            type: DataTypes.TEXT,
             allowNull: false,
         },
         type: {
@@ -56,20 +60,25 @@ Resource.init(
             allowNull: false,
         },
         url: {
-            type: DataTypes.STRING(150),
+            type: DataTypes.STRING(500),
             allowNull: false,
         },
         status: {
             type: DataTypes.STRING(150),
             allowNull: false,
         },
-        publishedAt: DataTypes.DATE,
+        publishedAt: {
+            type: DataTypes.DATE,
+            allowNull: true,
+        },
         createdAt: DataTypes.DATE,
     },
     {
         sequelize,
-        tableName: "resoruces",
+        tableName: "resources",
         modelName: "Resource",
         timestamps: true,
+        createdAt: "createdAt",
+        updatedAt: false,
     }
 );

@@ -30,7 +30,7 @@ export class ArticleController {
     static async create(req: Request, res: Response, next: NextFunction) {
         try {
             const { categoryId, createdById, name, description, type, specifications, stock, status } = req.body;
-            if (!categoryId || !createdById || !name || !description || !type || !specifications || !stock || !status ) {
+            if (!categoryId || !createdById || !name || !description || !type || !specifications || stock === undefined || !status ) {
                 res.status(400).json({
                     message: "CategoryId, createdById, name, description, type, specifications, stock and status are required",
                 });
@@ -44,7 +44,7 @@ export class ArticleController {
                 type, 
                 specifications, 
                 stock, 
-                status
+                status,
             });
             res.status(201).json(article);
         } catch (error) {

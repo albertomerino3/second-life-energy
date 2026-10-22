@@ -37,7 +37,7 @@ User.init(
             unique: true,
         },
         passwordHash: {
-            type: DataTypes.STRING(225),
+            type: DataTypes.STRING(255),
             allowNull: false,
         },
         isActive: {
@@ -51,7 +51,7 @@ User.init(
     {
         sequelize,
         tableName: "users",
-        modelName: "user",
+        modelName: "User",
         timestamps: true,
     }
 );

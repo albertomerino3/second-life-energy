@@ -12,15 +12,16 @@ export class AuditLogService {
     }
 
     static async create(data: {
-        userId: number;
+        userId?: number | null;
         entity: string;
         entityId: number;
         action: string;
         previousValues?: object | null;
-        newValues: object | null;
+        newValues?: object | null;
     }) {
         return AuditLog.create({
             ...data,
+            userId: data.userId ?? null,
             previousValues: data.previousValues ?? null,
             newValues: data.newValues ?? null,
         });

@@ -20,7 +20,9 @@ export class UserService {
         passwordHash: string;
         isActive?: boolean;
     }) {
-        return User.create(data);
+        const user = await User.create(data);
+        const { passwordHash, ...safeUser } = user.toJSON();
+        return safeUser;
     }
 
     static async update(
@@ -32,7 +34,9 @@ export class UserService {
             isActive?: boolean;
         }
     ) {
-        return user.update(data);
+        const updatedUser = await user.update(data);
+        const { passwordHash, ...safeUser } = updatedUser.toJSON();
+        return safeUser;
     }
 
     static async delete(user: User) {

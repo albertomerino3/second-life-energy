@@ -30,9 +30,9 @@ export class AuditLogController {
     static async create(req: Request, res: Response, next: NextFunction) {
         try {
             const { userId, entity, entityId, action, previousValues, newValues } = req.body;
-            if (!userId || !entity|| !entityId || !action) {
+            if (!entity|| !entityId || !action) {
                 res.status(400).json({
-                    message: "userId, entity, entityId and action are required",
+                    message: "Entity, entityId and action are required",
                 });
                 return;
             }
