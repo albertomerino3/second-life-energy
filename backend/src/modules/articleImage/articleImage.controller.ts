@@ -1,13 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import { ArticleImageService } from "./articleImage.service.js";
-import { ArticleImage } from "./articleImage.model.js";
 
 export class ArticleImageController {
 
 
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const articleImage = await ArticleImage.findAll();
+            const articleImage = await ArticleImageService.findAll();
             res.json(articleImage);
         } catch (error) {
             next(error);
@@ -27,7 +26,7 @@ export class ArticleImageController {
                 return;
             }
 
-            res.json(ArticleImage);
+            res.json(articleImage);
         } catch (error) {
             next(error);
         }

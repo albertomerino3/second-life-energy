@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import { KitComponentService } from "./kitComponent.service.js";
-import { KitComponent } from "./kitComponent.model.js";
 
 export class KitComponentController {
 
@@ -27,7 +26,7 @@ export class KitComponentController {
                 return;
             }
 
-            res.json(KitComponent);
+            res.json(kitComponent);
         } catch (error) {
             next(error);
         }

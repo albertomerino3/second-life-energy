@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import { RequestItemService } from "./requestItem.service.js";
-import { RequestItem } from "./requestItem.model.js";
 
 export class RequestItemController {
 
@@ -27,7 +26,7 @@ export class RequestItemController {
                 return;
             }
 
-            res.json(RequestItem);
+            res.json(requestItem);
         } catch (error) {
             next(error);
         }

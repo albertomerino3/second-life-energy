@@ -1,13 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import { ArticleResourceService } from "./articleResource.service.js";
-import { ArticleResource } from "./articleResource.model.js";
 
 export class ArticleResourceController {
 
 
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const articleResource = await ArticleResource.findAll();
+            const articleResource = await ArticleResourceService.findAll();
             res.json(articleResource);
         } catch (error) {
             next(error);
@@ -27,7 +26,7 @@ export class ArticleResourceController {
                 return;
             }
 
-            res.json(ArticleResource);
+            res.json(articleResource);
         } catch (error) {
             next(error);
         }
