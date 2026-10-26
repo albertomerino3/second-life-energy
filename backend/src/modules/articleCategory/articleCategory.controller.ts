@@ -37,7 +37,11 @@ export class ArticleCategoryController {
 
         try{
             const { name, description, parentCategoryId} = req.body;
-        
+            if (!name || !description || !parentCategoryId) {
+                res.status(400).json({
+                    message: "name, description, parentCategoryId are required",
+                });
+            };
         const articleCategory = await ArticleCategoryService.create({
             name,
             description,

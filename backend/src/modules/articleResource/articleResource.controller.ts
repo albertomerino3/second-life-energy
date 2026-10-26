@@ -37,7 +37,11 @@ export class ArticleResourceController {
 
         try{
             const { articleId, resourceId} = req.body;
-        
+            if (!articleId || !resourceId) {
+                res.status(400).json({
+                    message: "articleId and resourceId are required",
+                });
+            }
         const articleResource = await ArticleResourceService.create({
             articleId,
             resourceId,

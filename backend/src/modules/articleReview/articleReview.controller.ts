@@ -37,7 +37,11 @@ export class ArticleReviewController {
 
         try{
             const { articleId, reviewerId, decision, comments} = req.body;
-        
+            if (!articleId || !reviewerId || !decision || !comments){
+                res.status(400).json({
+                    message: "articleId, reviewerId, decision and comments are required",
+                });
+            }
         const articleReview = await ArticleReviewService.create({
             articleId,
             reviewerId,

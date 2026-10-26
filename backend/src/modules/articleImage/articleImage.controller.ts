@@ -37,7 +37,11 @@ export class ArticleImageController {
 
         try{
             const { articleId, url, altText, sortOrder} = req.body;
-        
+            if (!articleId || !url || !altText || !sortOrder) {
+                res.status(400).json({
+                    message: "articleId, url, altText and sortOrder are required",
+                });
+            }
         const articleImage = await ArticleImageService.create({
             articleId,
             url,

@@ -2,8 +2,6 @@ import { RequestItem } from "./requestItem.model.js";
 
 export class RequestItemService {
 
-    //OBTENER TODAS LAS BICICLETAS (y la marca asociada)
-
     static async findAll() {
         return RequestItem.findAll({
             order: [["id", "ASC"]],

@@ -37,15 +37,17 @@ export class RequestItemController {
 
         try{
             const { requestId, articleId, quantity} = req.body;
-        
-        const requestItem = await RequestItemService.create({
-            requestId,
-            articleId,
-            quantity,
-        });
-        
-        res.status(201).json(requestItem);
-
+            if (!requestId || !articleId || !quantity ) {
+                res.status(400).json({
+                    message: "requestId, articleId, quantity are required",
+                });
+            }
+            const requestItem = await RequestItemService.create({
+                requestId,
+                articleId,
+                quantity,
+            });
+            res.status(201).json(requestItem);
         } catch (error) {
             next(error);
         }

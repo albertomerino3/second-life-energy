@@ -37,7 +37,11 @@ export class KitComponentController {
 
         try{
             const { kitId, componentId, quantity} = req.body;
-        
+            if (!kitId || !componentId || !quantity) {
+                res.status(400).json({
+                    message: "kitId, componentId and quantity are required"
+                });
+            }
         const kitComponent = await KitComponentService.create({
             kitId,
             componentId,
