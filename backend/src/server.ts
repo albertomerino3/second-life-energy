@@ -18,8 +18,9 @@ async function startServer() {
         await sequelize.authenticate();
         console.log("MySQL connection established.");
         
-        await sequelize.sync({ force: true });
-        console.log("Models synchronized.");
+        await sequelize.sync({ force: true }).then(() => {
+            console.log("Database synchronized.");
+        });
 
         app.listen(env.PORT, () => {
             console.log(
