@@ -1,32 +1,48 @@
-import { Brand } from "./resource.model.js";
+import { Resource } from "./resource.model.js";
 
-export class BrandService {
+export class ResourceService {
     static async findAll() {
-        return Brand.findAll({
-            order: [["name", "ASC"]],
+        return Resource.findAll({
+            order: [["id", "ASC"]],
         });
     }
-    
+
     static async findById(id: number) {
-        return Brand.findByPk(id);
+        return Resource.findByPk(id);
     }
-    
+
     static async create(data: {
-        name: string;
+        authorId: number;
+        title: string;
+        description: string;
+        type: string;
+        topic: string;
+        difficulty: string;
+        url: string;
+        status: string;
+        publishedAt?: Date | null;
     }) {
-        return Brand.create(data);
+        return Resource.create(data);
     }
-    
+
     static async update(
-        brand: Brand,
+        resource: Resource,
         data: {
-            name?: string;
+            authorId?: number;
+            title?: string;
+            description?: string;
+            type?: string;
+            topic?: string;
+            difficulty?: string;
+            url?: string;
+            status?: string;
+            publishedAt?: Date | null;
         }
     ) {
-        return brand.update(data);
+        return resource.update(data);
     }
-    
-    static async delete(brand: Brand) {
-        await brand.destroy();
+
+    static async delete(resource: Resource) {
+        await resource.destroy();
     }
 }
