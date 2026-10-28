@@ -1,4 +1,3 @@
-// Import your entities
 import { Permission } from '../modules/permissions/permission.model';
 import { RolePermission } from '../modules/role-permissions/role-permission.model';
 import { ForumCategory } from '../modules/forum-categories/forum-category.model';
@@ -11,6 +10,12 @@ import { Invitation } from "../modules/invitations/invitation.model.js"
 import { Resource } from "../modules/resources/resource.model.js"
 import { Simulation } from "../modules/simulations/simulation.model.js"
 import { User } from "../modules/users/user.model.js"
+  import { Tag } from "../modules/tags/tag.model.js";
+import { ResourceTag } from "../modules/resource-tags/resource-tags.model.js";
+import { Role } from "../modules/roles/role.model.js";
+import { UserRole } from "../modules/user-roles/user-role.model.js";
+import { SimulationArticle } from "../modules/simulation-articles/simulation-articles.model.js";
+import { SimulationResource } from "../modules/simulation-resources/simulation-resource.model.js";
 
 export function setupAssociations(User: any, Role: any) {
   
