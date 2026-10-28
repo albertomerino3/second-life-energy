@@ -9,9 +9,12 @@ module.exports = {
             primaryKey: true,
             allowNull: false,
         },
-        articleId: {
-            type: DataTypes.INTEGER.UNSIGNED,
+        article_Id: {
+            type: Sequelize.INTEGER.UNSIGNED,
             allowNull: false,
+            references: { model: "article", key: "id"},
+            onUpdate: "CASCADE",
+            onDelete: "RESTRICT"
         },
         url: {
             type: DataTypes.STRING(250),

@@ -10,12 +10,18 @@ module.exports = {
           primaryKey: true,
       },
       articleId: {
-          type: DataTypes.INTEGER.UNSIGNED,
+          type: Sequelize.INTEGER.UNSIGNED,
           allowNull: false,
+          references: { model: "article", key: "id"},
+          onUpdate: "CASCADE",
+          onDelete: "RESTRICT"
       },
       reviewerId: {
-          type: DataTypes.INTEGER.UNSIGNED,
+          type: Sequelize.INTEGER.UNSIGNED,
           allowNull: false,
+          references: { model: "reviewer", key: "id" },
+          onUpdate: "CASCADE",
+          onDelete: "RESTRICT"
       },
       decision: {
           type: DataTypes.STRING(300),

@@ -10,12 +10,18 @@ module.exports = {
           primaryKey: true,
       },
       requestId: {
-          type: DataTypes.INTEGER.UNSIGNED,
+          type: Sequelize.INTEGER.UNSIGNED,
           allowNull: false,
+          references: { model: "request", key: "id" },
+          onUpdate: "CASCADE",
+          onDelete: "RESTRICT"
       },
       articleId: {
-          type: DataTypes.INTEGER.UNSIGNED,
+          type: Sequelize.INTEGER.UNSIGNED,
           allowNull: false,
+          references: { model: "article", key: "id" },
+          onUpdate: "CASCADE",
+          onDelete: "RESTRICT"
       },
       quantity: {
           type: DataTypes.INTEGER.UNSIGNED,
