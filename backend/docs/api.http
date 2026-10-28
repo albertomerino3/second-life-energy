@@ -1,0 +1,198 @@
+@baseUrl = http://localhost:3000/api
+
+### 1. FORUM CATEGORIES (ForumCategory)
+
+# Get all categories
+GET {{baseUrl}}/forum-categories
+Content-Type: application/json
+
+### Get category by ID
+GET {{baseUrl}}/forum-categories/1
+Content-Type: application/json
+
+### Create category
+POST {{baseUrl}}/forum-categories
+Content-Type: application/json
+
+{
+  "name": "General Discussion",
+  "description": "Category for general renewable energy inquiries"
+}
+
+### Update category
+PUT {{baseUrl}}/forum-categories/1
+Content-Type: application/json
+
+{
+  "name": "General Discussion Updated",
+  "description": "Updated category description"
+}
+
+### Delete category
+DELETE {{baseUrl}}/forum-categories/1
+Content-Type: application/json
+
+
+### 2. QUESTIONS (Question)
+
+# Get all questions
+GET {{baseUrl}}/questions
+Content-Type: application/json
+
+### Get question by ID
+GET {{baseUrl}}/questions/1
+Content-Type: application/json
+
+### Create question
+POST {{baseUrl}}/questions
+Content-Type: application/json
+
+{
+  "forumCategoryId": 1,
+  "userId": 1,
+  "title": "How to optimize battery storage lifecycle?",
+  "content": "Looking for best practices regarding secondary storage units."
+}
+
+### Update question
+PUT {{baseUrl}}/questions/1
+Content-Type: application/json
+
+{
+  "title": "How to optimize battery storage lifecycle? (Updated)",
+  "content": "Updated content with additional context."
+}
+
+### Delete question
+DELETE {{baseUrl}}/questions/1
+Content-Type: application/json
+
+
+### 3. ANSWERS (Answer)
+
+# Get all answers
+GET {{baseUrl}}/answers
+Content-Type: application/json
+
+### Get answers by Question ID
+GET {{baseUrl}}/questions/1/answers
+Content-Type: application/json
+
+### Get answer by ID
+GET {{baseUrl}}/answers/1
+Content-Type: application/json
+
+### Create answer
+POST {{baseUrl}}/answers
+Content-Type: application/json
+
+{
+  "questionId": 1,
+  "userId": 1,
+  "content": "Make sure to keep the discharge cycles within 20% to 80%."
+}
+
+### Update answer
+PUT {{baseUrl}}/answers/1
+Content-Type: application/json
+
+{
+  "content": "Make sure to keep the discharge cycles within 20% to 80% to maximize durability."
+}
+
+### Delete answer
+DELETE {{baseUrl}}/answers/1
+Content-Type: application/json
+
+
+### 4. MODERATION (Moderation)
+
+# Get all moderation tickets
+GET {{baseUrl}}/moderations
+Content-Type: application/json
+
+### Get moderation by ID
+GET {{baseUrl}}/moderations/1
+Content-Type: application/json
+
+### Create moderation report
+POST {{baseUrl}}/moderations
+Content-Type: application/json
+
+{
+  "moderatorId": 1,
+  "questionId": 1,
+  "answerId": null,
+  "status": "pending",
+  "reason": "Reported for potential spam content"
+}
+
+### Update moderation status
+PUT {{baseUrl}}/moderations/1
+Content-Type: application/json
+
+{
+  "status": "approved",
+  "reason": "Reviewed and cleared by moderator"
+}
+
+### Delete moderation ticket
+DELETE {{baseUrl}}/moderations/1
+Content-Type: application/json
+
+
+### 5. PERMISSIONS (Permission)
+
+# Get all permissions
+GET {{baseUrl}}/permissions
+Content-Type: application/json
+
+### Get permission by ID
+GET {{baseUrl}}/permissions/1
+Content-Type: application/json
+
+### Create permission
+POST {{baseUrl}}/permissions
+Content-Type: application/json
+
+{
+  "name": "MODERATE_FORUM",
+  "description": "Grants ability to review, approve, or delete forum posts"
+}
+
+### Update permission
+PUT {{baseUrl}}/permissions/1
+Content-Type: application/json
+
+{
+  "name": "MODERATE_FORUM_EXTENDED",
+  "description": "Grants full control over forum moderation"
+}
+
+### Delete permission
+DELETE {{baseUrl}}/permissions/1
+Content-Type: application/json
+
+
+### 6. ROLE PERMISSIONS (RolePermission)
+
+# Get all role-permission associations
+GET {{baseUrl}}/role-permissions
+Content-Type: application/json
+
+### Get permissions for a specific role
+GET {{baseUrl}}/roles/1/permissions
+Content-Type: application/json
+
+### Assign permission to a role
+POST {{baseUrl}}/role-permissions
+Content-Type: application/json
+
+{
+  "roleId": 1,
+  "permissionId": 1
+}
+
+### Revoke permission from a role
+DELETE {{baseUrl}}/role-permissions/1
+Content-Type: application/json
