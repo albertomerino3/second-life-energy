@@ -27,6 +27,7 @@ ForumCategory.init(
   {
     sequelize,
     tableName: 'forum_categories',
+    modelName: 'ForumCategory',
     timestamps: false,
   }
 );

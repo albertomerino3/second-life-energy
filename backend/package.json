@@ -8,6 +8,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development tsx watch src/server.ts",
+    "dev:test": "cross-env NODE_ENV=test tsx src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
     "db:migrate": "cd database && sequelize-cli db:migrate",
@@ -16,6 +17,7 @@
     "db:seed": "cd database && sequelize-cli db:seed:all",
     "db:seed:undo": "cd database && sequelize-cli db:seed:undo:all"
   },
+  "keywords": [],
   "dependencies": {
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
@@ -24,7 +26,7 @@
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
-    "@types/node": "^22.20.5",
+    "@types/node": "^22.20.3",
     "cross-env": "^10.1.0",
     "sequelize-cli": "^6.6.5",
     "tsx": "^4.23.13",
