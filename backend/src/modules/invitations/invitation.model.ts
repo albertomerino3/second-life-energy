@@ -17,9 +17,9 @@ export class Invitation extends Model<
     declare roleId: number;
     declare email: string;
     declare tokenHash: string;
-    declare expiresAt: CreationOptional<Date>;
+    declare expiresAt: Date;
+    declare usedAt: CreationOptional<Date> | null;
     declare createdAt: CreationOptional<Date>;
-    declare updatedAt: CreationOptional<Date>;
 }
 Invitation.init(
     {
@@ -31,10 +31,18 @@ Invitation.init(
         invitedById: {
             type: DataTypes.INTEGER.UNSIGNED,
             allowNull: false,
+            references: {
+                model: "users",
+                key: "id",
+            },
         },
         roleId: {
             type: DataTypes.INTEGER.UNSIGNED,
             allowNull: false,
+            references: {
+                model: "roles",
+                key: "id",
+            },
         },
         email: {
             type: DataTypes.STRING(150),
@@ -43,15 +51,28 @@ Invitation.init(
         tokenHash: {
             type: DataTypes.STRING(150),
             allowNull: false,
+            unique: true,
         },
-        expiresAt: DataTypes.DATE,
-        createdAt: DataTypes.DATE,
-        updatedAt: DataTypes.DATE,
+        expiresAt: {
+            type: DataTypes.DATE,
+            allowNull: false,
+        },
+        usedAt: {
+            type: DataTypes.DATE,
+            allowNull: true,
+        },
+        createdAt: {
+            type: DataTypes.DATE,
+            allowNull: false,
+            defaultValue: DataTypes.NOW,
+        }
     },
     {
         sequelize,
         tableName: "invitations",
         modelName: "Invitation",
         timestamps: true,
+        createdAt: "createdAt",
+        updatedAt: false,
     }
 );

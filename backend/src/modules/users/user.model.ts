@@ -8,56 +8,50 @@ import {
 
 import { sequelize } from "../../config/database.js";
 
-export class Bicycle extends Model<
-    InferAttributes<Bicycle>,
-    InferCreationAttributes<Bicycle>
+export class User extends Model<
+    InferAttributes<User>,
+    InferCreationAttributes<User>
 > {
     declare id: CreationOptional<number>;
-    declare brandId: number;
-    declare model: string;
-    declare description: string | null;
-    declare price: number;
-    declare stock: number;
+    declare name: string;
+    declare email: string;
+    declare passwordHash: string;
+    declare isActive: CreationOptional<boolean>;
     declare createdAt: CreationOptional<Date>;
     declare updatedAt: CreationOptional<Date>;
 }
-Bicycle.init(
+User.init(
     {
         id: {
             type: DataTypes.INTEGER.UNSIGNED,
             autoIncrement: true,
             primaryKey: true,
         },
-        brandId: {
-            type: DataTypes.INTEGER.UNSIGNED,
-            allowNull: false,
-            references: { model: "brands", key: "id" },
-            onUpdate: "CASCADE",
-            onDelete: "RESTRICT",
-        },
-        model: {
+        name: {
             type: DataTypes.STRING(150),
             allowNull: false,
         },
-        description: {
-            type: DataTypes.TEXT,
-            allowNull: true,
+        email: {
+            type: DataTypes.STRING(255),
+            allowNull: false,
+            unique: true,
         },
-        price: {
-            type: DataTypes.DECIMAL(10, 2),
+        passwordHash: {
+            type: DataTypes.STRING(255),
             allowNull: false,
         },
-        stock: {
-            type: DataTypes.INTEGER.UNSIGNED,
+        isActive: {
+            type: DataTypes.BOOLEAN,
             allowNull: false,
-            defaultValue: 0,
+            defaultValue: true,
         },
         createdAt: DataTypes.DATE,
         updatedAt: DataTypes.DATE,
     },
     {
         sequelize,
-        tableName: "bicycles",
+        tableName: "users",
+        modelName: "User",
         timestamps: true,
     }
 );

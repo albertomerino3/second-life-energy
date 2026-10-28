@@ -1,16 +1,16 @@
 import { Router } from "express";
-import { BicycleDetailController } from "./article.controller.js";
+import { ArticleController } from "./article.controller.js";
 
 const router = Router();
 
-router.get("/", BicycleDetailController.getAll);
+router.get("/", ArticleController.getAll);
 
-router.get("/:id", BicycleDetailController.getById);
+router.get("/:id", ArticleController.getById);
 
-router.post("/", BicycleDetailController.create);
+router.post("/", ArticleController.create);
 
-router.put("/:id", BicycleDetailController.update);
+router.put("/:id", ArticleController.update);
 
-router.delete("/:id", BicycleDetailController.delete);
+router.delete("/:id", ArticleController.delete);
 
 export default router;
