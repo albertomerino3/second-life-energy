@@ -1,4 +1,4 @@
-import { ArticleResource } from "./articleResource.model.js";
+import { ArticleResource } from "./article-resource.model.js";
 
 export class ArticleResourceService {
 

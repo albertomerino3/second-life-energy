@@ -1,4 +1,4 @@
-import { ArticleReview } from "./articleReview.model.js";
+import { ArticleReview } from "./article-review.model.js";
 
 export class ArticleReviewService {
 

@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from "express";
-import { ArticleImageService } from "./articleImage.service.js";
+import { RequestItemService } from "./request-item.service.js";
 
-export class ArticleImageController {
+export class RequestItemController {
 
 
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const articleImage = await ArticleImageService.findAll();
-            res.json(articleImage);
+            const requestItem = await RequestItemService.findAll();
+            res.json(requestItem);
         } catch (error) {
             next(error);
         }
@@ -17,16 +17,16 @@ export class ArticleImageController {
 
         try{
             const id = Number(req.params.id);
-            const articleImage = await ArticleImageService.findById(id);
+            const requestItem = await RequestItemService.findById(id);
 
-            if (!articleImage) {
+            if (!requestItem) {
                 res.status(404).json({
-                    message: "Article Image not found :(",
+                    message: "Request Item not found :(",
                 });
                 return;
             }
 
-            res.json(articleImage);
+            res.json(requestItem);
         } catch (error) {
             next(error);
         }
@@ -36,21 +36,18 @@ export class ArticleImageController {
     static async create(req: Request, res: Response, next: NextFunction) {
 
         try{
-            const { articleId, url, altText, sortOrder} = req.body;
-            if (!articleId || !url || !altText || !sortOrder) {
+            const { requestId, articleId, quantity} = req.body;
+            if (!requestId || !articleId || !quantity ) {
                 res.status(400).json({
-                    message: "articleId, url, altText and sortOrder are required",
+                    message: "requestId, articleId, quantity are required",
                 });
             }
-        const articleImage = await ArticleImageService.create({
-            articleId,
-            url,
-            altText,
-            sortOrder,
-        });
-        
-        res.status(201).json(articleImage);
-
+            const requestItem = await RequestItemService.create({
+                requestId,
+                articleId,
+                quantity,
+            });
+            res.status(201).json(requestItem);
         } catch (error) {
             next(error);
         }
@@ -61,21 +58,21 @@ export class ArticleImageController {
         try{
             const id = Number(req.params.id);
 
-            const articleImage = await ArticleImageService.findById(id);
+            const requestItem = await RequestItemService.findById(id);
 
-            if (!articleImage) {
+            if (!requestItem) {
                 res.status(404).json({
-                    message: "Article Image NOT FOUND",
+                    message: "Request Item NOT FOUND",
                 });
                 return;
             }
 
-            const updateArticleImage = await ArticleImageService.update(
-                articleImage,
+            const updateRequestItem = await RequestItemService.update(
+                requestItem,
                 req.body
             );
 
-            res.json(updateArticleImage);
+            res.json(updateRequestItem);
         } catch (error) {
             next(error);
         }
@@ -86,16 +83,16 @@ export class ArticleImageController {
         try {
             const id = Number(req.params.id);
 
-            const articleImage = await ArticleImageService.findById(id);
+            const requestItem = await RequestItemService.findById(id);
 
-            if (!articleImage) {
+            if (!requestItem) {
                 res.status(404).json({
-                    message: "Article Image not found :(",
+                    message: "Request Item not found :(",
                 });
                 return;
             }
 
-            await ArticleImageService.delete(articleImage);
+            await RequestItemService.delete(requestItem);
 
             res.status(204).send();
         } catch (error) {

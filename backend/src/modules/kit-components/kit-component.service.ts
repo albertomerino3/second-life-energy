@@ -1,4 +1,4 @@
-import { KitComponent } from "./kitComponent.model.js";
+import { KitComponent } from "./kit-component.model.js";
 
 export class KitComponentService {
 

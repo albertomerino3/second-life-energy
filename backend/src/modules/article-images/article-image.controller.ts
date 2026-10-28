@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from "express";
-import { ArticleResourceService } from "./articleResource.service.js";
+import { ArticleImageService } from "./article-image.service.js";
 
-export class ArticleResourceController {
+export class ArticleImageController {
 
 
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const articleResource = await ArticleResourceService.findAll();
-            res.json(articleResource);
+            const articleImage = await ArticleImageService.findAll();
+            res.json(articleImage);
         } catch (error) {
             next(error);
         }
@@ -17,16 +17,16 @@ export class ArticleResourceController {
 
         try{
             const id = Number(req.params.id);
-            const articleResource = await ArticleResourceService.findById(id);
+            const articleImage = await ArticleImageService.findById(id);
 
-            if (!articleResource) {
+            if (!articleImage) {
                 res.status(404).json({
-                    message: "Article Resource not found :(",
+                    message: "Article Image not found :(",
                 });
                 return;
             }
 
-            res.json(articleResource);
+            res.json(articleImage);
         } catch (error) {
             next(error);
         }
@@ -36,18 +36,20 @@ export class ArticleResourceController {
     static async create(req: Request, res: Response, next: NextFunction) {
 
         try{
-            const { articleId, resourceId} = req.body;
-            if (!articleId || !resourceId) {
+            const { articleId, url, altText, sortOrder} = req.body;
+            if (!articleId || !url || !altText || !sortOrder) {
                 res.status(400).json({
-                    message: "articleId and resourceId are required",
+                    message: "articleId, url, altText and sortOrder are required",
                 });
             }
-        const articleResource = await ArticleResourceService.create({
+        const articleImage = await ArticleImageService.create({
             articleId,
-            resourceId,
+            url,
+            altText,
+            sortOrder,
         });
         
-        res.status(201).json(articleResource);
+        res.status(201).json(articleImage);
 
         } catch (error) {
             next(error);
@@ -59,21 +61,21 @@ export class ArticleResourceController {
         try{
             const id = Number(req.params.id);
 
-            const articleResource = await ArticleResourceService.findById(id);
+            const articleImage = await ArticleImageService.findById(id);
 
-            if (!articleResource) {
+            if (!articleImage) {
                 res.status(404).json({
-                    message: "Article Resource NOT FOUND",
+                    message: "Article Image NOT FOUND",
                 });
                 return;
             }
 
-            const updateArticleResource = await ArticleResourceService.update(
-                articleResource,
+            const updateArticleImage = await ArticleImageService.update(
+                articleImage,
                 req.body
             );
 
-            res.json(updateArticleResource);
+            res.json(updateArticleImage);
         } catch (error) {
             next(error);
         }
@@ -84,16 +86,16 @@ export class ArticleResourceController {
         try {
             const id = Number(req.params.id);
 
-            const articleResource = await ArticleResourceService.findById(id);
+            const articleImage = await ArticleImageService.findById(id);
 
-            if (!articleResource) {
+            if (!articleImage) {
                 res.status(404).json({
-                    message: "Article Resource not found :(",
+                    message: "Article Image not found :(",
                 });
                 return;
             }
 
-            await ArticleResourceService.delete(articleResource);
+            await ArticleImageService.delete(articleImage);
 
             res.status(204).send();
         } catch (error) {

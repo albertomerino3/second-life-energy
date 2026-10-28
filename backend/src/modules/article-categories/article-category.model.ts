@@ -8,41 +8,41 @@ import {
 
 import { sequelize } from "../../config/database.js";
 
-export class KitComponent extends Model<
-    InferAttributes<KitComponent>,
-    InferCreationAttributes<KitComponent>
+export class ArticleCategory extends Model<
+    InferAttributes<ArticleCategory>,
+    InferCreationAttributes<ArticleCategory>
 > {
     declare id: CreationOptional<number>;
-    declare kitId: number;
-    declare componentId: number;
-    declare quantity: number;
+    declare name: string | null;
+    declare description: string;
+    declare parentCategoryId: number;
 }
 
-KitComponent.init(
+ArticleCategory.init(
     {
         id: {
             type: DataTypes.INTEGER.UNSIGNED,
             autoIncrement: true,
             primaryKey: true,
         },
-        kitId: {
-            type: DataTypes.INTEGER.UNSIGNED,
+        name: {
+            type: DataTypes.STRING(100),
+            allowNull: true,
+            unique: true,
+        },
+        description: {
+            type: DataTypes.STRING(200),
             allowNull: false,
         },
-        componentId: {
+        parentCategoryId: {
             type: DataTypes.INTEGER.UNSIGNED,
             allowNull: false,
-        },
-        quantity: {
-            type: DataTypes.INTEGER.UNSIGNED,
-            allowNull: false,
-            validate: { min: 1 },
         },
     },
     {
         sequelize,
-        tableName: "kit-components",
-        modelName: "KitComponent",
+        tableName: "article_categories",
+        modelName: "ArticleCategory",
         timestamps: true,
     }
 );

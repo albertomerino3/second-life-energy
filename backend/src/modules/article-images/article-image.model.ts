@@ -45,7 +45,7 @@ ArticleImage.init(
     },
     {
         sequelize,
-        tableName: "article-images",
+        tableName: "article_images",
         modelName: "ArticleImage",
         timestamps: true,
     }

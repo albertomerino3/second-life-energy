@@ -1,14 +1,20 @@
 // Import your entities
-import { Permission } from '../modules/permissions/permission.model.js';
-import { RolePermission } from '../modules/role-permissions/role-permission.model.js';
-import { ForumCategory } from '../modules/forum-categories/forum-category.model.js';
-import { Question } from '../modules/questions/question.model.js';
 import { Answer } from '../modules/answers/answer.model.js';
-import { Moderation } from '../modules/moderations/moderation.model.js';
+import { ArticleCategory } from '../modules/article-categories/article-category.model.js';
+import { ArticleImage } from '../modules/article-images/article-image.model.js';
+import { ArticleResource } from '../modules/article-resources/article-resource.model.js';
+import { ArticleReview } from '../modules/article-reviews/article-review.model.js';
 import { Article } from "../modules/articles/article.model.js"
 import { AuditLog } from "../modules/audit-logs/audit-log.model.js"
+import { ForumCategory } from '../modules/forum-categories/forum-category.model.js';
 import { Invitation } from "../modules/invitations/invitation.model.js"
+import { KitComponent } from '../modules/kit-components/kit-component.model.js';
+import { Moderation } from '../modules/moderations/moderation.model.js';
+import { Permission } from '../modules/permissions/permission.model.js';
+import { Question } from '../modules/questions/question.model.js';
+import { RequestItem } from "../modules/request-items/request-item.model.js"
 import { Resource } from "../modules/resources/resource.model.js"
+import { RolePermission } from '../modules/role-permissions/role-permission.model.js';
 import { Simulation } from "../modules/simulations/simulation.model.js"
 import { User } from "../modules/users/user.model.js"
 
@@ -132,8 +138,8 @@ export function setupAssociations(User: any, Role: any) {
   Resource.hasMany(AuditLog, { foreignKey: "userId", as: "auditLogs" });
   AuditLog.belongsTo(Resource, { foreignKey: "userId", as: "resource" });
 
-  //Article.belongsToMany(Resource, { through: ArticleResource, foreignKey: "articleId", otherKey: "resourceId", as: "resources" });
-  //Resource.belongsToMany(Article, { through: ArticleResource, foreignKey: "resourceId", otherKey: "articleId", as: "articles" });
+  Article.belongsToMany(Resource, { through: ArticleResource, foreignKey: "articleId", otherKey: "resourceId", as: "resources" });
+  Resource.belongsToMany(Article, { through: ArticleResource, foreignKey: "resourceId", otherKey: "articleId", as: "articles" });
     
   //Resource.belongsToMany(Simulation, { through: SimulationResource, foreignKey: "resourceId", otherKey: "simulationId", as: "simulations" });
   //Simulation.belongsToMany(Resource, { through: SimulationResource, foreignKey: "simulationId", otherKey: "resourceId", as: "resources" });

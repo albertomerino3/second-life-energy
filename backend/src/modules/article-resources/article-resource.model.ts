@@ -31,7 +31,7 @@ ArticleResource.init(
     },
     {
         sequelize,
-        tableName: "article-resources",
+        tableName: "article_resources",
         modelName: "ArticleResource",
         timestamps: true,
     }

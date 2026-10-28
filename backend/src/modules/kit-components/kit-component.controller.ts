@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from "express";
-import { ArticleCategoryService } from "./articleCategory.service.js";
+import { KitComponentService } from "./kit-component.service.js";
 
-export class ArticleCategoryController {
+export class KitComponentController {
 
 
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const articleCategory = await ArticleCategoryService.findAll();
-            res.json(articleCategory);
+            const kitComponent = await KitComponentService.findAll();
+            res.json(kitComponent);
         } catch (error) {
             next(error);
         }
@@ -17,16 +17,16 @@ export class ArticleCategoryController {
 
         try{
             const id = Number(req.params.id);
-            const articleCategory = await ArticleCategoryService.findById(id);
+            const kitComponent = await KitComponentService.findById(id);
 
-            if (!articleCategory) {
+            if (!kitComponent) {
                 res.status(404).json({
-                    message: "Article Category not found :(",
+                    message: "Kit Component not found :(",
                 });
                 return;
             }
 
-            res.json(articleCategory);
+            res.json(kitComponent);
         } catch (error) {
             next(error);
         }
@@ -36,19 +36,19 @@ export class ArticleCategoryController {
     static async create(req: Request, res: Response, next: NextFunction) {
 
         try{
-            const { name, description, parentCategoryId} = req.body;
-            if (!name || !description || !parentCategoryId) {
+            const { kitId, componentId, quantity} = req.body;
+            if (!kitId || !componentId || !quantity) {
                 res.status(400).json({
-                    message: "name, description, parentCategoryId are required",
+                    message: "kitId, componentId and quantity are required"
                 });
-            };
-        const articleCategory = await ArticleCategoryService.create({
-            name,
-            description,
-            parentCategoryId,
+            }
+        const kitComponent = await KitComponentService.create({
+            kitId,
+            componentId,
+            quantity,
         });
         
-        res.status(201).json(articleCategory);
+        res.status(201).json(kitComponent);
 
         } catch (error) {
             next(error);
@@ -60,21 +60,21 @@ export class ArticleCategoryController {
         try{
             const id = Number(req.params.id);
 
-            const articleCategory = await ArticleCategoryService.findById(id);
+            const kitComponent = await KitComponentService.findById(id);
 
-            if (!articleCategory) {
+            if (!kitComponent) {
                 res.status(404).json({
-                    message: "Article Category NOT FOUND",
+                    message: "Kit Component NOT FOUND",
                 });
                 return;
             }
 
-            const updateArticleCategory = await ArticleCategoryService.update(
-                articleCategory,
+            const updateKitComponent = await KitComponentService.update(
+                kitComponent,
                 req.body
             );
 
-            res.json(updateArticleCategory);
+            res.json(updateKitComponent);
         } catch (error) {
             next(error);
         }
@@ -85,16 +85,16 @@ export class ArticleCategoryController {
         try {
             const id = Number(req.params.id);
 
-            const articleCategory = await ArticleCategoryService.findById(id);
+            const kitComponent = await KitComponentService.findById(id);
 
-            if (!articleCategory) {
+            if (!kitComponent) {
                 res.status(404).json({
-                    message: "Article Category not found :(",
+                    message: "Kit Component not found :(",
                 });
                 return;
             }
 
-            await ArticleCategoryService.delete(articleCategory);
+            await KitComponentService.delete(kitComponent);
 
             res.status(204).send();
         } catch (error) {

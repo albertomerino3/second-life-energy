@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from "express";
-import { RequestItemService } from "./requestItem.service.js";
+import { ArticleResourceService } from "./article-resource.service.js";
 
-export class RequestItemController {
+export class ArticleResourceController {
 
 
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const requestItem = await RequestItemService.findAll();
-            res.json(requestItem);
+            const articleResource = await ArticleResourceService.findAll();
+            res.json(articleResource);
         } catch (error) {
             next(error);
         }
@@ -17,16 +17,16 @@ export class RequestItemController {
 
         try{
             const id = Number(req.params.id);
-            const requestItem = await RequestItemService.findById(id);
+            const articleResource = await ArticleResourceService.findById(id);
 
-            if (!requestItem) {
+            if (!articleResource) {
                 res.status(404).json({
-                    message: "Request Item not found :(",
+                    message: "Article Resource not found :(",
                 });
                 return;
             }
 
-            res.json(requestItem);
+            res.json(articleResource);
         } catch (error) {
             next(error);
         }
@@ -36,18 +36,19 @@ export class RequestItemController {
     static async create(req: Request, res: Response, next: NextFunction) {
 
         try{
-            const { requestId, articleId, quantity} = req.body;
-            if (!requestId || !articleId || !quantity ) {
+            const { articleId, resourceId} = req.body;
+            if (!articleId || !resourceId) {
                 res.status(400).json({
-                    message: "requestId, articleId, quantity are required",
+                    message: "articleId and resourceId are required",
                 });
             }
-            const requestItem = await RequestItemService.create({
-                requestId,
-                articleId,
-                quantity,
-            });
-            res.status(201).json(requestItem);
+        const articleResource = await ArticleResourceService.create({
+            articleId,
+            resourceId,
+        });
+        
+        res.status(201).json(articleResource);
+
         } catch (error) {
             next(error);
         }
@@ -58,21 +59,21 @@ export class RequestItemController {
         try{
             const id = Number(req.params.id);
 
-            const requestItem = await RequestItemService.findById(id);
+            const articleResource = await ArticleResourceService.findById(id);
 
-            if (!requestItem) {
+            if (!articleResource) {
                 res.status(404).json({
-                    message: "Request Item NOT FOUND",
+                    message: "Article Resource NOT FOUND",
                 });
                 return;
             }
 
-            const updateRequestItem = await RequestItemService.update(
-                requestItem,
+            const updateArticleResource = await ArticleResourceService.update(
+                articleResource,
                 req.body
             );
 
-            res.json(updateRequestItem);
+            res.json(updateArticleResource);
         } catch (error) {
             next(error);
         }
@@ -83,16 +84,16 @@ export class RequestItemController {
         try {
             const id = Number(req.params.id);
 
-            const requestItem = await RequestItemService.findById(id);
+            const articleResource = await ArticleResourceService.findById(id);
 
-            if (!requestItem) {
+            if (!articleResource) {
                 res.status(404).json({
-                    message: "Request Item not found :(",
+                    message: "Article Resource not found :(",
                 });
                 return;
             }
 
-            await RequestItemService.delete(requestItem);
+            await ArticleResourceService.delete(articleResource);
 
             res.status(204).send();
         } catch (error) {

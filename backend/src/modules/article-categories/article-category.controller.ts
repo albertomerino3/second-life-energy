@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from "express";
-import { ArticleReviewService } from "./articleReview.service.js";
+import { ArticleCategoryService } from "./article-category.service.js";
 
-export class ArticleReviewController {
+export class ArticleCategoryController {
 
 
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const articleReview = await ArticleReviewService.findAll();
-            res.json(articleReview);
+            const articleCategory = await ArticleCategoryService.findAll();
+            res.json(articleCategory);
         } catch (error) {
             next(error);
         }
@@ -17,16 +17,16 @@ export class ArticleReviewController {
 
         try{
             const id = Number(req.params.id);
-            const articleReview = await ArticleReviewService.findById(id);
+            const articleCategory = await ArticleCategoryService.findById(id);
 
-            if (!articleReview) {
+            if (!articleCategory) {
                 res.status(404).json({
-                    message: "Article Review not found :(",
+                    message: "Article Category not found :(",
                 });
                 return;
             }
 
-            res.json(articleReview);
+            res.json(articleCategory);
         } catch (error) {
             next(error);
         }
@@ -36,20 +36,19 @@ export class ArticleReviewController {
     static async create(req: Request, res: Response, next: NextFunction) {
 
         try{
-            const { articleId, reviewerId, decision, comments} = req.body;
-            if (!articleId || !reviewerId || !decision || !comments){
+            const { name, description, parentCategoryId} = req.body;
+            if (!name || !description || !parentCategoryId) {
                 res.status(400).json({
-                    message: "articleId, reviewerId, decision and comments are required",
+                    message: "name, description, parentCategoryId are required",
                 });
-            }
-        const articleReview = await ArticleReviewService.create({
-            articleId,
-            reviewerId,
-            decision,
-            comments,
+            };
+        const articleCategory = await ArticleCategoryService.create({
+            name,
+            description,
+            parentCategoryId,
         });
         
-        res.status(201).json(articleReview);
+        res.status(201).json(articleCategory);
 
         } catch (error) {
             next(error);
@@ -61,21 +60,21 @@ export class ArticleReviewController {
         try{
             const id = Number(req.params.id);
 
-            const articleReview = await ArticleReviewService.findById(id);
+            const articleCategory = await ArticleCategoryService.findById(id);
 
-            if (!articleReview) {
+            if (!articleCategory) {
                 res.status(404).json({
-                    message: "Article Review NOT FOUND",
+                    message: "Article Category NOT FOUND",
                 });
                 return;
             }
 
-            const updateArticleReview = await ArticleReviewService.update(
-                articleReview,
+            const updateArticleCategory = await ArticleCategoryService.update(
+                articleCategory,
                 req.body
             );
 
-            res.json(updateArticleReview);
+            res.json(updateArticleCategory);
         } catch (error) {
             next(error);
         }
@@ -86,16 +85,16 @@ export class ArticleReviewController {
         try {
             const id = Number(req.params.id);
 
-            const articleReview = await ArticleReviewService.findById(id);
+            const articleCategory = await ArticleCategoryService.findById(id);
 
-            if (!articleReview) {
+            if (!articleCategory) {
                 res.status(404).json({
-                    message: "Article Review not found :(",
+                    message: "Article Category not found :(",
                 });
                 return;
             }
 
-            await ArticleReviewService.delete(articleReview);
+            await ArticleCategoryService.delete(articleCategory);
 
             res.status(204).send();
         } catch (error) {

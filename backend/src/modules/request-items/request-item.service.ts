@@ -1,4 +1,4 @@
-import { RequestItem } from "./requestItem.model.js";
+import { RequestItem } from "./request-item.model.js";
 
 export class RequestItemService {
 

@@ -1,4 +1,4 @@
-import { ArticleImage } from "./articleImage.model.js";
+import { ArticleImage } from "./article-image.model.js";
 
 export class ArticleImageService {
 

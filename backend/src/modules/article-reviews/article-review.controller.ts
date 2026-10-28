@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from "express";
-import { KitComponentService } from "./kitComponent.service.js";
+import { ArticleReviewService } from "./article-review.service.js";
 
-export class KitComponentController {
+export class ArticleReviewController {
 
 
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const kitComponent = await KitComponentService.findAll();
-            res.json(kitComponent);
+            const articleReview = await ArticleReviewService.findAll();
+            res.json(articleReview);
         } catch (error) {
             next(error);
         }
@@ -17,16 +17,16 @@ export class KitComponentController {
 
         try{
             const id = Number(req.params.id);
-            const kitComponent = await KitComponentService.findById(id);
+            const articleReview = await ArticleReviewService.findById(id);
 
-            if (!kitComponent) {
+            if (!articleReview) {
                 res.status(404).json({
-                    message: "Kit Component not found :(",
+                    message: "Article Review not found :(",
                 });
                 return;
             }
 
-            res.json(kitComponent);
+            res.json(articleReview);
         } catch (error) {
             next(error);
         }
@@ -36,19 +36,20 @@ export class KitComponentController {
     static async create(req: Request, res: Response, next: NextFunction) {
 
         try{
-            const { kitId, componentId, quantity} = req.body;
-            if (!kitId || !componentId || !quantity) {
+            const { articleId, reviewerId, decision, comments} = req.body;
+            if (!articleId || !reviewerId || !decision || !comments){
                 res.status(400).json({
-                    message: "kitId, componentId and quantity are required"
+                    message: "articleId, reviewerId, decision and comments are required",
                 });
             }
-        const kitComponent = await KitComponentService.create({
-            kitId,
-            componentId,
-            quantity,
+        const articleReview = await ArticleReviewService.create({
+            articleId,
+            reviewerId,
+            decision,
+            comments,
         });
         
-        res.status(201).json(kitComponent);
+        res.status(201).json(articleReview);
 
         } catch (error) {
             next(error);
@@ -60,21 +61,21 @@ export class KitComponentController {
         try{
             const id = Number(req.params.id);
 
-            const kitComponent = await KitComponentService.findById(id);
+            const articleReview = await ArticleReviewService.findById(id);
 
-            if (!kitComponent) {
+            if (!articleReview) {
                 res.status(404).json({
-                    message: "Kit Component NOT FOUND",
+                    message: "Article Review NOT FOUND",
                 });
                 return;
             }
 
-            const updateKitComponent = await KitComponentService.update(
-                kitComponent,
+            const updateArticleReview = await ArticleReviewService.update(
+                articleReview,
                 req.body
             );
 
-            res.json(updateKitComponent);
+            res.json(updateArticleReview);
         } catch (error) {
             next(error);
         }
@@ -85,16 +86,16 @@ export class KitComponentController {
         try {
             const id = Number(req.params.id);
 
-            const kitComponent = await KitComponentService.findById(id);
+            const articleReview = await ArticleReviewService.findById(id);
 
-            if (!kitComponent) {
+            if (!articleReview) {
                 res.status(404).json({
-                    message: "Kit Component not found :(",
+                    message: "Article Review not found :(",
                 });
                 return;
             }
 
-            await KitComponentService.delete(kitComponent);
+            await ArticleReviewService.delete(articleReview);
 
             res.status(204).send();
         } catch (error) {

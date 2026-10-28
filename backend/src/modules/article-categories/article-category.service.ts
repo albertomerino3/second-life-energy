@@ -1,4 +1,4 @@
-import { ArticleCategory } from "./articleCategory.model.js";
+import { ArticleCategory } from "./article-category.model.js";
 
 export class ArticleCategoryService {
 

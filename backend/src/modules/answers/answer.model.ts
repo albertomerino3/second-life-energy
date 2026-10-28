@@ -42,6 +42,7 @@ Answer.init(
   {
     sequelize,
     tableName: 'answers',
+    modelName: 'Answer',
     timestamps: false,
   }
 );

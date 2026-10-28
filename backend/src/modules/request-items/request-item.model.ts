@@ -41,7 +41,7 @@ RequestItem.init(
     },
     {
         sequelize,
-        tableName: "request-items",
+        tableName: "request_items",
         modelName: "RequestItem",
         timestamps: true,
     }

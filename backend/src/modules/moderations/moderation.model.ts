@@ -46,6 +46,7 @@ Moderation.init(
   {
     sequelize,
     tableName: 'moderations',
+    modelName: 'Moderation',
     timestamps: false,
   }
 );
