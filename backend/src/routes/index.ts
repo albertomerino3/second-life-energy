@@ -18,6 +18,8 @@ import resourceRoutes from "../modules/resources/resource.routes.js";
 import rolePermissionRoutes from '../modules/role-permissions/role-permission.routes.js';
 import simulationRoutes from "../modules/simulations/simulation.routes.js";
 import userRoutes from "../modules/users/user.routes.js";
+import tagRoutes from "../modules/users/user.routes.js";
+import resourceRoutes from "../modules/resources/resource.routes.js";
 
 const router = Router();
 
@@ -39,5 +41,7 @@ router.use("/resources", resourceRoutes);
 router.use('/role-permissions', rolePermissionRoutes);
 router.use("/simulations", simulationRoutes);
 router.use("/users", userRoutes);
+router.use("/tags", tagRoutes);
+router.use("/resource-tags", resourceRoutes);
 
 export default router;

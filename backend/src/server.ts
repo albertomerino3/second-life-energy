@@ -21,6 +21,8 @@ import "./modules/resources/resource.model.js";
 import "./modules/role-permissions/role-permission.model.js";
 import "./modules/simulations/simulation.model.js";
 import "./modules/users/user.model.js";
+import "./modules/tags/tag.model.js"
+import "./modules/resource-tags/resource-tags.model.js"
 
 async function startServer() {
     try {
