@@ -12,9 +12,8 @@ export const sequelize = new Sequelize(
             underscored: true,
             freezeTableName: false,
         },
-        logging:
-        env.NODE_ENV === "development"
-        ? console.log
-        : false,
-    }
+        logging: env.NODE_ENV === "development"
+            ? console.log
+            : false,
+    },
 );

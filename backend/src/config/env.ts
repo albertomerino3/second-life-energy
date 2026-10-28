@@ -5,7 +5,7 @@ dotenv.config();
 const NODE_ENV = process.env.NODE_ENV ?? "development";
 
 if (!["development", "test", "production"].includes(NODE_ENV)) {
-    throw new Error(`invalid environment: ${NODE_ENV}`);
+    throw new Error(`Invalid environment: ${NODE_ENV}`);
 }
 
 if (NODE_ENV !== "production") {
@@ -13,7 +13,6 @@ if (NODE_ENV !== "production") {
         path: `.env.${NODE_ENV}`,
     });
 }
-
 
 export const env = {
     PORT: Number(process.env.PORT) || 3000,
@@ -23,6 +22,6 @@ export const env = {
     DB_PORT: Number(process.env.DB_PORT) || 3306,
     DB_NAME: process.env.DB_NAME || "second_life_energy",
     DB_USER: process.env.DB_USER || "root",
-    DB_PASSWORD: process.env.DB_PASSWORD || "1234",
+    DB_PASSWORD: process.env.DB_PASSWORD || "",
     NODE_ENV
 };
