@@ -3,23 +3,23 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.createTable("article_category", {
+    await queryInterface.createTable("article_categories", {
       id: {
-          type: DataTypes.INTEGER.UNSIGNED,
+          type: Sequelize.INTEGER.UNSIGNED,
           autoIncrement: true,
           primaryKey: true,
       },
       name: {
-          type: DataTypes.STRING(100),
+          type: Sequelize.STRING(100),
           allowNull: true,
           unique: true,
       },
       description: {
-          type: DataTypes.STRING(200),
+          type: Sequelize.STRING(200),
           allowNull: false,
       },
-      parentCategoryId: {
-          type: DataTypes.INTEGER.UNSIGNED,
+      parent_category_id: {
+          type: Sequelize.INTEGER.UNSIGNED,
           allowNull: false,
       },
       created_at: { type: Sequelize.DATE},
@@ -28,6 +28,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('article_category');
+    await queryInterface.dropTable('article_categories');
   }
 };

@@ -4,7 +4,7 @@
 module.exports = {
   async up (queryInterface, Sequelize) {
     const now = new Date();
-    await queryInterface.bulkInsert( 'article_category', [{
+    await queryInterface.bulkInsert( 'article_categories', [{
       id: 1,
       name: 'tecnology',
       description: 'Articles about technology, programming, and new digital trends',
@@ -16,8 +16,8 @@ module.exports = {
     if (queryInterface.sequelize.getDialect() === "postgres") {
       await queryInterface.sequelize.query(`
         SELECT setval(
-        pg_get_serial_sequence('public.article_category', 'id'),
-        COALESCE((SELECT MAX(id) FROM public.article_categorys), 0) + 1,
+        pg_get_serial_sequence('public.article_categories', 'id'),
+        COALESCE((SELECT MAX(id) FROM public.article_categories), 0) + 1,
         false
         );
       `);
@@ -25,6 +25,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.bulkDelete( 'article_categorys', { id: [1, 2] });
+    await queryInterface.bulkDelete( 'article_categories', { id: [1, 2] });
   }
 };

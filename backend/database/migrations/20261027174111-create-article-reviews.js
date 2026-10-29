@@ -3,30 +3,33 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.createTable("kit_component", {
+    await queryInterface.createTable("article_reviews", {
       id: {
-          type: DataTypes.INTEGER.UNSIGNED,
+          type: Sequelize.INTEGER.UNSIGNED,
           autoIncrement: true,
           primaryKey: true,
       },
-      kitId: {
+      article_id: {
           type: Sequelize.INTEGER.UNSIGNED,
           allowNull: false,
-        references: { model: "kit", key: "id"},
-        onUpdate: "CASCADE",
-        onDelete: "RESTRICT"
-      },
-      componentId: {
-          type: Sequelize.INTEGER.UNSIGNED,
-          allowNull: false,
-          references: { model: "component", key: "id" },
+          references: { model: "article", key: "id"},
           onUpdate: "CASCADE",
           onDelete: "RESTRICT"
       },
-      quantity: {
-          type: DataTypes.INTEGER.UNSIGNED,
+      reviewer_id: {
+          type: Sequelize.INTEGER.UNSIGNED,
           allowNull: false,
-          validate: { min: 1 },
+          references: { model: "reviewer", key: "id" },
+          onUpdate: "CASCADE",
+          onDelete: "RESTRICT"
+      },
+      decision: {
+          type: Sequelize.STRING(300),
+          allowNull: false,
+      },
+      comments: {
+          type: Sequelize.STRING(300),
+          allowNull: false,
       },
       created_at: { type: Sequelize.DATE },
       updated_at: { type: Sequelize.DATE },
@@ -34,6 +37,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('kit_component');
+    await queryInterface.dropTable('article_reviews');
   }
 };
