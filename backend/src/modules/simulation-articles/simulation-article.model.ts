@@ -22,6 +22,7 @@ SimulationArticle.init(
     {
         sequelize,
         tableName: "simulation_articles",
+        modelName: "SimulationArticle",
         timestamps: false,
     }
 );

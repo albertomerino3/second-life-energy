@@ -1,4 +1,4 @@
-import { ResourceTag } from "./resource-tags.model.js";
+import { ResourceTag } from "./resource-tag.model.js";
 import { FindOptions } from "sequelize";
 
 export class ResourceTagService {

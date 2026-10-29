@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { ResourceTagService } from "./resource-tags.service.js";
+import { ResourceTagService } from "./resource-tag.service.js";
 
 export class ResourceTagController {
 

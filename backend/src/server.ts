@@ -17,12 +17,16 @@ import "./modules/moderations/moderation.model.js";
 import "./modules/permissions/permission.model.js";
 import "./modules/questions/question.model.js";
 import "./modules/request-items/request-item.model.js";
+import "./modules/resource-tags/resource-tag.model.js"
 import "./modules/resources/resource.model.js";
 import "./modules/role-permissions/role-permission.model.js";
+import "./modules/roles/role.model.js"
+import "./modules/simulation-articles/simulation-article.model.js";
+import "./modules/simulation-resources/simulation-resource.model.js";
 import "./modules/simulations/simulation.model.js";
-import "./modules/users/user.model.js";
 import "./modules/tags/tag.model.js"
-import "./modules/resource-tags/resource-tags.model.js"
+import "./modules/user-roles/user-role.model.js"
+import "./modules/users/user.model.js";
 
 async function startServer() {
     try {
