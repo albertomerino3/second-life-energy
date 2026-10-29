@@ -25,6 +25,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.bulkDelete( 'kit_component', { id: [1] });
+    await queryInterface.bulkDelete( 'kit_components', { id: [1] });
   }
 };

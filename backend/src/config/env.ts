@@ -20,8 +20,8 @@ export const env = {
     DB_DIALECT: process.env.DB_DIALECT || "mysql",
     DB_HOST: process.env.DB_HOST || "localhost",
     DB_PORT: Number(process.env.DB_PORT) || 3306,
-    DB_NAME: process.env.DB_NAME || "second_life_energy",
+    DB_NAME: process.env.DB_NAME || "db_second_life_energy_dev",
     DB_USER: process.env.DB_USER || "root",
-    DB_PASSWORD: process.env.DB_PASSWORD || "",
+    DB_PASSWORD: process.env.DB_PASSWORD || "1234",
     NODE_ENV
 };

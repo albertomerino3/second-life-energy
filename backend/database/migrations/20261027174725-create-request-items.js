@@ -3,40 +3,37 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.createTable("article_review", {
+    await queryInterface.createTable("request_items", {
       id: {
-          type: DataTypes.INTEGER.UNSIGNED,
+          type: Sequelize.INTEGER.UNSIGNED,
           autoIncrement: true,
           primaryKey: true,
       },
-      articleId: {
+      request_id: {
           type: Sequelize.INTEGER.UNSIGNED,
           allowNull: false,
-          references: { model: "article", key: "id"},
+          references: { model: "request", key: "id" },
           onUpdate: "CASCADE",
           onDelete: "RESTRICT"
       },
-      reviewerId: {
+      article_id: {
           type: Sequelize.INTEGER.UNSIGNED,
           allowNull: false,
-          references: { model: "reviewer", key: "id" },
+          references: { model: "article", key: "id" },
           onUpdate: "CASCADE",
           onDelete: "RESTRICT"
       },
-      decision: {
-          type: DataTypes.STRING(300),
+      quantity: {
+          type: Sequelize.INTEGER.UNSIGNED,
           allowNull: false,
+          validate: { min: 1 },
       },
-      comments: {
-          type: DataTypes.STRING(300),
-          allowNull: false,
-      },
-      created_at: { type: Sequelize.DATE },
+      created_at: { type:Sequelize.DATE },
       updated_at: { type: Sequelize.DATE },
     })
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('article_review');
+    await queryInterface.dropTable('request_items');
   }
 };
