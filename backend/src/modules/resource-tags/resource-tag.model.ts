@@ -14,25 +14,20 @@ export class ResourceTag extends Model<
 > {
     declare resourceId: CreationOptional<number>;
     declare tagId: CreationOptional<number>;
-    
 }
 ResourceTag.init(
     {
         resourceId: {
             type: DataTypes.INTEGER.UNSIGNED,
-        
             primaryKey: true,
             allowNull: false,
         },
     
         tagId: {
             type: DataTypes.INTEGER.UNSIGNED,
-            
             primaryKey: true,
             allowNull: false,
         },
-
-       
     },
     {
         sequelize,

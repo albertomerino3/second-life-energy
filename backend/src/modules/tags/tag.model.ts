@@ -23,17 +23,14 @@ Tag.init(
             autoIncrement: true,
             primaryKey: true,
         },
-    
         name: {
             type: DataTypes.STRING(80),
-            allowNull: true,
+            allowNull: false,
         },
-
         slug: {
             type: DataTypes.STRING(150),
-            allowNull: true,
+            allowNull: false,
         },
-       
     },
     {
         sequelize,

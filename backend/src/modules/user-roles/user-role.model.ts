@@ -28,6 +28,7 @@ UserRole.init(
     {
         sequelize,
         tableName: "user_roles",
+        modelName: "UserRole",
         timestamps: false,
     }
 );

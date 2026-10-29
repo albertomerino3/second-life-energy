@@ -7,19 +7,23 @@ import articleResourceRoutes from "../modules/article-resources/article-resource
 import articleReviewRoutes from "../modules/article-reviews/article-review.routes.js";
 import articleRoutes from "../modules/articles/article.routes.js";
 import auditLogRoutes from "../modules/audit-logs/audit-log.routes.js";
-import forumCategoryRoutes from "../modules/forum-categories/forum-category.routes.js";";
+import forumCategoryRoutes from "../modules/forum-categories/forum-category.routes.js";
 import invitationRoutes from "../modules/invitations/invitation.routes.js";
 import kitComponentRoutes from "../modules/kit-components/kit-component.routes.js";
 import moderationRoutes from '../modules/moderations/moderation.routes.js';
 import permissionRoutes from '../modules/permissions/permission.routes.js';
 import questionRoutes from '../modules/questions/question.routes.js';
 import requestItemRoutes from '../modules/request-items/request-item.routes.js';
+import resourceTagRoutes from "../modules/resource-tags/resource-tag.routes.js";
 import resourceRoutes from "../modules/resources/resource.routes.js";
 import rolePermissionRoutes from '../modules/role-permissions/role-permission.routes.js';
+import roleRoutes from '../modules/roles/role.routes.js';
+import simulationArticleRoutes from "../modules/simulation-articles/simulation-article.routes.js";
+import simulationResourceRoutes from "../modules/simulation-resources/simulation-resource.routes.js";
 import simulationRoutes from "../modules/simulations/simulation.routes.js";
+import tagRoutes from "../modules/tags/tag.routes.js";
+import userRoleRoutes from "../modules/user-roles/user-role.routes.js";
 import userRoutes from "../modules/users/user.routes.js";
-import tagRoutes from "../modules/users/user.routes.js";
-import resourceRoutes from "../modules/resources/resource.routes.js";
 
 const router = Router();
 
@@ -37,11 +41,15 @@ router.use('/moderations', moderationRoutes);
 router.use('/permissions', permissionRoutes);
 router.use('/questions', questionRoutes);
 router.use("/request-items", requestItemRoutes);
+router.use("/resource-tags", resourceTagRoutes);
 router.use("/resources", resourceRoutes);
 router.use('/role-permissions', rolePermissionRoutes);
+router.use('/roles', roleRoutes);
+router.use("/simulation-articles", simulationArticleRoutes);
+router.use("/simulation-resources", simulationResourceRoutes);
 router.use("/simulations", simulationRoutes);
-router.use("/users", userRoutes);
 router.use("/tags", tagRoutes);
-router.use("/resource-tags", resourceRoutes);
+router.use("/user-roles", userRoleRoutes);
+router.use("/users", userRoutes);
 
 export default router;
