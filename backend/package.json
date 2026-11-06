@@ -10,12 +10,18 @@
     "dev": "cross-env NODE_ENV=development tsx watch src/server.ts",
     "dev:test": "cross-env NODE_ENV=test tsx src/server.ts",
     "build": "tsc",
+    "typecheck": "tsc --noEmit",
     "start": "node dist/server.js",
+    "db:create": "cd database && sequelize-cli db:create",
+    "db:drop": "cd database && sequelize-cli db:drop",
     "db:migrate": "cd database && sequelize-cli db:migrate",
     "db:migrate:undo": "cd database && sequelize-cli db:migrate:undo",
+    "db:migrate:undo:all": "cd database && sequelize-cli db:migrate:undo:all",
     "db:migrate:status": "cd database && sequelize-cli db:migrate:status",
     "db:seed": "cd database && sequelize-cli db:seed:all",
-    "db:seed:undo": "cd database && sequelize-cli db:seed:undo:all"
+    "db:seed:undo": "cd database && sequelize-cli db:seed:undo:all",
+    "db:reset": "npm run db:migrate:undo:all && npm run db:migrate && npm run db:seed",
+    "test:api": "cd bruno && npx --yes @usebruno/cli@4.2.1 run --env local --reporter-html ../bruno-report.html"
   },
   "keywords": [],
   "dependencies": {

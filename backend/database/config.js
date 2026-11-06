@@ -9,16 +9,16 @@ function getConfig(environment) {
     variables = process.env;
   } else {
     const envPath = path.resolve(__dirname, "..", `.env.${environment}`);
-    variables = dotenv.parse(fs.readFileSync(envPath));
+    variables = fs.existsSync(envPath) ? dotenv.parse(fs.readFileSync(envPath)) : {};
   }
 
   return {
     username: variables.DB_USER,
     password: variables.DB_PASSWORD ?? "",
     database: variables.DB_NAME,
-    host: variables.DB_HOST,
-    port: Number(variables.DB_PORT ?? 3306),
-    dialect: variables.DB_DIALECT,
+    host: variables.DB_HOST ?? "localhost",
+    port: Number(variables.DB_PORT ?? 5432),
+    dialect: variables.DB_DIALECT ?? "postgres",
     logging: false,
     migrationStorage: "sequelize",
     seederStorage: "sequelize",
