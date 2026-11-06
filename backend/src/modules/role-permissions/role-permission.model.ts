@@ -7,7 +7,6 @@ import {
 
 import { sequelize } from "../../config/database.js";
 
-// Join table: many-to-many relationship between Role and Permission
 export class RolePermission extends Model<
     InferAttributes<RolePermission>,
     InferCreationAttributes<RolePermission>
@@ -21,12 +20,12 @@ RolePermission.init(
         roleId: {
             type: DataTypes.INTEGER,
             primaryKey: true,
-            allowNull: false, // Foreign key to Role
+            allowNull: false,
         },
         permissionId: {
             type: DataTypes.INTEGER,
             primaryKey: true,
-            allowNull: false, // Foreign key to Permission
+            allowNull: false,
         },
     },
     {

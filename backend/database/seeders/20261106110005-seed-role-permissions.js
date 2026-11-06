@@ -1,15 +1,11 @@
 'use strict';
 
 const ROLE_PERMISSIONS = {
-  // admin: every permission
   1: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-  // teacher
   2: [3, 4, 5, 6, 7, 9, 10],
-  // student
   3: [4, 9],
 };
 
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface) {
     const rows = Object.entries(ROLE_PERMISSIONS).flatMap(([roleId, permissionIds]) =>

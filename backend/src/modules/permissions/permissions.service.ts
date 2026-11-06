@@ -8,7 +8,6 @@ export class PermissionService {
     });
   }
 
-  // A permission with the roles that grant it
   static async findById(id: number) {
     return Permission.findByPk(id, {
       include: [{ model: Role, as: "roles", attributes: ["id", "name"], through: { attributes: [] } }],

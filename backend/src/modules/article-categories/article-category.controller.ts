@@ -2,8 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { ArticleCategoryService } from "./article-category.service.js";
 
 export class ArticleCategoryController {
-
-
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
             const rootOnly = req.query.rootOnly === "true";
@@ -15,7 +13,6 @@ export class ArticleCategoryController {
     }
 
     static async getById(req: Request, res: Response, next: NextFunction) {
-
         try{
             const id = Number(req.params.id);
             const articleCategory = await ArticleCategoryService.findById(id);
@@ -33,9 +30,7 @@ export class ArticleCategoryController {
         }
     }
 
-
     static async create(req: Request, res: Response, next: NextFunction) {
-
         try{
             const { name, description, parentCategoryId } = req.body;
             if (!name) {
@@ -56,7 +51,6 @@ export class ArticleCategoryController {
             next(error);
         }
     }
-
 
     static async update(req: Request, res: Response, next: NextFunction) {
         try{
@@ -88,7 +82,6 @@ export class ArticleCategoryController {
             next(error);
         }
     }
-
 
     static async delete(req: Request, res: Response, next: NextFunction) {
         try {

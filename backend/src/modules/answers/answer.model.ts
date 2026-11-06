@@ -31,11 +31,11 @@ Answer.init(
         },
         questionId: {
             type: DataTypes.INTEGER,
-            allowNull: false, // Foreign key to Question
+            allowNull: false,
         },
         authorId: {
             type: DataTypes.INTEGER,
-            allowNull: false, // Foreign key to User (author)
+            allowNull: false,
         },
         content: {
             type: DataTypes.TEXT,

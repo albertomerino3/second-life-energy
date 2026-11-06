@@ -2,8 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { KitComponentService } from "./kit-component.service.js";
 
 export class KitComponentController {
-
-
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
             const kitId = Number(req.query.kitId) || undefined;
@@ -15,7 +13,6 @@ export class KitComponentController {
     }
 
     static async getById(req: Request, res: Response, next: NextFunction) {
-
         try{
             const kitId = Number(req.params.kitId);
             const componentId = Number(req.params.componentId);
@@ -34,9 +31,7 @@ export class KitComponentController {
         }
     }
 
-
     static async create(req: Request, res: Response, next: NextFunction) {
-
         try{
             const { kitId, componentId, quantity } = req.body;
             if (!kitId || !componentId) {
@@ -63,7 +58,6 @@ export class KitComponentController {
             next(error);
         }
     }
-
 
     static async update(req: Request, res: Response, next: NextFunction) {
         try{
@@ -97,7 +91,6 @@ export class KitComponentController {
             next(error);
         }
     }
-
 
     static async delete(req: Request, res: Response, next: NextFunction) {
         try {

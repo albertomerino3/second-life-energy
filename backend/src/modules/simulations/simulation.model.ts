@@ -7,9 +7,7 @@ import {
 } from "sequelize";
 
 import { sequelize } from "../../config/database.js";
-import { isHttpsUrl } from "../../utils/validators.js";
 
-// HU-10: practices linked to Falstad (CircuitJS1) and Wokwi
 export const SIMULATION_PLATFORMS = ["falstad", "wokwi"] as const;
 
 export class Simulation extends Model<
@@ -50,7 +48,6 @@ Simulation.init(
         url: {
             type: DataTypes.STRING(500),
             allowNull: false,
-            validate: { isHttpsUrl },
         },
         objectives: {
             type: DataTypes.TEXT,

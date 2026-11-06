@@ -1,22 +1,17 @@
 'use strict';
 
 const crypto = require("node:crypto");
-const { resetSequence } = require("../utils/reset-sequence");
-
 const DAY = 24 * 60 * 60 * 1000;
 
-// Only the hash of the token is stored, never the token itself
 function hashToken(token) {
   return crypto.createHash("sha256").update(token).digest("hex");
 }
 
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface) {
     const now = Date.now();
 
     await queryInterface.bulkInsert("invitations", [
-      // Accepted invitation: admin invited a teacher
       {
         id: 1,
         invited_by_id: 1,
@@ -27,7 +22,6 @@ module.exports = {
         used_at: new Date(now - 25 * DAY),
         created_at: new Date(now - 27 * DAY),
       },
-      // Accepted invitation: teacher (delegated permission) invited a student
       {
         id: 2,
         invited_by_id: 2,
@@ -38,7 +32,6 @@ module.exports = {
         used_at: new Date(now - 15 * DAY),
         created_at: new Date(now - 17 * DAY),
       },
-      // Pending invitation, still valid
       {
         id: 3,
         invited_by_id: 2,
@@ -49,7 +42,6 @@ module.exports = {
         used_at: null,
         created_at: new Date(now),
       },
-      // Expired invitation, never used
       {
         id: 4,
         invited_by_id: 1,
@@ -62,7 +54,15 @@ module.exports = {
       },
     ]);
 
-    await resetSequence(queryInterface, "invitations");
+    if (queryInterface.sequelize.getDialect() === "postgres") {
+      await queryInterface.sequelize.query(`
+        SELECT setval(
+          pg_get_serial_sequence('public.invitations', 'id'),
+          COALESCE((SELECT MAX(id) FROM public.invitations), 0) + 1,
+          false
+        );
+      `);
+    }
   },
 
   async down(queryInterface) {

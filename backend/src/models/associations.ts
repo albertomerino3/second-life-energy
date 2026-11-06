@@ -25,10 +25,7 @@ import { SimulationResource } from "../modules/simulation-resources/simulation-r
 import { ArticleReview } from "../modules/article-reviews/article-review.model.js";
 import { AuditLog } from "../modules/audit-logs/audit-log.model.js";
 
-// Relationships of the ERD (docs: 20261019-SecondLifeEnergy-ERD).
-// Foreign keys and ON DELETE rules are defined in the migrations.
 export function setupAssociations() {
-    // User N:M Role (UserRole)
     User.belongsToMany(Role, { through: UserRole, foreignKey: "userId", otherKey: "roleId", as: "roles" });
     Role.belongsToMany(User, { through: UserRole, foreignKey: "roleId", otherKey: "userId", as: "users" });
     User.hasMany(UserRole, { foreignKey: "userId", as: "userRoles" });
@@ -36,84 +33,69 @@ export function setupAssociations() {
     Role.hasMany(UserRole, { foreignKey: "roleId", as: "userRoles" });
     UserRole.belongsTo(Role, { foreignKey: "roleId", as: "role" });
 
-    // Role N:M Permission (RolePermission)
     Role.belongsToMany(Permission, { through: RolePermission, foreignKey: "roleId", otherKey: "permissionId", as: "permissions" });
     Permission.belongsToMany(Role, { through: RolePermission, foreignKey: "permissionId", otherKey: "roleId", as: "roles" });
     RolePermission.belongsTo(Role, { foreignKey: "roleId", as: "role" });
     RolePermission.belongsTo(Permission, { foreignKey: "permissionId", as: "permission" });
 
-    // User 1:N Invitation (sends) and Role 1:N Invitation (assigns)
     User.hasMany(Invitation, { foreignKey: "invitedById", as: "sentInvitations" });
     Invitation.belongsTo(User, { foreignKey: "invitedById", as: "invitedBy" });
     Role.hasMany(Invitation, { foreignKey: "roleId", as: "invitations" });
     Invitation.belongsTo(Role, { foreignKey: "roleId", as: "role" });
 
-    // ArticleCategory 1:N ArticleCategory (hasSubcategories)
     ArticleCategory.hasMany(ArticleCategory, { foreignKey: "parentCategoryId", as: "subcategories" });
     ArticleCategory.belongsTo(ArticleCategory, { foreignKey: "parentCategoryId", as: "parentCategory" });
 
-    // ArticleCategory 1:N Article (classifies) and User 1:N Article (creates)
     ArticleCategory.hasMany(Article, { foreignKey: "categoryId", as: "articles" });
     Article.belongsTo(ArticleCategory, { foreignKey: "categoryId", as: "category" });
     User.hasMany(Article, { foreignKey: "createdById", as: "articles" });
     Article.belongsTo(User, { foreignKey: "createdById", as: "createdBy" });
 
-    // Article N:M Article (KitComponent): a kit is made of components
     Article.belongsToMany(Article, { through: KitComponent, foreignKey: "kitId", otherKey: "componentId", as: "components" });
     Article.belongsToMany(Article, { through: KitComponent, foreignKey: "componentId", otherKey: "kitId", as: "kits" });
     Article.hasMany(KitComponent, { foreignKey: "kitId", as: "kitComponents" });
     KitComponent.belongsTo(Article, { foreignKey: "kitId", as: "kit" });
     KitComponent.belongsTo(Article, { foreignKey: "componentId", as: "component" });
 
-    // Article 1:N ArticleImage
     Article.hasMany(ArticleImage, { foreignKey: "articleId", as: "images" });
     ArticleImage.belongsTo(Article, { foreignKey: "articleId", as: "article" });
 
-    // Article 1:N StockMovement (tracks) and User 1:N StockMovement (records)
     Article.hasMany(StockMovement, { foreignKey: "articleId", as: "stockMovements" });
     StockMovement.belongsTo(Article, { foreignKey: "articleId", as: "article" });
     User.hasMany(StockMovement, { foreignKey: "userId", as: "stockMovements" });
     StockMovement.belongsTo(User, { foreignKey: "userId", as: "user" });
 
-    // Request 1:N RequestItem (contains) and Article 1:N RequestItem (requestedIn)
     Request.hasMany(RequestItem, { foreignKey: "requestId", as: "items" });
     RequestItem.belongsTo(Request, { foreignKey: "requestId", as: "request" });
     Article.hasMany(RequestItem, { foreignKey: "articleId", as: "requestItems" });
     RequestItem.belongsTo(Article, { foreignKey: "articleId", as: "article" });
 
-    // User 1:N Resource (authors)
     User.hasMany(Resource, { foreignKey: "authorId", as: "resources" });
     Resource.belongsTo(User, { foreignKey: "authorId", as: "author" });
 
-    // Resource N:M Tag (ResourceTag)
     Resource.belongsToMany(Tag, { through: ResourceTag, foreignKey: "resourceId", otherKey: "tagId", as: "tags" });
     Tag.belongsToMany(Resource, { through: ResourceTag, foreignKey: "tagId", otherKey: "resourceId", as: "resources" });
     ResourceTag.belongsTo(Resource, { foreignKey: "resourceId", as: "resource" });
     ResourceTag.belongsTo(Tag, { foreignKey: "tagId", as: "tag" });
 
-    // Article N:M Resource (ArticleResource)
     Article.belongsToMany(Resource, { through: ArticleResource, foreignKey: "articleId", otherKey: "resourceId", as: "resources" });
     Resource.belongsToMany(Article, { through: ArticleResource, foreignKey: "resourceId", otherKey: "articleId", as: "articles" });
     ArticleResource.belongsTo(Article, { foreignKey: "articleId", as: "article" });
     ArticleResource.belongsTo(Resource, { foreignKey: "resourceId", as: "resource" });
 
-    // ForumCategory 1:N Question and User 1:N Question (posts)
     ForumCategory.hasMany(Question, { foreignKey: "categoryId", as: "questions" });
     Question.belongsTo(ForumCategory, { foreignKey: "categoryId", as: "category" });
     User.hasMany(Question, { foreignKey: "authorId", as: "questions" });
     Question.belongsTo(User, { foreignKey: "authorId", as: "author" });
 
-    // Question 1:N Answer (receives) and User 1:N Answer (writes)
     Question.hasMany(Answer, { foreignKey: "questionId", as: "answers" });
     Answer.belongsTo(Question, { foreignKey: "questionId", as: "question" });
     User.hasMany(Answer, { foreignKey: "authorId", as: "answers" });
     Answer.belongsTo(User, { foreignKey: "authorId", as: "author" });
 
-    // Answer 0..1 : 0..1 Question (acceptedAsSolution)
     Question.belongsTo(Answer, { foreignKey: "acceptedAnswerId", as: "acceptedAnswer", constraints: false });
     Answer.hasOne(Question, { foreignKey: "acceptedAnswerId", as: "acceptedForQuestion", constraints: false });
 
-    // Moderation: performed by a User on a Question or an Answer
     User.hasMany(Moderation, { foreignKey: "moderatorId", as: "moderations" });
     Moderation.belongsTo(User, { foreignKey: "moderatorId", as: "moderator" });
     Question.hasMany(Moderation, { foreignKey: "questionId", as: "moderations" });
@@ -121,25 +103,21 @@ export function setupAssociations() {
     Answer.hasMany(Moderation, { foreignKey: "answerId", as: "moderations" });
     Moderation.belongsTo(Answer, { foreignKey: "answerId", as: "answer" });
 
-    // Simulation N:M Article (SimulationArticle)
     Simulation.belongsToMany(Article, { through: SimulationArticle, foreignKey: "simulationId", otherKey: "articleId", as: "articles" });
     Article.belongsToMany(Simulation, { through: SimulationArticle, foreignKey: "articleId", otherKey: "simulationId", as: "simulations" });
     SimulationArticle.belongsTo(Simulation, { foreignKey: "simulationId", as: "simulation" });
     SimulationArticle.belongsTo(Article, { foreignKey: "articleId", as: "article" });
 
-    // Simulation N:M Resource (SimulationResource)
     Simulation.belongsToMany(Resource, { through: SimulationResource, foreignKey: "simulationId", otherKey: "resourceId", as: "resources" });
     Resource.belongsToMany(Simulation, { through: SimulationResource, foreignKey: "resourceId", otherKey: "simulationId", as: "simulations" });
     SimulationResource.belongsTo(Simulation, { foreignKey: "simulationId", as: "simulation" });
     SimulationResource.belongsTo(Resource, { foreignKey: "resourceId", as: "resource" });
 
-    // Article 1:N ArticleReview (receives) and User 1:N ArticleReview (reviews)
     Article.hasMany(ArticleReview, { foreignKey: "articleId", as: "reviews" });
     ArticleReview.belongsTo(Article, { foreignKey: "articleId", as: "article" });
     User.hasMany(ArticleReview, { foreignKey: "reviewerId", as: "reviews" });
     ArticleReview.belongsTo(User, { foreignKey: "reviewerId", as: "reviewer" });
 
-    // User 0..1 : N AuditLog (generates)
     User.hasMany(AuditLog, { foreignKey: "userId", as: "auditLogs" });
     AuditLog.belongsTo(User, { foreignKey: "userId", as: "user" });
 }

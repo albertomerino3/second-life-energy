@@ -7,7 +7,6 @@ import {
 
 import { sequelize } from "../../config/database.js";
 
-// Join table: many-to-many relationship between Simulation and Resource
 export class SimulationResource extends Model<
     InferAttributes<SimulationResource>,
     InferCreationAttributes<SimulationResource>

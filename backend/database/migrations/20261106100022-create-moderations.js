@@ -1,6 +1,5 @@
 'use strict';
 
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("moderations", {
@@ -17,7 +16,6 @@ module.exports = {
         onUpdate: "CASCADE",
         onDelete: "RESTRICT",
       },
-      // A moderation targets either a question or an answer
       question_id: {
         type: Sequelize.INTEGER,
         allowNull: true,
@@ -32,12 +30,10 @@ module.exports = {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
-      // "hide" | "restore"
       action: {
         type: Sequelize.STRING(20),
         allowNull: false,
       },
-      // HU-09: a reason is mandatory to hide or restore a message
       reason: {
         type: Sequelize.STRING(255),
         allowNull: false,

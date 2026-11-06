@@ -2,8 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { ArticleImageService } from "./article-image.service.js";
 
 export class ArticleImageController {
-
-
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
             const articleId = Number(req.query.articleId) || undefined;
@@ -15,7 +13,6 @@ export class ArticleImageController {
     }
 
     static async getById(req: Request, res: Response, next: NextFunction) {
-
         try{
             const id = Number(req.params.id);
             const articleImage = await ArticleImageService.findById(id);
@@ -33,9 +30,7 @@ export class ArticleImageController {
         }
     }
 
-
     static async create(req: Request, res: Response, next: NextFunction) {
-
         try{
             const { articleId, url, altText, sortOrder} = req.body;
             if (!articleId || !url || !altText) {
@@ -50,14 +45,13 @@ export class ArticleImageController {
             altText,
             sortOrder,
         });
-        
+
         res.status(201).json(articleImage);
 
         } catch (error) {
             next(error);
         }
     }
-
 
     static async update(req: Request, res: Response, next: NextFunction) {
         try{
@@ -82,7 +76,6 @@ export class ArticleImageController {
             next(error);
         }
     }
-
 
     static async delete(req: Request, res: Response, next: NextFunction) {
         try {

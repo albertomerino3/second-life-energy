@@ -2,8 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { ArticleReviewService } from "./article-review.service.js";
 
 export class ArticleReviewController {
-
-
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
             const articleReview = await ArticleReviewService.findAll({
@@ -17,7 +15,6 @@ export class ArticleReviewController {
     }
 
     static async getById(req: Request, res: Response, next: NextFunction) {
-
         try{
             const id = Number(req.params.id);
             const articleReview = await ArticleReviewService.findById(id);
@@ -35,9 +32,7 @@ export class ArticleReviewController {
         }
     }
 
-
     static async create(req: Request, res: Response, next: NextFunction) {
-
         try{
             const { articleId, reviewerId, decision, comments} = req.body;
             if (!articleId || !reviewerId || !decision) {
@@ -52,14 +47,13 @@ export class ArticleReviewController {
             decision,
             comments,
         });
-        
+
         res.status(201).json(articleReview);
 
         } catch (error) {
             next(error);
         }
     }
-
 
     static async update(req: Request, res: Response, next: NextFunction) {
         try{
@@ -84,7 +78,6 @@ export class ArticleReviewController {
             next(error);
         }
     }
-
 
     static async delete(req: Request, res: Response, next: NextFunction) {
         try {

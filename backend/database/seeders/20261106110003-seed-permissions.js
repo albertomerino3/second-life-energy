@@ -1,8 +1,5 @@
 'use strict';
 
-const { resetSequence } = require("../utils/reset-sequence");
-
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface) {
     await queryInterface.bulkInsert("permissions", [
@@ -19,7 +16,15 @@ module.exports = {
       { id: 11, code: "requests.manage", description: "Gestionar las solicitudes de material" },
     ]);
 
-    await resetSequence(queryInterface, "permissions");
+    if (queryInterface.sequelize.getDialect() === "postgres") {
+      await queryInterface.sequelize.query(`
+        SELECT setval(
+          pg_get_serial_sequence('public.permissions', 'id'),
+          COALESCE((SELECT MAX(id) FROM public.permissions), 0) + 1,
+          false
+        );
+      `);
+    }
   },
 
   async down(queryInterface) {

@@ -5,8 +5,6 @@ import { setupAssociations } from "./models/associations.js";
 
 async function startServer() {
     try {
-        // The schema is managed with migrations (npm run db:migrate),
-        // so the models are never synchronized here.
         setupAssociations();
 
         await sequelize.authenticate();

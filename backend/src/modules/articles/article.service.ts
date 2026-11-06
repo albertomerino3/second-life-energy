@@ -19,7 +19,6 @@ export interface ArticleFilters {
 const SORTABLE_FIELDS = ["id", "name", "stock", "createdAt"];
 
 export class ArticleService {
-    // HU-03: catalogue with search, filters and sorting
     static async findAll(filters: ArticleFilters = {}) {
         const where: WhereOptions = {};
 
@@ -61,7 +60,6 @@ export class ArticleService {
         });
     }
 
-    // HU-03: article page with images, specifications, components and related resources
     static async findById(id: number) {
         return Article.findByPk(id, {
             include: [

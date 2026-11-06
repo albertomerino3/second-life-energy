@@ -1,8 +1,5 @@
 'use strict';
 
-const { resetSequence } = require("../utils/reset-sequence");
-
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface) {
     await queryInterface.bulkInsert("roles", [
@@ -11,7 +8,15 @@ module.exports = {
       { id: 3, name: "student", description: "Alumnado autorizado: crea borradores de kits y participa en el foro" },
     ]);
 
-    await resetSequence(queryInterface, "roles");
+    if (queryInterface.sequelize.getDialect() === "postgres") {
+      await queryInterface.sequelize.query(`
+        SELECT setval(
+          pg_get_serial_sequence('public.roles', 'id'),
+          COALESCE((SELECT MAX(id) FROM public.roles), 0) + 1,
+          false
+        );
+      `);
+    }
   },
 
   async down(queryInterface) {

@@ -9,7 +9,6 @@ const includeRelations = [
 ];
 
 export class InvitationService {
-    // state: "pending" (not used, not expired), "used" or "expired"
     static async findAll(filters: { state?: string } = {}) {
         const now = new Date();
         let where: WhereOptions = {};

@@ -1,17 +1,16 @@
 import { Router } from "express";
 import { RequestItemController } from "./request-item.controller.js";
-import { validateIdParams } from "../../middlewares/validate-id.middleware.js";
 
 const router = Router();
 
 router.get("/", RequestItemController.getAll);
 
-router.get("/:id", validateIdParams, RequestItemController.getById);
+router.get("/:id", RequestItemController.getById);
 
 router.post("/", RequestItemController.create);
 
-router.put("/:id", validateIdParams, RequestItemController.update);
+router.put("/:id", RequestItemController.update);
 
-router.delete("/:id", validateIdParams, RequestItemController.delete);
+router.delete("/:id", RequestItemController.delete);
 
 export default router;

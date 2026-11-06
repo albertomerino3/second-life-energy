@@ -1,8 +1,5 @@
 'use strict';
 
-const { resetSequence } = require("../utils/reset-sequence");
-
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface) {
     await queryInterface.bulkInsert("tags", [
@@ -16,7 +13,15 @@ module.exports = {
       { id: 8, name: "Medición", slug: "medicion" },
     ]);
 
-    await resetSequence(queryInterface, "tags");
+    if (queryInterface.sequelize.getDialect() === "postgres") {
+      await queryInterface.sequelize.query(`
+        SELECT setval(
+          pg_get_serial_sequence('public.tags', 'id'),
+          COALESCE((SELECT MAX(id) FROM public.tags), 0) + 1,
+          false
+        );
+      `);
+    }
   },
 
   async down(queryInterface) {

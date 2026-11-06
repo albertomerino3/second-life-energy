@@ -27,7 +27,7 @@ Permission.init(
         code: {
             type: DataTypes.STRING(100),
             allowNull: false,
-            unique: true, // Unique permission code, e.g. "articles.review"
+            unique: true,
             validate: { notEmpty: true },
         },
         description: {

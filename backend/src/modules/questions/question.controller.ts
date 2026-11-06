@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { QuestionService } from "./question.service.js";
 
 export class QuestionController {
-  // GET /questions?search=&categoryId=&status=
   static async getAll(req: Request, res: Response, next: NextFunction) {
     try {
       const items = await QuestionService.findAll({
@@ -16,7 +15,6 @@ export class QuestionController {
     }
   }
 
-  // GET /questions/:id
   static async getById(req: Request, res: Response, next: NextFunction) {
     try {
       const id = Number(req.params.id);
@@ -31,7 +29,6 @@ export class QuestionController {
     }
   }
 
-  // GET /questions/category/:categoryId
   static async getByCategoryId(req: Request, res: Response, next: NextFunction) {
     try {
       const categoryId = Number(req.params.categoryId);
@@ -42,7 +39,6 @@ export class QuestionController {
     }
   }
 
-  // POST /questions
   static async create(req: Request, res: Response, next: NextFunction) {
     try {
       const { categoryId, authorId, title, content, status } = req.body;
@@ -57,7 +53,6 @@ export class QuestionController {
     }
   }
 
-  // PUT /questions/:id
   static async update(req: Request, res: Response, next: NextFunction) {
     try {
       const id = Number(req.params.id);
@@ -73,7 +68,6 @@ export class QuestionController {
     }
   }
 
-  // DELETE /questions/:id
   static async delete(req: Request, res: Response, next: NextFunction) {
     try {
       const id = Number(req.params.id);

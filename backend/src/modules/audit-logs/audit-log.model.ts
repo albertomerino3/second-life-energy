@@ -31,7 +31,7 @@ AuditLog.init(
         },
         userId: {
             type: DataTypes.INTEGER,
-            allowNull: true, // null when the action was made by a visitor or the system
+            allowNull: true,
         },
         entity: {
             type: DataTypes.STRING(100),

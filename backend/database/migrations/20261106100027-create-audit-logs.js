@@ -1,6 +1,5 @@
 'use strict';
 
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("audit_logs", {
@@ -25,7 +24,6 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      // "create" | "update" | "delete" | "publish" | "permission_change"
       action: {
         type: Sequelize.STRING(30),
         allowNull: false,

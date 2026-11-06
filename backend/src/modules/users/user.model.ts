@@ -57,7 +57,6 @@ User.init(
         tableName: "users",
         modelName: "User",
         timestamps: true,
-        // The password hash is never returned, not even inside an include
         defaultScope: {
             attributes: { exclude: ["passwordHash"] },
         },

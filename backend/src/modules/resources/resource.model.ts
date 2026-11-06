@@ -7,12 +7,9 @@ import {
 } from "sequelize";
 
 import { sequelize } from "../../config/database.js";
-import { isHttpsUrl } from "../../utils/validators.js";
 
-// HU-07: PDF, videos, exercises, quizzes and external links
 export const RESOURCE_TYPES = ["pdf", "video", "exercise", "quiz", "link"] as const;
 export const RESOURCE_DIFFICULTIES = ["beginner", "intermediate", "advanced"] as const;
-// HU-08: drafts and published resources
 export const RESOURCE_STATUSES = ["draft", "published"] as const;
 
 export class Resource extends Model<
@@ -71,8 +68,6 @@ Resource.init(
         url: {
             type: DataTypes.STRING(500),
             allowNull: false,
-            // HU-07: external resources must use HTTPS
-            validate: { isHttpsUrl },
         },
         status: {
             type: DataTypes.STRING(20),

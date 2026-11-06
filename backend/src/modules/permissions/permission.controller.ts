@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { PermissionService } from "./permissions.service.js";
 
 export class PermissionController {
-  // GET /permissions
   static async getAll(req: Request, res: Response, next: NextFunction) {
     try {
       const items = await PermissionService.findAll();
@@ -12,7 +11,6 @@ export class PermissionController {
     }
   }
 
-  // GET /permissions/:id
   static async getById(req: Request, res: Response, next: NextFunction) {
     try {
       const id = Number(req.params.id);
@@ -27,7 +25,6 @@ export class PermissionController {
     }
   }
 
-  // POST /permissions
   static async create(req: Request, res: Response, next: NextFunction) {
     try {
       const { code, description } = req.body;
@@ -42,7 +39,6 @@ export class PermissionController {
     }
   }
 
-  // PUT /permissions/:id
   static async update(req: Request, res: Response, next: NextFunction) {
     try {
       const id = Number(req.params.id);
@@ -58,7 +54,6 @@ export class PermissionController {
     }
   }
 
-  // DELETE /permissions/:id
   static async delete(req: Request, res: Response, next: NextFunction) {
     try {
       const id = Number(req.params.id);

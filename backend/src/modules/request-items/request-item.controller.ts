@@ -2,8 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { RequestItemService } from "./request-item.service.js";
 
 export class RequestItemController {
-
-
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
             const requestId = Number(req.query.requestId) || undefined;
@@ -15,7 +13,6 @@ export class RequestItemController {
     }
 
     static async getById(req: Request, res: Response, next: NextFunction) {
-
         try{
             const id = Number(req.params.id);
             const requestItem = await RequestItemService.findById(id);
@@ -33,9 +30,7 @@ export class RequestItemController {
         }
     }
 
-
     static async create(req: Request, res: Response, next: NextFunction) {
-
         try{
             const { requestId, articleId, quantity} = req.body;
             if (!requestId || !articleId) {
@@ -54,7 +49,6 @@ export class RequestItemController {
             next(error);
         }
     }
-
 
     static async update(req: Request, res: Response, next: NextFunction) {
         try{
@@ -79,7 +73,6 @@ export class RequestItemController {
             next(error);
         }
     }
-
 
     static async delete(req: Request, res: Response, next: NextFunction) {
         try {

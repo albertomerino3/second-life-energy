@@ -9,7 +9,6 @@ import {
 import { sequelize } from "../../config/database.js";
 
 export const ARTICLE_TYPES = ["kit", "component"] as const;
-// HU-11: students create drafts and send them to review, teachers approve or return them
 export const ARTICLE_STATUSES = ["draft", "in_review", "published", "returned"] as const;
 
 export class Article extends Model<

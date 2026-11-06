@@ -5,7 +5,6 @@ import {
     UniqueConstraintError,
     ValidationError,
 } from "sequelize";
-import { HttpError } from "../utils/http-error.js";
 
 export function errorMiddleware(
     error: Error,
@@ -13,15 +12,6 @@ export function errorMiddleware(
     res: Response,
     next: NextFunction
 ) {
-    // Business rules thrown by the services
-    if (error instanceof HttpError) {
-        res.status(error.status).json({
-            message: error.message,
-        });
-        return;
-    }
-
-    // Malformed JSON body
     if ("type" in error && error.type === "entity.parse.failed") {
         res.status(400).json({
             message: "Invalid JSON body",
@@ -29,7 +19,6 @@ export function errorMiddleware(
         return;
     }
 
-    // Duplicated value of a unique column (email, slug, code...)
     if (error instanceof UniqueConstraintError) {
         res.status(409).json({
             message: "A record with the same unique value already exists",
@@ -38,7 +27,6 @@ export function errorMiddleware(
         return;
     }
 
-    // Model validations (allowNull, isEmail, isIn, min...)
     if (error instanceof ValidationError) {
         res.status(400).json({
             message: "Validation error",
@@ -50,7 +38,6 @@ export function errorMiddleware(
         return;
     }
 
-    // The referenced record does not exist, or the record is still referenced
     if (error instanceof ForeignKeyConstraintError) {
         res.status(409).json({
             message: "The operation violates a relationship between records",
@@ -59,7 +46,6 @@ export function errorMiddleware(
         return;
     }
 
-    // ON DELETE RESTRICT (PostgreSQL code 23001): the record is still in use
     if (error instanceof DatabaseError && (error.parent as { code?: string })?.code === "23001") {
         res.status(409).json({
             message: "The record cannot be deleted because other records depend on it",
@@ -67,7 +53,6 @@ export function errorMiddleware(
         return;
     }
 
-    // Values the database cannot store (e.g. text in an integer column)
     if (error instanceof DatabaseError) {
         console.error(error);
         res.status(400).json({

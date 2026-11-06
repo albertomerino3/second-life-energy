@@ -7,7 +7,6 @@ import {
 
 import { sequelize } from "../../config/database.js";
 
-// Join table: many-to-many relationship between Article and Resource
 export class ArticleResource extends Model<
     InferAttributes<ArticleResource>,
     InferCreationAttributes<ArticleResource>

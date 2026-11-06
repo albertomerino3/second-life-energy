@@ -1,10 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { ResourceTagService } from "./resource-tag.service.js";
 
-// Join table with a composite key: there is no PUT, a relationship is
-// changed by deleting it and creating a new one.
 export class ResourceTagController {
-
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
             const resourceTags = await ResourceTagService.findAll({

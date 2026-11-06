@@ -20,8 +20,7 @@
     "db:migrate:status": "cd database && sequelize-cli db:migrate:status",
     "db:seed": "cd database && sequelize-cli db:seed:all",
     "db:seed:undo": "cd database && sequelize-cli db:seed:undo:all",
-    "db:reset": "npm run db:seed:undo && npm run db:migrate:undo:all && npm run db:migrate && npm run db:seed",
-    "test:api": "cd bruno && npx --yes @usebruno/cli@4.2.1 run --env local --reporter-html ../bruno-report.html"
+    "db:reset": "npm run db:seed:undo && npm run db:migrate:undo:all && npm run db:migrate && npm run db:seed"
   },
   "keywords": [],
   "dependencies": {

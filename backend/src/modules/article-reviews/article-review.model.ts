@@ -8,7 +8,6 @@ import {
 
 import { sequelize } from "../../config/database.js";
 
-// HU-11: teachers or admins approve a kit or return it with observations
 export const REVIEW_DECISIONS = ["approved", "returned"] as const;
 
 export class ArticleReview extends Model<
@@ -56,7 +55,6 @@ ArticleReview.init(
         timestamps: true,
         updatedAt: false,
         validate: {
-            // Returning a kit requires observations for the student
             commentsWhenReturned(this: ArticleReview) {
                 if (this.decision === "returned" && !this.comments) {
                     throw new Error("comments are required when the decision is 'returned'");

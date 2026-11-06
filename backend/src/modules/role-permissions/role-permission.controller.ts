@@ -1,10 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { RolePermissionService } from "./role-permission.service.js";
 
-// Join table with a composite key: there is no PUT, a permission is
-// revoked (DELETE) and assigned again (POST).
 export class RolePermissionController {
-  // GET /role-permissions?roleId=&permissionId=
   static async getAll(req: Request, res: Response, next: NextFunction) {
     try {
       const items = await RolePermissionService.findAll({
@@ -17,7 +14,6 @@ export class RolePermissionController {
     }
   }
 
-  // GET /role-permissions/role/:roleId
   static async getByRoleId(req: Request, res: Response, next: NextFunction) {
     try {
       const roleId = Number(req.params.roleId);
@@ -28,7 +24,6 @@ export class RolePermissionController {
     }
   }
 
-  // GET /role-permissions/:roleId/:permissionId
   static async getById(req: Request, res: Response, next: NextFunction) {
     try {
       const roleId = Number(req.params.roleId);
@@ -44,7 +39,6 @@ export class RolePermissionController {
     }
   }
 
-  // POST /role-permissions
   static async assign(req: Request, res: Response, next: NextFunction) {
     try {
       const { roleId, permissionId } = req.body;
@@ -59,7 +53,6 @@ export class RolePermissionController {
     }
   }
 
-  // DELETE /role-permissions/:roleId/:permissionId
   static async revoke(req: Request, res: Response, next: NextFunction) {
     try {
       const roleId = Number(req.params.roleId);

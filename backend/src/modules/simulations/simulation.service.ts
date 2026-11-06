@@ -2,7 +2,6 @@ import { Simulation } from "./simulation.model.js";
 import { Article } from "../articles/article.model.js";
 import { Resource } from "../resources/resource.model.js";
 
-// HU-10: simulations related to kits and educational resources
 const includeRelations = [
     { model: Article, as: "articles", attributes: ["id", "name", "type"], through: { attributes: [] } },
     { model: Resource, as: "resources", attributes: ["id", "title", "type", "url"], through: { attributes: [] } },

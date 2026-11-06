@@ -1,6 +1,5 @@
 'use strict';
 
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("resources", {
@@ -25,7 +24,6 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: false,
       },
-      // "pdf" | "video" | "exercise" | "quiz" | "link"
       type: {
         type: Sequelize.STRING(20),
         allowNull: false,
@@ -34,7 +32,6 @@ module.exports = {
         type: Sequelize.STRING(100),
         allowNull: false,
       },
-      // "beginner" | "intermediate" | "advanced"
       difficulty: {
         type: Sequelize.STRING(20),
         allowNull: false,
@@ -43,7 +40,6 @@ module.exports = {
         type: Sequelize.STRING(500),
         allowNull: false,
       },
-      // "draft" | "published"
       status: {
         type: Sequelize.STRING(20),
         allowNull: false,

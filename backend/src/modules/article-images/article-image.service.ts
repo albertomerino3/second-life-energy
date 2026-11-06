@@ -4,7 +4,6 @@ import { Article } from "../articles/article.model.js";
 const includeArticle = [{ model: Article, as: "article", attributes: ["id", "name"] }];
 
 export class ArticleImageService {
-
     static async findAll(filters: { articleId?: number } = {}) {
         return ArticleImage.findAll({
             where: filters.articleId ? { articleId: filters.articleId } : {},

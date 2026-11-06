@@ -16,7 +16,6 @@ export interface ResourceFilters {
 }
 
 export class ResourceService {
-    // HU-07: library filtered by type, topic and difficulty
     static async findAll(filters: ResourceFilters = {}) {
         const where: WhereOptions = {};
 
@@ -48,7 +47,6 @@ export class ResourceService {
                     as: "tags",
                     attributes: ["id", "name", "slug"],
                     through: { attributes: [] },
-                    // Filter by tag slug (only resources that have that tag)
                     ...(filters.tag ? { where: { slug: filters.tag } } : {}),
                 },
             ],
@@ -78,7 +76,6 @@ export class ResourceService {
         status?: string;
         publishedAt?: Date | null;
     }) {
-        // A published resource always has a publication date
         const publishedAt = data.status === "published" ? data.publishedAt ?? new Date() : data.publishedAt ?? null;
         return Resource.create({ ...data, publishedAt });
     }

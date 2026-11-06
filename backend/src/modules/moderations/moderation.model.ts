@@ -32,15 +32,15 @@ Moderation.init(
         },
         moderatorId: {
             type: DataTypes.INTEGER,
-            allowNull: false, // Foreign key to User (moderator)
+            allowNull: false,
         },
         questionId: {
             type: DataTypes.INTEGER,
-            allowNull: true, // Nullable: filled if a Question is being moderated
+            allowNull: true,
         },
         answerId: {
             type: DataTypes.INTEGER,
-            allowNull: true, // Nullable: filled if an Answer is being moderated
+            allowNull: true,
         },
         action: {
             type: DataTypes.STRING(20),
@@ -49,7 +49,7 @@ Moderation.init(
         },
         reason: {
             type: DataTypes.STRING(255),
-            allowNull: false, // HU-09: a reason is mandatory
+            allowNull: false,
             validate: { notEmpty: true },
         },
         createdAt: DataTypes.DATE,
@@ -61,7 +61,6 @@ Moderation.init(
         timestamps: true,
         updatedAt: false,
         validate: {
-            // A moderation targets exactly one message: a question or an answer
             exactlyOneTarget(this: Moderation) {
                 const hasQuestion = this.questionId !== null && this.questionId !== undefined;
                 const hasAnswer = this.answerId !== null && this.answerId !== undefined;

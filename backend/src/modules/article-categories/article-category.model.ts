@@ -15,7 +15,6 @@ export class ArticleCategory extends Model<
     declare id: CreationOptional<number>;
     declare name: string;
     declare description: string | null;
-    // null for the root categories (self relationship "hasSubcategories")
     declare parentCategoryId: number | null;
 }
 

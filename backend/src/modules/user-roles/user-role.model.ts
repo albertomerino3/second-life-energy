@@ -8,7 +8,6 @@ import {
 
 import { sequelize } from "../../config/database.js";
 
-// Join table: many-to-many relationship between User and Role
 export class UserRole extends Model<
     InferAttributes<UserRole>,
     InferCreationAttributes<UserRole>

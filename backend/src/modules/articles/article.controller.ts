@@ -46,13 +46,13 @@ export class ArticleController {
                 return;
             }
             const article = await ArticleService.create({
-                categoryId, 
-                createdById, 
-                name, 
-                description, 
-                type, 
-                specifications, 
-                stock, 
+                categoryId,
+                createdById,
+                name,
+                description,
+                type,
+                specifications,
+                stock,
                 status,
             });
             res.status(201).json(article);

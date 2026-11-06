@@ -1,8 +1,5 @@
 'use strict';
 
-const { resetSequence } = require("../utils/reset-sequence");
-
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface) {
     await queryInterface.bulkInsert("simulations", [
@@ -11,7 +8,15 @@ module.exports = {
       { id: 3, title: "Divisor de tensión", description: "Cálculo y comprobación de un divisor de tensión con dos resistencias.", platform: "falstad", url: "https://www.falstad.com/circuit/circuitjs.html", objectives: "Aplicar la ley de Ohm para obtener una tensión de salida.", materials: "Pack de resistencias variadas." },
     ]);
 
-    await resetSequence(queryInterface, "simulations");
+    if (queryInterface.sequelize.getDialect() === "postgres") {
+      await queryInterface.sequelize.query(`
+        SELECT setval(
+          pg_get_serial_sequence('public.simulations', 'id'),
+          COALESCE((SELECT MAX(id) FROM public.simulations), 0) + 1,
+          false
+        );
+      `);
+    }
   },
 
   async down(queryInterface) {

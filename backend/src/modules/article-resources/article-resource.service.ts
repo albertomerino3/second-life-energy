@@ -8,7 +8,6 @@ const includeRelations = [
 ];
 
 export class ArticleResourceService {
-
     static async findAll(filters: { articleId?: number; resourceId?: number } = {}) {
         const where: Record<string, number> = {};
         if (filters.articleId) where.articleId = filters.articleId;

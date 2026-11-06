@@ -6,7 +6,6 @@ const includeHierarchy = [
 ];
 
 export class ArticleCategoryService {
-
     static async findAll(filters: { rootOnly?: boolean } = {}) {
         return ArticleCategory.findAll({
             where: filters.rootOnly ? { parentCategoryId: null } : {},

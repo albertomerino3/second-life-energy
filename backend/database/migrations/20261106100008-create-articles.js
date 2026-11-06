@@ -1,6 +1,5 @@
 'use strict';
 
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("articles", {
@@ -32,7 +31,6 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: false,
       },
-      // "kit" | "component"
       type: {
         type: Sequelize.STRING(20),
         allowNull: false,
@@ -46,7 +44,6 @@ module.exports = {
         allowNull: false,
         defaultValue: 0,
       },
-      // "draft" | "in_review" | "published" | "returned"
       status: {
         type: Sequelize.STRING(20),
         allowNull: false,

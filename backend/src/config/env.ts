@@ -6,8 +6,6 @@ if (!["development", "test", "production"].includes(NODE_ENV)) {
     throw new Error(`Invalid environment: ${NODE_ENV}`);
 }
 
-// In production the variables come from the environment (Docker / IsardVDI),
-// never from a file in the repository.
 if (NODE_ENV !== "production") {
     dotenv.config({
         path: `.env.${NODE_ENV}`,

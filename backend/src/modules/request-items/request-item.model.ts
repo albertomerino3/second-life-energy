@@ -37,7 +37,6 @@ RequestItem.init(
             type: DataTypes.INTEGER,
             allowNull: false,
             defaultValue: 1,
-            // HU-04: max. 1 unit per kit and 10 per component (checked in the service)
             validate: { isInt: true, min: 1, max: 10 },
         },
     },

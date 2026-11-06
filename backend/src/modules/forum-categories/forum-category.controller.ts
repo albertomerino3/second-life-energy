@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { ForumCategoryService } from "./forum-category.service.js";
 
 export class ForumCategoryController {
-  // GET /forum-categories
   static async getAll(req: Request, res: Response, next: NextFunction) {
     try {
       const items = await ForumCategoryService.findAll();
@@ -12,7 +11,6 @@ export class ForumCategoryController {
     }
   }
 
-  // GET /forum-categories/:id
   static async getById(req: Request, res: Response, next: NextFunction) {
     try {
       const id = Number(req.params.id);
@@ -27,7 +25,6 @@ export class ForumCategoryController {
     }
   }
 
-  // POST /forum-categories
   static async create(req: Request, res: Response, next: NextFunction) {
     try {
       const { name, description } = req.body;
@@ -42,7 +39,6 @@ export class ForumCategoryController {
     }
   }
 
-  // PUT /forum-categories/:id
   static async update(req: Request, res: Response, next: NextFunction) {
     try {
       const id = Number(req.params.id);
@@ -58,7 +54,6 @@ export class ForumCategoryController {
     }
   }
 
-  // DELETE /forum-categories/:id
   static async delete(req: Request, res: Response, next: NextFunction) {
     try {
       const id = Number(req.params.id);

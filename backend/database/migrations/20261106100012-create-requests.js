@@ -1,6 +1,5 @@
 'use strict';
 
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("requests", {
@@ -10,7 +9,6 @@ module.exports = {
         primaryKey: true,
         allowNull: false,
       },
-      // Fictitious reference, e.g. "DEMO-2026-0001" (HU-05)
       reference: {
         type: Sequelize.STRING(30),
         allowNull: false,
@@ -28,7 +26,6 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: true,
       },
-      // "draft" | "confirmed" | "cancelled"
       status: {
         type: Sequelize.STRING(20),
         allowNull: false,

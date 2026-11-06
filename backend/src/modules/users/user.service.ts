@@ -1,7 +1,6 @@
 import { User } from "./user.model.js";
 import { Role } from "../roles/role.model.js";
 
-// The password hash is excluded by the default scope of the model
 const includeRoles = [
     {
         model: Role,
@@ -50,8 +49,6 @@ export class UserService {
             isActive?: boolean;
         }
     ) {
-        // Only the fields sent in the body: the instance was loaded without
-        // passwordHash (default scope), so it must not be validated if absent
         const editableFields = ["name", "email", "passwordHash", "isActive"] as const;
         const fields = editableFields.filter((field) => data[field] !== undefined);
         if (fields.length === 0) {

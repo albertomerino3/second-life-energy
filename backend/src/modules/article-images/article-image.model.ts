@@ -38,7 +38,7 @@ ArticleImage.init(
         altText: {
             type: DataTypes.STRING(300),
             allowNull: false,
-            validate: { notEmpty: true }, // Accessibility: every image needs an alternative text
+            validate: { notEmpty: true },
         },
         sortOrder: {
             type: DataTypes.INTEGER,

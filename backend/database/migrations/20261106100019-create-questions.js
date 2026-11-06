@@ -1,6 +1,5 @@
 'use strict';
 
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("questions", {
@@ -24,8 +23,6 @@ module.exports = {
         onUpdate: "CASCADE",
         onDelete: "RESTRICT",
       },
-      // The foreign key to "answers" is added once that table exists
-      // (see 20261106100021-add-accepted-answer-fk-to-questions.js).
       accepted_answer_id: {
         type: Sequelize.INTEGER,
         allowNull: true,
@@ -38,7 +35,6 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: false,
       },
-      // "open" | "solved" | "hidden"
       status: {
         type: Sequelize.STRING(20),
         allowNull: false,

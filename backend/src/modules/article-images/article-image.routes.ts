@@ -1,17 +1,16 @@
 import { Router } from "express";
 import { ArticleImageController } from "./article-image.controller.js";
-import { validateIdParams } from "../../middlewares/validate-id.middleware.js";
 
 const router = Router();
 
 router.get("/", ArticleImageController.getAll);
 
-router.get("/:id", validateIdParams, ArticleImageController.getById);
+router.get("/:id", ArticleImageController.getById);
 
 router.post("/", ArticleImageController.create);
 
-router.put("/:id", validateIdParams, ArticleImageController.update);
+router.put("/:id", ArticleImageController.update);
 
-router.delete("/:id", validateIdParams, ArticleImageController.delete);
+router.delete("/:id", ArticleImageController.delete);
 
 export default router;

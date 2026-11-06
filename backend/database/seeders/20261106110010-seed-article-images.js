@@ -1,8 +1,5 @@
 'use strict';
 
-const { resetSequence } = require("../utils/reset-sequence");
-
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface) {
     await queryInterface.bulkInsert("article_images", [
@@ -14,7 +11,15 @@ module.exports = {
       { id: 6, article_id: 7, url: "/images/articles/panel-solar-6v-1.jpg", alt_text: "Panel solar pequeño de 6 voltios", sort_order: 0 },
     ]);
 
-    await resetSequence(queryInterface, "article_images");
+    if (queryInterface.sequelize.getDialect() === "postgres") {
+      await queryInterface.sequelize.query(`
+        SELECT setval(
+          pg_get_serial_sequence('public.article_images', 'id'),
+          COALESCE((SELECT MAX(id) FROM public.article_images), 0) + 1,
+          false
+        );
+      `);
+    }
   },
 
   async down(queryInterface) {

@@ -41,11 +41,11 @@ export class AuditLogController {
                 return;
             }
             const auditLog = await AuditLogService.create({
-                userId, 
-                entity, 
-                entityId, 
-                action, 
-                previousValues, 
+                userId,
+                entity,
+                entityId,
+                action,
+                previousValues,
                 newValues
             });
             res.status(201).json(auditLog);

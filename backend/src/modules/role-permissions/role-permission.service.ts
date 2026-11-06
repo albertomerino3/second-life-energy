@@ -8,7 +8,6 @@ const includeRelations = [
 ];
 
 export class RolePermissionService {
-  // All role-permission assignments, optionally of one role
   static async findAll(filters: { roleId?: number; permissionId?: number } = {}) {
     const where: Record<string, number> = {};
     if (filters.roleId) where.roleId = filters.roleId;
@@ -21,7 +20,6 @@ export class RolePermissionService {
     });
   }
 
-  // All permissions assigned to a specific role
   static async findByRoleId(roleId: number) {
     return RolePermissionService.findAll({ roleId });
   }
@@ -33,13 +31,11 @@ export class RolePermissionService {
     });
   }
 
-  // Assign a permission to a role
   static async create(data: { roleId: number; permissionId: number }) {
     await RolePermission.create(data);
     return RolePermissionService.findById(data.roleId, data.permissionId);
   }
 
-  // Revoke a permission from a role
   static async delete(rolePermission: RolePermission) {
     await rolePermission.destroy();
   }

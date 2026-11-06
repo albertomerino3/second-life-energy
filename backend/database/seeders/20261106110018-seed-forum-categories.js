@@ -1,8 +1,5 @@
 'use strict';
 
-const { resetSequence } = require("../utils/reset-sequence");
-
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface) {
     await queryInterface.bulkInsert("forum_categories", [
@@ -12,7 +9,15 @@ module.exports = {
       { id: 4, name: "Energía renovable", description: "Paneles solares, baterías y almacenamiento" },
     ]);
 
-    await resetSequence(queryInterface, "forum_categories");
+    if (queryInterface.sequelize.getDialect() === "postgres") {
+      await queryInterface.sequelize.query(`
+        SELECT setval(
+          pg_get_serial_sequence('public.forum_categories', 'id'),
+          COALESCE((SELECT MAX(id) FROM public.forum_categories), 0) + 1,
+          false
+        );
+      `);
+    }
   },
 
   async down(queryInterface) {

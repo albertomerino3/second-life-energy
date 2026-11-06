@@ -8,7 +8,6 @@ import {
 
 import { sequelize } from "../../config/database.js";
 
-// Join table: a kit (Article of type "kit") is made of components (Article of type "component")
 export class KitComponent extends Model<
     InferAttributes<KitComponent>,
     InferCreationAttributes<KitComponent>

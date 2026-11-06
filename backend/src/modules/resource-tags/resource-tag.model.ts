@@ -7,7 +7,6 @@ import {
 
 import { sequelize } from "../../config/database.js";
 
-// Join table: many-to-many relationship between Resource and Tag
 export class ResourceTag extends Model<
     InferAttributes<ResourceTag>,
     InferCreationAttributes<ResourceTag>

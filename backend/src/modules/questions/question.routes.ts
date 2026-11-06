@@ -1,14 +1,13 @@
 import { Router } from "express";
 import { QuestionController } from "./question.controller.js";
-import { validateIdParams } from "../../middlewares/validate-id.middleware.js";
 
 const router = Router();
 
 router.get("/", QuestionController.getAll);
-router.get("/category/:categoryId", validateIdParams, QuestionController.getByCategoryId);
-router.get("/:id", validateIdParams, QuestionController.getById);
+router.get("/category/:categoryId", QuestionController.getByCategoryId);
+router.get("/:id", QuestionController.getById);
 router.post("/", QuestionController.create);
-router.put("/:id", validateIdParams, QuestionController.update);
-router.delete("/:id", validateIdParams, QuestionController.delete);
+router.put("/:id", QuestionController.update);
+router.delete("/:id", QuestionController.delete);
 
 export default router;

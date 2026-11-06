@@ -8,7 +8,6 @@ import {
 
 import { sequelize } from "../../config/database.js";
 
-// HU-05: demo requests, nobody receives or processes them
 export const REQUEST_STATUSES = ["draft", "confirmed", "cancelled"] as const;
 
 export class Request extends Model<
@@ -35,7 +34,6 @@ Request.init(
             type: DataTypes.STRING(30),
             allowNull: false,
             unique: true,
-            // Unmistakably fictitious reference, e.g. "DEMO-2026-0001"
             validate: { is: /^DEMO-\d{4}-[A-Z0-9]+$/ },
         },
         contactName: {

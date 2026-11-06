@@ -10,7 +10,7 @@ export class InvitationController {
             next(error);
         }
     }
-    
+
     static async getById(req: Request, res: Response, next: NextFunction) {
         try {
             const id = Number(req.params.id);
@@ -26,7 +26,7 @@ export class InvitationController {
             next(error);
         }
     }
-    
+
     static async create(req: Request, res: Response, next: NextFunction) {
             try {
                 const { invitedById, roleId, email, tokenHash, expiresAt, usedAt } = req.body;
@@ -37,10 +37,10 @@ export class InvitationController {
                     return;
                 }
                 const invitation = await InvitationService.create({
-                    invitedById, 
-                    roleId, 
-                    email, 
-                    tokenHash, 
+                    invitedById,
+                    roleId,
+                    email,
+                    tokenHash,
                     expiresAt,
                     usedAt,
                 });
@@ -49,7 +49,7 @@ export class InvitationController {
                 next(error);
             }
         }
-    
+
     static async update(req: Request, res: Response, next: NextFunction) {
         try {
             const id = Number(req.params.id);
@@ -69,7 +69,7 @@ export class InvitationController {
             next(error);
         }
     }
-    
+
     static async delete(req: Request, res: Response, next: NextFunction) {
         try {
             const id = Number(req.params.id);

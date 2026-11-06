@@ -33,15 +33,15 @@ Question.init(
         },
         categoryId: {
             type: DataTypes.INTEGER,
-            allowNull: false, // Foreign key to ForumCategory
+            allowNull: false,
         },
         authorId: {
             type: DataTypes.INTEGER,
-            allowNull: false, // Foreign key to User (creator)
+            allowNull: false,
         },
         acceptedAnswerId: {
             type: DataTypes.INTEGER,
-            allowNull: true, // Foreign key to Answer chosen as solution
+            allowNull: true,
         },
         title: {
             type: DataTypes.STRING(255),

@@ -1,6 +1,5 @@
 'use strict';
 
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("article_reviews", {
@@ -24,7 +23,6 @@ module.exports = {
         onUpdate: "CASCADE",
         onDelete: "RESTRICT",
       },
-      // "approved" | "returned"
       decision: {
         type: Sequelize.STRING(20),
         allowNull: false,

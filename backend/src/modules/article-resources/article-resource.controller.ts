@@ -1,11 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { ArticleResourceService } from "./article-resource.service.js";
 
-// Join table with a composite key: there is no PUT, a relationship is
-// changed by deleting it and creating a new one.
 export class ArticleResourceController {
-
-
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
             const articleResource = await ArticleResourceService.findAll({
@@ -19,7 +15,6 @@ export class ArticleResourceController {
     }
 
     static async getById(req: Request, res: Response, next: NextFunction) {
-
         try{
             const articleId = Number(req.params.articleId);
             const resourceId = Number(req.params.resourceId);
@@ -38,9 +33,7 @@ export class ArticleResourceController {
         }
     }
 
-
     static async create(req: Request, res: Response, next: NextFunction) {
-
         try{
             const { articleId, resourceId } = req.body;
             if (!articleId || !resourceId) {
@@ -60,7 +53,6 @@ export class ArticleResourceController {
             next(error);
         }
     }
-
 
     static async delete(req: Request, res: Response, next: NextFunction) {
         try {

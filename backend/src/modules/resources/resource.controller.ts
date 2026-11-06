@@ -45,13 +45,13 @@ export class ResourceController {
                 return;
             }
             const resource = await ResourceService.create({
-                authorId, 
-                title, 
-                description, 
-                type, 
-                topic, 
-                difficulty, 
-                url, 
+                authorId,
+                title,
+                description,
+                type,
+                topic,
+                difficulty,
+                url,
                 status,
                 publishedAt
             });

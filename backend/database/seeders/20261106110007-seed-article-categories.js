@@ -1,11 +1,7 @@
 'use strict';
 
-const { resetSequence } = require("../utils/reset-sequence");
-
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface) {
-    // Parents first, then subcategories (self reference)
     await queryInterface.bulkInsert("article_categories", [
       { id: 1, name: "Kits", description: "Kits didácticos montados con material recuperado", parent_category_id: null },
       { id: 2, name: "Componentes", description: "Componentes electrónicos recuperados y revisados", parent_category_id: null },
@@ -19,7 +15,15 @@ module.exports = {
       { id: 7, name: "Alimentación y energía", description: "Paneles, módulos de carga y baterías", parent_category_id: 2 },
     ]);
 
-    await resetSequence(queryInterface, "article_categories");
+    if (queryInterface.sequelize.getDialect() === "postgres") {
+      await queryInterface.sequelize.query(`
+        SELECT setval(
+          pg_get_serial_sequence('public.article_categories', 'id'),
+          COALESCE((SELECT MAX(id) FROM public.article_categories), 0) + 1,
+          false
+        );
+      `);
+    }
   },
 
   async down(queryInterface) {

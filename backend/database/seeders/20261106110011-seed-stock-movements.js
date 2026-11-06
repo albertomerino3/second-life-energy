@@ -1,8 +1,5 @@
 'use strict';
 
-const { resetSequence } = require("../utils/reset-sequence");
-
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface) {
     const now = new Date();
@@ -15,7 +12,15 @@ module.exports = {
       { id: 5, article_id: 9, user_id: 3, type: "in", quantity: 100, reason: "LEDs recuperados de paneles de señalización", created_at: now },
     ]);
 
-    await resetSequence(queryInterface, "stock_movements");
+    if (queryInterface.sequelize.getDialect() === "postgres") {
+      await queryInterface.sequelize.query(`
+        SELECT setval(
+          pg_get_serial_sequence('public.stock_movements', 'id'),
+          COALESCE((SELECT MAX(id) FROM public.stock_movements), 0) + 1,
+          false
+        );
+      `);
+    }
   },
 
   async down(queryInterface) {

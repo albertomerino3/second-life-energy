@@ -8,7 +8,6 @@ const includeRelations = [
 ];
 
 export class ArticleReviewService {
-
     static async findAll(filters: { articleId?: number; decision?: string } = {}) {
         const where: Record<string, unknown> = {};
         if (filters.articleId) where.articleId = filters.articleId;

@@ -46,9 +46,9 @@ export class UserController {
                 return;
             }
             const user = await UserService.create({
-                name, 
-                email, 
-                passwordHash, 
+                name,
+                email,
+                passwordHash,
                 isActive,
             });
             res.status(201).json(user);
