@@ -1,26 +1,29 @@
-import { Permission } from './permission.model.js';
+import { Permission } from "./permission.model.js";
+import { Role } from "../roles/role.model.js";
 
 export class PermissionService {
-  async getAll(): Promise<Permission[]> {
-    return await Permission.findAll();
+  static async findAll() {
+    return Permission.findAll({
+      order: [["id", "ASC"]],
+    });
   }
 
-  async getById(id: number): Promise<Permission | null> {
-    return await Permission.findByPk(id);
+  // A permission with the roles that grant it
+  static async findById(id: number) {
+    return Permission.findByPk(id, {
+      include: [{ model: Role, as: "roles", attributes: ["id", "name"], through: { attributes: [] } }],
+    });
   }
 
-  async create(data: any): Promise<Permission> {
-    return await Permission.create(data);
+  static async create(data: { code: string; description?: string | null }) {
+    return Permission.create(data);
   }
 
-  async update(id: number, data: any): Promise<Permission | null> {
-    const item = await Permission.findByPk(id);
-    if (!item) return null;
-    return await item.update(data);
+  static async update(permission: Permission, data: { code?: string; description?: string | null }) {
+    return permission.update(data, { fields: ["code", "description"] });
   }
 
-  async delete(id: number): Promise<boolean> {
-    const deleted = await Permission.destroy({ where: { id } });
-    return deleted > 0;
+  static async delete(permission: Permission) {
+    await permission.destroy();
   }
 }

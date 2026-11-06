@@ -6,7 +6,8 @@ export class ArticleCategoryController {
 
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const articleCategory = await ArticleCategoryService.findAll();
+            const rootOnly = req.query.rootOnly === "true";
+            const articleCategory = await ArticleCategoryService.findAll({ rootOnly });
             res.json(articleCategory);
         } catch (error) {
             next(error);
@@ -21,7 +22,7 @@ export class ArticleCategoryController {
 
             if (!articleCategory) {
                 res.status(404).json({
-                    message: "Article Category not found :(",
+                    message: "Article Category not found",
                 });
                 return;
             }
@@ -36,19 +37,20 @@ export class ArticleCategoryController {
     static async create(req: Request, res: Response, next: NextFunction) {
 
         try{
-            const { name, description, parentCategoryId} = req.body;
-            if (!name || !description || !parentCategoryId) {
+            const { name, description, parentCategoryId } = req.body;
+            if (!name) {
                 res.status(400).json({
-                    message: "name, description, parentCategoryId are required",
+                    message: "name is required",
                 });
-            };
-        const articleCategory = await ArticleCategoryService.create({
-            name,
-            description,
-            parentCategoryId,
-        });
-        
-        res.status(201).json(articleCategory);
+                return;
+            }
+            const articleCategory = await ArticleCategoryService.create({
+                name,
+                description,
+                parentCategoryId,
+            });
+
+            res.status(201).json(articleCategory);
 
         } catch (error) {
             next(error);
@@ -64,7 +66,14 @@ export class ArticleCategoryController {
 
             if (!articleCategory) {
                 res.status(404).json({
-                    message: "Article Category NOT FOUND",
+                    message: "Article Category not found",
+                });
+                return;
+            }
+
+            if (req.body.parentCategoryId !== undefined && Number(req.body.parentCategoryId) === id) {
+                res.status(400).json({
+                    message: "A category cannot be its own parent",
                 });
                 return;
             }
@@ -89,7 +98,7 @@ export class ArticleCategoryController {
 
             if (!articleCategory) {
                 res.status(404).json({
-                    message: "Article Category not found :(",
+                    message: "Article Category not found",
                 });
                 return;
             }

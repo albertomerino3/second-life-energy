@@ -4,7 +4,10 @@ import { UserRoleService } from "./user-role.service.js";
 export class UserRoleController {
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const userRoles = await UserRoleService.findAll();
+            const userRoles = await UserRoleService.findAll({
+                userId: Number(req.query.userId) || undefined,
+                roleId: Number(req.query.roleId) || undefined,
+            });
             res.json(userRoles);
         } catch (error) {
             next(error);

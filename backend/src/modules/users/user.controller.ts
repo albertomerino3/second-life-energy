@@ -4,7 +4,10 @@ import { UserService } from "./user.service.js";
 export class UserController {
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const users = await UserService.findAll();
+            const isActive = req.query.isActive === undefined
+                ? undefined
+                : req.query.isActive === "true";
+            const users = await UserService.findAll({ isActive });
             res.json(users);
         } catch (error) {
             next(error);

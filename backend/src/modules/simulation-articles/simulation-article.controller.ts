@@ -4,7 +4,10 @@ import { SimulationArticleService } from "./simulation-article.service.js";
 export class SimulationArticleController {
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const items = await SimulationArticleService.findAll();
+            const items = await SimulationArticleService.findAll({
+                simulationId: Number(req.query.simulationId) || undefined,
+                articleId: Number(req.query.articleId) || undefined,
+            });
             res.json(items);
         } catch (error) {
             next(error);

@@ -6,7 +6,8 @@ export class RequestItemController {
 
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const requestItem = await RequestItemService.findAll();
+            const requestId = Number(req.query.requestId) || undefined;
+            const requestItem = await RequestItemService.findAll({ requestId });
             res.json(requestItem);
         } catch (error) {
             next(error);
@@ -21,7 +22,7 @@ export class RequestItemController {
 
             if (!requestItem) {
                 res.status(404).json({
-                    message: "Request Item not found :(",
+                    message: "Request Item not found",
                 });
                 return;
             }
@@ -37,10 +38,11 @@ export class RequestItemController {
 
         try{
             const { requestId, articleId, quantity} = req.body;
-            if (!requestId || !articleId || !quantity ) {
+            if (!requestId || !articleId) {
                 res.status(400).json({
-                    message: "requestId, articleId, quantity are required",
+                    message: "requestId and articleId are required",
                 });
+                return;
             }
             const requestItem = await RequestItemService.create({
                 requestId,
@@ -62,7 +64,7 @@ export class RequestItemController {
 
             if (!requestItem) {
                 res.status(404).json({
-                    message: "Request Item NOT FOUND",
+                    message: "Request Item not found",
                 });
                 return;
             }
@@ -87,7 +89,7 @@ export class RequestItemController {
 
             if (!requestItem) {
                 res.status(404).json({
-                    message: "Request Item not found :(",
+                    message: "Request Item not found",
                 });
                 return;
             }

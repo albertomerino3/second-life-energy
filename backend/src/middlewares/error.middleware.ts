@@ -5,6 +5,7 @@ import {
     UniqueConstraintError,
     ValidationError,
 } from "sequelize";
+import { HttpError } from "../utils/http-error.js";
 
 export function errorMiddleware(
     error: Error,
@@ -12,6 +13,14 @@ export function errorMiddleware(
     res: Response,
     next: NextFunction
 ) {
+    // Business rules thrown by the services
+    if (error instanceof HttpError) {
+        res.status(error.status).json({
+            message: error.message,
+        });
+        return;
+    }
+
     // Malformed JSON body
     if ("type" in error && error.type === "entity.parse.failed") {
         res.status(400).json({
@@ -24,10 +33,7 @@ export function errorMiddleware(
     if (error instanceof UniqueConstraintError) {
         res.status(409).json({
             message: "A record with the same unique value already exists",
-            errors: error.errors.map((item) => ({
-                field: item.path,
-                message: item.message,
-            })),
+            fields: Object.keys(error.fields ?? {}),
         });
         return;
     }
@@ -49,6 +55,14 @@ export function errorMiddleware(
         res.status(409).json({
             message: "The operation violates a relationship between records",
             detail: error.index ?? error.table ?? undefined,
+        });
+        return;
+    }
+
+    // ON DELETE RESTRICT (PostgreSQL code 23001): the record is still in use
+    if (error instanceof DatabaseError && (error.parent as { code?: string })?.code === "23001") {
+        res.status(409).json({
+            message: "The record cannot be deleted because other records depend on it",
         });
         return;
     }

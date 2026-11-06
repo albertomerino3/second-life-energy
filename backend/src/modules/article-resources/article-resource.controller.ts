@@ -1,12 +1,17 @@
 import { Request, Response, NextFunction } from "express";
 import { ArticleResourceService } from "./article-resource.service.js";
 
+// Join table with a composite key: there is no PUT, a relationship is
+// changed by deleting it and creating a new one.
 export class ArticleResourceController {
 
 
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const articleResource = await ArticleResourceService.findAll();
+            const articleResource = await ArticleResourceService.findAll({
+                articleId: Number(req.query.articleId) || undefined,
+                resourceId: Number(req.query.resourceId) || undefined,
+            });
             res.json(articleResource);
         } catch (error) {
             next(error);
@@ -16,12 +21,13 @@ export class ArticleResourceController {
     static async getById(req: Request, res: Response, next: NextFunction) {
 
         try{
-            const id = Number(req.params.id);
-            const articleResource = await ArticleResourceService.findById(id);
+            const articleId = Number(req.params.articleId);
+            const resourceId = Number(req.params.resourceId);
+            const articleResource = await ArticleResourceService.findById(articleId, resourceId);
 
             if (!articleResource) {
                 res.status(404).json({
-                    message: "Article Resource not found :(",
+                    message: "Article Resource not found",
                 });
                 return;
             }
@@ -36,44 +42,20 @@ export class ArticleResourceController {
     static async create(req: Request, res: Response, next: NextFunction) {
 
         try{
-            const { articleId, resourceId} = req.body;
+            const { articleId, resourceId } = req.body;
             if (!articleId || !resourceId) {
                 res.status(400).json({
                     message: "articleId and resourceId are required",
                 });
-            }
-        const articleResource = await ArticleResourceService.create({
-            articleId,
-            resourceId,
-        });
-        
-        res.status(201).json(articleResource);
-
-        } catch (error) {
-            next(error);
-        }
-    }
-
-
-    static async update(req: Request, res: Response, next: NextFunction) {
-        try{
-            const id = Number(req.params.id);
-
-            const articleResource = await ArticleResourceService.findById(id);
-
-            if (!articleResource) {
-                res.status(404).json({
-                    message: "Article Resource NOT FOUND",
-                });
                 return;
             }
+            const articleResource = await ArticleResourceService.create({
+                articleId,
+                resourceId,
+            });
 
-            const updateArticleResource = await ArticleResourceService.update(
-                articleResource,
-                req.body
-            );
+            res.status(201).json(articleResource);
 
-            res.json(updateArticleResource);
         } catch (error) {
             next(error);
         }
@@ -82,13 +64,14 @@ export class ArticleResourceController {
 
     static async delete(req: Request, res: Response, next: NextFunction) {
         try {
-            const id = Number(req.params.id);
+            const articleId = Number(req.params.articleId);
+            const resourceId = Number(req.params.resourceId);
 
-            const articleResource = await ArticleResourceService.findById(id);
+            const articleResource = await ArticleResourceService.findById(articleId, resourceId);
 
             if (!articleResource) {
                 res.status(404).json({
-                    message: "Article Resource not found :(",
+                    message: "Article Resource not found",
                 });
                 return;
             }

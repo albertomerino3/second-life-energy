@@ -1,16 +1,17 @@
 import { Router } from "express";
 import { ArticleCategoryController } from "./article-category.controller.js";
+import { validateIdParams } from "../../middlewares/validate-id.middleware.js";
 
 const router = Router();
 
 router.get("/", ArticleCategoryController.getAll);
 
-router.get("/:id", ArticleCategoryController.getById);
+router.get("/:id", validateIdParams, ArticleCategoryController.getById);
 
 router.post("/", ArticleCategoryController.create);
 
-router.put("/:id", ArticleCategoryController.update);
+router.put("/:id", validateIdParams, ArticleCategoryController.update);
 
-router.delete("/:id", ArticleCategoryController.delete);
+router.delete("/:id", validateIdParams, ArticleCategoryController.delete);
 
 export default router;

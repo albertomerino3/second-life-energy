@@ -1,31 +1,44 @@
-import { ForumCategory } from './/forum-category.model.js';
+import { ForumCategory } from "./forum-category.model.js";
+import { Question } from "../questions/question.model.js";
 
 export class ForumCategoryService {
   // All forum categories
-  async getAll(): Promise<ForumCategory[]> {
-    return await ForumCategory.findAll();
+  static async findAll() {
+    return ForumCategory.findAll({
+      order: [["id", "ASC"]],
+    });
   }
 
-  // A single forum category by ID
-  async getById(id: number): Promise<ForumCategory | null> {
-    return await ForumCategory.findByPk(id);
+  // A single forum category with its visible questions
+  static async findById(id: number) {
+    return ForumCategory.findByPk(id, {
+      include: [
+        {
+          model: Question,
+          as: "questions",
+          attributes: ["id", "title", "status", "createdAt"],
+          where: { status: ["open", "solved"] },
+          required: false,
+        },
+      ],
+    });
   }
 
   // Create a new forum category
-  async create(data: any): Promise<ForumCategory> {
-    return await ForumCategory.create(data);
+  static async create(data: { name: string; description?: string | null }) {
+    return ForumCategory.create(data);
   }
 
-  // Update a forum category by ID
-  async update(id: number, data: any): Promise<ForumCategory | null> {
-    const item = await ForumCategory.findByPk(id);
-    if (!item) return null;
-    return await item.update(data);
+  // Update a forum category
+  static async update(
+    forumCategory: ForumCategory,
+    data: { name?: string; description?: string | null }
+  ) {
+    return forumCategory.update(data, { fields: ["name", "description"] });
   }
 
-  // Delete a forum category by ID
-  async delete(id: number): Promise<boolean> {
-    const deletedCount = await ForumCategory.destroy({ where: { id } });
-    return deletedCount > 0;
+  // Delete a forum category
+  static async delete(forumCategory: ForumCategory) {
+    await forumCategory.destroy();
   }
 }

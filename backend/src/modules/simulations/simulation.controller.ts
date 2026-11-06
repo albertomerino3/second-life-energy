@@ -4,7 +4,7 @@ import { SimulationService } from "./simulation.service.js";
 export class SimulationController {
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const simulations = await SimulationService.findAll();
+            const simulations = await SimulationService.findAll({ platform: typeof req.query.platform === "string" ? req.query.platform : undefined });
             res.json(simulations);
         } catch (error) {
             next(error);

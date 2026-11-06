@@ -6,7 +6,10 @@ export class ArticleReviewController {
 
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const articleReview = await ArticleReviewService.findAll();
+            const articleReview = await ArticleReviewService.findAll({
+                articleId: Number(req.query.articleId) || undefined,
+                decision: typeof req.query.decision === "string" ? req.query.decision : undefined,
+            });
             res.json(articleReview);
         } catch (error) {
             next(error);
@@ -21,7 +24,7 @@ export class ArticleReviewController {
 
             if (!articleReview) {
                 res.status(404).json({
-                    message: "Article Review not found :(",
+                    message: "Article Review not found",
                 });
                 return;
             }
@@ -37,10 +40,11 @@ export class ArticleReviewController {
 
         try{
             const { articleId, reviewerId, decision, comments} = req.body;
-            if (!articleId || !reviewerId || !decision || !comments){
+            if (!articleId || !reviewerId || !decision) {
                 res.status(400).json({
-                    message: "articleId, reviewerId, decision and comments are required",
+                    message: "articleId, reviewerId and decision are required",
                 });
+                return;
             }
         const articleReview = await ArticleReviewService.create({
             articleId,
@@ -65,7 +69,7 @@ export class ArticleReviewController {
 
             if (!articleReview) {
                 res.status(404).json({
-                    message: "Article Review NOT FOUND",
+                    message: "Article Review not found",
                 });
                 return;
             }
@@ -90,7 +94,7 @@ export class ArticleReviewController {
 
             if (!articleReview) {
                 res.status(404).json({
-                    message: "Article Review not found :(",
+                    message: "Article Review not found",
                 });
                 return;
             }

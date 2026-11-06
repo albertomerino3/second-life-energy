@@ -6,7 +6,8 @@ export class ArticleImageController {
 
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const articleImage = await ArticleImageService.findAll();
+            const articleId = Number(req.query.articleId) || undefined;
+            const articleImage = await ArticleImageService.findAll({ articleId });
             res.json(articleImage);
         } catch (error) {
             next(error);
@@ -21,7 +22,7 @@ export class ArticleImageController {
 
             if (!articleImage) {
                 res.status(404).json({
-                    message: "Article Image not found :(",
+                    message: "Article Image not found",
                 });
                 return;
             }
@@ -37,10 +38,11 @@ export class ArticleImageController {
 
         try{
             const { articleId, url, altText, sortOrder} = req.body;
-            if (!articleId || !url || !altText || !sortOrder) {
+            if (!articleId || !url || !altText) {
                 res.status(400).json({
-                    message: "articleId, url, altText and sortOrder are required",
+                    message: "articleId, url and altText are required",
                 });
+                return;
             }
         const articleImage = await ArticleImageService.create({
             articleId,
@@ -65,7 +67,7 @@ export class ArticleImageController {
 
             if (!articleImage) {
                 res.status(404).json({
-                    message: "Article Image NOT FOUND",
+                    message: "Article Image not found",
                 });
                 return;
             }
@@ -90,7 +92,7 @@ export class ArticleImageController {
 
             if (!articleImage) {
                 res.status(404).json({
-                    message: "Article Image not found :(",
+                    message: "Article Image not found",
                 });
                 return;
             }

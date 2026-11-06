@@ -1,16 +1,15 @@
 import { Router } from "express";
 import { ResourceTagController } from "./resource-tag.controller.js";
+import { validateIdParams } from "../../middlewares/validate-id.middleware.js";
 
 const router = Router();
 
 router.get("/", ResourceTagController.getAll);
 
-router.get("/:id", ResourceTagController.getById);
+router.get("/:resourceId/:tagId", validateIdParams, ResourceTagController.getById);
 
 router.post("/", ResourceTagController.create);
 
-router.put("/:id", ResourceTagController.update);
-
-router.delete("/:id", ResourceTagController.delete);
+router.delete("/:resourceId/:tagId", validateIdParams, ResourceTagController.delete);
 
 export default router;

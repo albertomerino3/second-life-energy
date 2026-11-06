@@ -1,31 +1,46 @@
-import { Answer } from './answer.model.js';
+import { Answer } from "./answer.model.js";
+import { Question } from "../questions/question.model.js";
+import { User } from "../users/user.model.js";
+
+const includeRelations = [
+  { model: User, as: "author", attributes: ["id", "name"] },
+  { model: Question, as: "question", attributes: ["id", "title", "status"] },
+];
 
 export class AnswerService {
+  // All answers, optionally of one question
+  static async findAll(filters: { questionId?: number } = {}) {
+    return Answer.findAll({
+      where: filters.questionId ? { questionId: filters.questionId } : {},
+      include: includeRelations,
+      order: [["id", "ASC"]],
+    });
+  }
+
   // All answers for a specific question
-  async getByQuestionId(questionId: number): Promise<Answer[]> {
-    return await Answer.findAll({ where: { questionId } });
+  static async findByQuestionId(questionId: number) {
+    return AnswerService.findAll({ questionId });
   }
 
   // A single answer by ID
-  async getById(id: number): Promise<Answer | null> {
-    return await Answer.findByPk(id);
+  static async findById(id: number) {
+    return Answer.findByPk(id, {
+      include: includeRelations,
+    });
   }
 
   // Create a new answer
-  async create(data: any): Promise<Answer> {
-    return await Answer.create(data);
+  static async create(data: { questionId: number; authorId: number; content: string; status?: string }) {
+    return Answer.create(data);
   }
 
-  // Update an answer by ID
-  async update(id: number, data: any): Promise<Answer | null> {
-    const item = await Answer.findByPk(id);
-    if (!item) return null;
-    return await item.update(data);
+  // Update an answer (the author and the question cannot change)
+  static async update(answer: Answer, data: { content?: string; status?: string }) {
+    return answer.update(data, { fields: ["content", "status"] });
   }
 
-  // Delete an answer by ID
-  async delete(id: number): Promise<boolean> {
-    const deletedCount = await Answer.destroy({ where: { id } });
-    return deletedCount > 0;
+  // Delete an answer
+  static async delete(answer: Answer) {
+    await answer.destroy();
   }
 }

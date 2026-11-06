@@ -1,82 +1,91 @@
-import { Request, Response } from 'express';
-import { QuestionService } from './/question.service.js';
-
-const questionService = new QuestionService();
+import { Request, Response, NextFunction } from "express";
+import { QuestionService } from "./question.service.js";
 
 export class QuestionController {
-  // GET /questions
-  static async getAll(req: Request, res: Response): Promise<void> {
+  // GET /questions?search=&categoryId=&status=
+  static async getAll(req: Request, res: Response, next: NextFunction) {
     try {
-      const items = await questionService.getAll();
-      res.status(200).json(items);
+      const items = await QuestionService.findAll({
+        search: typeof req.query.search === "string" ? req.query.search : undefined,
+        categoryId: Number(req.query.categoryId) || undefined,
+        status: typeof req.query.status === "string" ? req.query.status : undefined,
+      });
+      res.json(items);
     } catch (error) {
-      res.status(500).json({ message: 'Error retrieving questions', error });
+      next(error);
     }
   }
 
   // GET /questions/:id
-  static async getById(req: Request, res: Response): Promise<void> {
+  static async getById(req: Request, res: Response, next: NextFunction) {
     try {
       const id = Number(req.params.id);
-      const item = await questionService.getById(id);
+      const item = await QuestionService.findById(id);
       if (!item) {
-        res.status(404).json({ message: 'Question not found' });
+        res.status(404).json({ message: "Question not found" });
         return;
       }
-      res.status(200).json(item);
+      res.json(item);
     } catch (error) {
-      res.status(500).json({ message: 'Error retrieving question', error });
+      next(error);
     }
   }
 
   // GET /questions/category/:categoryId
-  static async getByCategoryId(req: Request, res: Response): Promise<void> {
+  static async getByCategoryId(req: Request, res: Response, next: NextFunction) {
     try {
       const categoryId = Number(req.params.categoryId);
-      const items = await questionService.getByCategoryId(categoryId);
-      res.status(200).json(items);
+      const items = await QuestionService.findByCategoryId(categoryId);
+      res.json(items);
     } catch (error) {
-      res.status(500).json({ message: 'Error retrieving questions by category', error });
+      next(error);
     }
   }
 
   // POST /questions
-  static async create(req: Request, res: Response): Promise<void> {
+  static async create(req: Request, res: Response, next: NextFunction) {
     try {
-      const created = await questionService.create(req.body);
+      const { categoryId, authorId, title, content, status } = req.body;
+      if (!categoryId || !authorId || !title || !content) {
+        res.status(400).json({ message: "categoryId, authorId, title and content are required" });
+        return;
+      }
+      const created = await QuestionService.create({ categoryId, authorId, title, content, status });
       res.status(201).json(created);
     } catch (error) {
-      res.status(400).json({ message: 'Error creating question', error });
+      next(error);
     }
   }
 
   // PUT /questions/:id
-  static async update(req: Request, res: Response): Promise<void> {
+  static async update(req: Request, res: Response, next: NextFunction) {
     try {
       const id = Number(req.params.id);
-      const updated = await questionService.update(id, req.body);
-      if (!updated) {
-        res.status(404).json({ message: 'Question not found' });
+      const item = await QuestionService.findById(id);
+      if (!item) {
+        res.status(404).json({ message: "Question not found" });
         return;
       }
-      res.status(200).json(updated);
+      const updated = await QuestionService.update(item, req.body);
+      res.json(updated);
     } catch (error) {
-      res.status(400).json({ message: 'Error updating question', error });
+      next(error);
     }
   }
 
   // DELETE /questions/:id
-  static async delete(req: Request, res: Response): Promise<void> {
+  static async delete(req: Request, res: Response, next: NextFunction) {
     try {
       const id = Number(req.params.id);
-      const deleted = await questionService.delete(id);
-      if (!deleted) {
-        res.status(404).json({ message: 'Question not found' });
+      const item = await QuestionService.findById(id);
+      if (!item) {
+        res.status(404).json({ message: "Question not found" });
         return;
       }
+      await QuestionService.delete(item);
       res.status(204).send();
     } catch (error) {
-      res.status(500).json({ message: 'Error deleting question', error });
+      next(error);
     }
   }
 }

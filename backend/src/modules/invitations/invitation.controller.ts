@@ -4,7 +4,7 @@ import { InvitationService } from "./invitation.service.js";
 export class InvitationController {
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const invitations = await InvitationService.findAll();
+            const invitations = await InvitationService.findAll({ state: typeof req.query.state === "string" ? req.query.state : undefined });
             res.json(invitations);
         } catch (error) {
             next(error);
