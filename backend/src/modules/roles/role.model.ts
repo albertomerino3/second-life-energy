@@ -1,8 +1,18 @@
-import { Model, DataTypes } from "sequelize";
+import {
+    Model,
+    DataTypes,
+    InferAttributes,
+    InferCreationAttributes,
+    CreationOptional,
+} from "sequelize";
+
 import { sequelize } from "../../config/database.js";
 
-export class Role extends Model {
-    declare id: number;
+export class Role extends Model<
+    InferAttributes<Role>,
+    InferCreationAttributes<Role>
+> {
+    declare id: CreationOptional<number>;
     declare name: string;
     declare description: string | null;
 }
@@ -10,7 +20,7 @@ export class Role extends Model {
 Role.init(
     {
         id: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
         },
@@ -18,6 +28,7 @@ Role.init(
             type: DataTypes.STRING(100),
             allowNull: false,
             unique: true,
+            validate: { notEmpty: true },
         },
         description: {
             type: DataTypes.STRING(255),

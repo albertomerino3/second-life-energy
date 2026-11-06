@@ -3,11 +3,11 @@ import {
     DataTypes,
     InferAttributes,
     InferCreationAttributes,
-    CreationOptional,
 } from "sequelize";
 
 import { sequelize } from "../../config/database.js";
 
+// Join table: many-to-many relationship between Article and Resource
 export class ArticleResource extends Model<
     InferAttributes<ArticleResource>,
     InferCreationAttributes<ArticleResource>
@@ -19,20 +19,20 @@ export class ArticleResource extends Model<
 ArticleResource.init(
     {
         articleId: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
         },
         resourceId: {
-            type: DataTypes.INTEGER.UNSIGNED,
-            allowNull: false,
+            type: DataTypes.INTEGER,
             primaryKey: true,
+            allowNull: false,
         },
     },
     {
         sequelize,
         tableName: "article_resources",
         modelName: "ArticleResource",
-        timestamps: true,
+        timestamps: false,
     }
 );

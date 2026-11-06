@@ -1,33 +1,44 @@
-import { DataTypes, Model } from 'sequelize';
-import {sequelize} from '../../config/database.js';
+import {
+    Model,
+    DataTypes,
+    InferAttributes,
+    InferCreationAttributes,
+    CreationOptional,
+} from "sequelize";
 
-export class Permission extends Model {
-  public id!: number;
-  public code!: string;
-  public description!: string;
+import { sequelize } from "../../config/database.js";
+
+export class Permission extends Model<
+    InferAttributes<Permission>,
+    InferCreationAttributes<Permission>
+> {
+    declare id: CreationOptional<number>;
+    declare code: string;
+    declare description: string | null;
 }
 
 Permission.init(
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
+    {
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true,
+        },
+        code: {
+            type: DataTypes.STRING(100),
+            allowNull: false,
+            unique: true, // Unique permission code, e.g. "articles.review"
+            validate: { notEmpty: true },
+        },
+        description: {
+            type: DataTypes.STRING(255),
+            allowNull: true,
+        },
     },
-    code: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true, // Unique permission code
-    },
-    description: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-  },
-  {
-    sequelize,
-    tableName: 'permissions',
-    modelName: 'Permission',
-    timestamps: false,
-  }
+    {
+        sequelize,
+        tableName: "permissions",
+        modelName: "Permission",
+        timestamps: false,
+    }
 );

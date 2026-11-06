@@ -18,61 +18,52 @@ export class Invitation extends Model<
     declare email: string;
     declare tokenHash: string;
     declare expiresAt: Date;
-    declare usedAt: CreationOptional<Date> | null;
+    declare usedAt: CreationOptional<Date | null>;
     declare createdAt: CreationOptional<Date>;
 }
+
 Invitation.init(
     {
         id: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
         },
         invitedById: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             allowNull: false,
-            references: {
-                model: "users",
-                key: "id",
-            },
         },
         roleId: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             allowNull: false,
-            references: {
-                model: "roles",
-                key: "id",
-            },
         },
         email: {
-            type: DataTypes.STRING(150),
+            type: DataTypes.STRING(255),
             allowNull: false,
+            validate: { isEmail: true },
         },
         tokenHash: {
-            type: DataTypes.STRING(150),
+            type: DataTypes.STRING(255),
             allowNull: false,
             unique: true,
+            validate: { notEmpty: true },
         },
         expiresAt: {
             type: DataTypes.DATE,
             allowNull: false,
+            validate: { isDate: true },
         },
         usedAt: {
             type: DataTypes.DATE,
             allowNull: true,
         },
-        createdAt: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            defaultValue: DataTypes.NOW,
-        }
+        createdAt: DataTypes.DATE,
     },
     {
         sequelize,
         tableName: "invitations",
         modelName: "Invitation",
         timestamps: true,
-        createdAt: "createdAt",
         updatedAt: false,
     }
 );
