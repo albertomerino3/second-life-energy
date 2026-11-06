@@ -1,0 +1,21 @@
+meta {
+  name: Delete article category again (not found)
+  type: http
+  seq: 10
+}
+
+delete {
+  url: {{baseUrl}}/article-categories/{{articleCategoryId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 404
+}
+
+tests {
+  test("responds 404", function () {
+    expect(res.getStatus()).to.equal(404);
+  });
+}

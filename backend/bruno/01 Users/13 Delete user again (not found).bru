@@ -1,0 +1,21 @@
+meta {
+  name: Delete user again (not found)
+  type: http
+  seq: 13
+}
+
+delete {
+  url: {{baseUrl}}/users/{{userId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 404
+}
+
+tests {
+  test("responds 404", function () {
+    expect(res.getStatus()).to.equal(404);
+  });
+}

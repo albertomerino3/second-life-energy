@@ -1,0 +1,21 @@
+meta {
+  name: Get role permission deleted (not found)
+  type: http
+  seq: 9
+}
+
+get {
+  url: {{baseUrl}}/role-permissions/3/7
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 404
+}
+
+tests {
+  test("responds 404", function () {
+    expect(res.getStatus()).to.equal(404);
+  });
+}

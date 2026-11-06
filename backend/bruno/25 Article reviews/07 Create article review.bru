@@ -1,0 +1,48 @@
+meta {
+  name: Create article review
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/article-reviews
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "articleId": 3,
+    "reviewerId": 2,
+    "decision": "approved",
+    "comments": "Revisión creada desde Bruno"
+  }
+}
+
+assert {
+  res.status: eq 201
+}
+
+script:pre-request {
+  bru.setVar("uniq", Date.now());
+}
+
+script:post-response {
+  if (res.getStatus() < 300) { bru.setVar("articleReviewId", res.getBody().id); }
+}
+
+tests {
+  test("responds 201", function () {
+    expect(res.getStatus()).to.equal(201);
+  });
+
+  test("returns the new id", function () {
+    expect(res.getBody().id).to.be.a("number");
+  });
+}
+
+docs {
+  POST /article-reviews
+
+  Creates a record in `article-reviews`. The id is saved in the variable `articleReviewId`.
+}

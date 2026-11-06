@@ -1,0 +1,35 @@
+meta {
+  name: List resources with filters
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/resources?type=pdf&status=published
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("responds 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("returns an array", function () {
+    expect(res.getBody()).to.be.an("array");
+  });
+
+  test("only published PDFs", function () {
+    res.getBody().forEach((r) => { expect(r.type).to.equal("pdf"); expect(r.status).to.equal("published"); });
+  });
+}
+
+docs {
+  GET /resources?type=pdf&status=published
+
+  HU-07: `search`, `type`, `topic`, `difficulty`, `status`, `authorId` and `tag` (slug).
+}

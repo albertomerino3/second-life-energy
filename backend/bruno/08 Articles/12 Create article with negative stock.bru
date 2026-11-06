@@ -1,0 +1,32 @@
+meta {
+  name: Create article with negative stock
+  type: http
+  seq: 12
+}
+
+post {
+  url: {{baseUrl}}/articles
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "categoryId": 5,
+    "createdById": 3,
+    "name": "Mal",
+    "description": "Stock negativo",
+    "type": "component",
+    "stock": -1
+  }
+}
+
+assert {
+  res.status: eq 400
+}
+
+tests {
+  test("responds 400", function () {
+    expect(res.getStatus()).to.equal(400);
+  });
+}

@@ -1,0 +1,27 @@
+meta {
+  name: Delete user
+  type: http
+  seq: 12
+}
+
+delete {
+  url: {{baseUrl}}/users/{{userId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 204
+}
+
+tests {
+  test("responds 204", function () {
+    expect(res.getStatus()).to.equal(204);
+  });
+}
+
+docs {
+  DELETE /users/{{userId}}
+
+  Deletes the record created by this folder.
+}

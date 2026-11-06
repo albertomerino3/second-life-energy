@@ -1,0 +1,46 @@
+meta {
+  name: Create forum category
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/forum-categories
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Categoría foro Bruno {{uniq}}",
+    "description": "Creada desde Bruno"
+  }
+}
+
+assert {
+  res.status: eq 201
+}
+
+script:pre-request {
+  bru.setVar("uniq", Date.now());
+}
+
+script:post-response {
+  if (res.getStatus() < 300) { bru.setVar("forumCategoryId", res.getBody().id); }
+}
+
+tests {
+  test("responds 201", function () {
+    expect(res.getStatus()).to.equal(201);
+  });
+
+  test("returns the new id", function () {
+    expect(res.getBody().id).to.be.a("number");
+  });
+}
+
+docs {
+  POST /forum-categories
+
+  Creates a record in `forum-categories`. The id is saved in the variable `forumCategoryId`.
+}

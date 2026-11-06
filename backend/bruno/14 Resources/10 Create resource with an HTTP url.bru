@@ -1,0 +1,39 @@
+meta {
+  name: Create resource with an HTTP url
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{baseUrl}}/resources
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "authorId": 2,
+    "title": "Inseguro",
+    "description": "HTTP",
+    "type": "link",
+    "topic": "x",
+    "difficulty": "beginner",
+    "url": "http://example.com"
+  }
+}
+
+assert {
+  res.status: eq 400
+}
+
+tests {
+  test("responds 400", function () {
+    expect(res.getStatus()).to.equal(400);
+  });
+}
+
+docs {
+  POST /resources
+
+  HU-07: external links must use HTTPS.
+}

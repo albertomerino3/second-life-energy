@@ -1,0 +1,25 @@
+meta {
+  name: Create role permission without required fields
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/role-permissions
+  body: json
+  auth: none
+}
+
+body:json {
+  {}
+}
+
+assert {
+  res.status: eq 400
+}
+
+tests {
+  test("responds 400", function () {
+    expect(res.getStatus()).to.equal(400);
+  });
+}

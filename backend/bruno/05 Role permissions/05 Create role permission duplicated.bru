@@ -1,0 +1,34 @@
+meta {
+  name: Create role permission duplicated
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/role-permissions
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "roleId": 3,
+    "permissionId": 7
+  }
+}
+
+assert {
+  res.status: eq 409
+}
+
+tests {
+  test("responds 409", function () {
+    expect(res.getStatus()).to.equal(409);
+  });
+}
+
+docs {
+  POST /role-permissions
+
+  The same relationship cannot be created twice (primary key).
+}

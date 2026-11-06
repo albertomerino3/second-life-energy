@@ -1,0 +1,33 @@
+meta {
+  name: Update article image
+  type: http
+  seq: 8
+}
+
+put {
+  url: {{baseUrl}}/article-images/{{articleImageId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "sortOrder": 2
+  }
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("responds 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+}
+
+docs {
+  PUT /article-images/{{articleImageId}}
+
+  Updates only the editable fields of `article-images`.
+}

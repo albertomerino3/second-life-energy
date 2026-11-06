@@ -1,0 +1,35 @@
+meta {
+  name: List article-images with filters
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/article-images?articleId=1
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("responds 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("returns an array", function () {
+    expect(res.getBody()).to.be.an("array");
+  });
+
+  test("only images of article 1", function () {
+    res.getBody().forEach((i) => expect(i.articleId).to.equal(1));
+  });
+}
+
+docs {
+  GET /article-images?articleId=1
+
+  Filters by `articleId`.
+}

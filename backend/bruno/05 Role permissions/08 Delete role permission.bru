@@ -1,0 +1,21 @@
+meta {
+  name: Delete role permission
+  type: http
+  seq: 8
+}
+
+delete {
+  url: {{baseUrl}}/role-permissions/3/7
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 204
+}
+
+tests {
+  test("responds 204", function () {
+    expect(res.getStatus()).to.equal(204);
+  });
+}

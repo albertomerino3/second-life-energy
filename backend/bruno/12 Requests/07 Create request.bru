@@ -1,0 +1,51 @@
+meta {
+  name: Create request
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/requests
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "contactName": "Visitante Bruno",
+    "contactEmail": "visitante.bruno@example.com",
+    "notes": "Solicitud de prueba"
+  }
+}
+
+assert {
+  res.status: eq 201
+}
+
+script:pre-request {
+  bru.setVar("uniq", Date.now());
+}
+
+script:post-response {
+  if (res.getStatus() < 300) { bru.setVar("requestId", res.getBody().id); }
+}
+
+tests {
+  test("responds 201", function () {
+    expect(res.getStatus()).to.equal(201);
+  });
+
+  test("returns the new id", function () {
+    expect(res.getBody().id).to.be.a("number");
+  });
+
+  test("has a fictitious reference", function () {
+    expect(res.getBody().reference).to.match(/^DEMO-\d{4}-/);
+  });
+}
+
+docs {
+  POST /requests
+
+  Creates a record in `requests`. The id is saved in the variable `requestId`.
+}

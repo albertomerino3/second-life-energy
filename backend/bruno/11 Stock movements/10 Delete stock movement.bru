@@ -1,0 +1,27 @@
+meta {
+  name: Delete stock movement
+  type: http
+  seq: 10
+}
+
+delete {
+  url: {{baseUrl}}/stock-movements/{{stockMovementId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 204
+}
+
+tests {
+  test("responds 204", function () {
+    expect(res.getStatus()).to.equal(204);
+  });
+}
+
+docs {
+  DELETE /stock-movements/{{stockMovementId}}
+
+  Deletes the record created by this folder.
+}

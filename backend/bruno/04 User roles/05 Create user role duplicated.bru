@@ -1,0 +1,34 @@
+meta {
+  name: Create user role duplicated
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/user-roles
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "userId": 5,
+    "roleId": 2
+  }
+}
+
+assert {
+  res.status: eq 409
+}
+
+tests {
+  test("responds 409", function () {
+    expect(res.getStatus()).to.equal(409);
+  });
+}
+
+docs {
+  POST /user-roles
+
+  The same relationship cannot be created twice (primary key).
+}

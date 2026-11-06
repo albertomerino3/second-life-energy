@@ -1,0 +1,27 @@
+meta {
+  name: Delete forum category
+  type: http
+  seq: 8
+}
+
+delete {
+  url: {{baseUrl}}/forum-categories/{{forumCategoryId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 204
+}
+
+tests {
+  test("responds 204", function () {
+    expect(res.getStatus()).to.equal(204);
+  });
+}
+
+docs {
+  DELETE /forum-categories/{{forumCategoryId}}
+
+  Deletes the record created by this folder.
+}

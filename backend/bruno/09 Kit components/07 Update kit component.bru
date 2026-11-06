@@ -1,0 +1,31 @@
+meta {
+  name: Update kit component
+  type: http
+  seq: 7
+}
+
+put {
+  url: {{baseUrl}}/kit-components/2/9
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "quantity": 3
+  }
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("responds 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("quantity updated", function () {
+    expect(res.getBody().quantity).to.equal(3);
+  });
+}

@@ -1,0 +1,31 @@
+meta {
+  name: Create article with a category that does not exist
+  type: http
+  seq: 13
+}
+
+post {
+  url: {{baseUrl}}/articles
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "categoryId": 999999,
+    "createdById": 3,
+    "name": "Mal",
+    "description": "FK",
+    "type": "component"
+  }
+}
+
+assert {
+  res.status: eq 409
+}
+
+tests {
+  test("responds 409", function () {
+    expect(res.getStatus()).to.equal(409);
+  });
+}

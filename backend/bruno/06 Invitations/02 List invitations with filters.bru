@@ -1,0 +1,35 @@
+meta {
+  name: List invitations with filters
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/invitations?state=pending
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("responds 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("returns an array", function () {
+    expect(res.getBody()).to.be.an("array");
+  });
+
+  test("only pending invitations", function () {
+    res.getBody().forEach((i) => expect(i.usedAt).to.equal(null));
+  });
+}
+
+docs {
+  GET /invitations?state=pending
+
+  `state` = `pending` | `used` | `expired`.
+}

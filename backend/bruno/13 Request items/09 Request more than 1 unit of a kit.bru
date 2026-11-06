@@ -1,0 +1,35 @@
+meta {
+  name: Request more than 1 unit of a kit
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{baseUrl}}/request-items
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "requestId": 2,
+    "articleId": 1,
+    "quantity": 2
+  }
+}
+
+assert {
+  res.status: eq 400
+}
+
+tests {
+  test("responds 400", function () {
+    expect(res.getStatus()).to.equal(400);
+  });
+}
+
+docs {
+  POST /request-items
+
+  HU-04: max. 1 unit per kit.
+}

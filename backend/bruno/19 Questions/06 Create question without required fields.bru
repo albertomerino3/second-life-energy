@@ -1,0 +1,25 @@
+meta {
+  name: Create question without required fields
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/questions
+  body: json
+  auth: none
+}
+
+body:json {
+  {}
+}
+
+assert {
+  res.status: eq 400
+}
+
+tests {
+  test("responds 400", function () {
+    expect(res.getStatus()).to.equal(400);
+  });
+}

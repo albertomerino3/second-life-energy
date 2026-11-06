@@ -1,0 +1,38 @@
+meta {
+  name: Update article
+  type: http
+  seq: 8
+}
+
+put {
+  url: {{baseUrl}}/articles/{{articleId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "stock": 7,
+    "status": "published"
+  }
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("responds 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("stock updated", function () {
+    expect(res.getBody().stock).to.equal(7);
+  });
+}
+
+docs {
+  PUT /articles/{{articleId}}
+
+  Updates only the editable fields of `articles`.
+}

@@ -1,0 +1,25 @@
+meta {
+  name: Get article review not found
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/article-reviews/999999
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 404
+}
+
+tests {
+  test("responds 404", function () {
+    expect(res.getStatus()).to.equal(404);
+  });
+
+  test("has a message", function () {
+    expect(res.getBody().message).to.be.a("string");
+  });
+}

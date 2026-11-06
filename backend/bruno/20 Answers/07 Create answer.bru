@@ -1,0 +1,47 @@
+meta {
+  name: Create answer
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/answers
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "questionId": 3,
+    "authorId": 2,
+    "content": "Respuesta creada desde Bruno"
+  }
+}
+
+assert {
+  res.status: eq 201
+}
+
+script:pre-request {
+  bru.setVar("uniq", Date.now());
+}
+
+script:post-response {
+  if (res.getStatus() < 300) { bru.setVar("answerId", res.getBody().id); }
+}
+
+tests {
+  test("responds 201", function () {
+    expect(res.getStatus()).to.equal(201);
+  });
+
+  test("returns the new id", function () {
+    expect(res.getBody().id).to.be.a("number");
+  });
+}
+
+docs {
+  POST /answers
+
+  Creates a record in `answers`. The id is saved in the variable `answerId`.
+}

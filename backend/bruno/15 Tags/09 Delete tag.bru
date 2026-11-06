@@ -1,0 +1,27 @@
+meta {
+  name: Delete tag
+  type: http
+  seq: 9
+}
+
+delete {
+  url: {{baseUrl}}/tags/{{tagId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 204
+}
+
+tests {
+  test("responds 204", function () {
+    expect(res.getStatus()).to.equal(204);
+  });
+}
+
+docs {
+  DELETE /tags/{{tagId}}
+
+  Deletes the record created by this folder.
+}

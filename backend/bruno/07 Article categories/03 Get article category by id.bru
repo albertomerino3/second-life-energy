@@ -1,0 +1,35 @@
+meta {
+  name: Get article category by id
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/article-categories/1
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("responds 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("has the requested id", function () {
+    expect(res.getBody().id).to.equal(1);
+  });
+
+  test("includes its subcategories", function () {
+    expect(res.getBody().subcategories).to.be.an("array").that.is.not.empty;
+  });
+}
+
+docs {
+  GET /article-categories/1
+
+  Returns one record of `article-categories` with its relationships.
+}

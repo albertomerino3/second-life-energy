@@ -1,0 +1,35 @@
+meta {
+  name: List article-categories with filters
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/article-categories?rootOnly=true
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("responds 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("returns an array", function () {
+    expect(res.getBody()).to.be.an("array");
+  });
+
+  test("only root categories", function () {
+    res.getBody().forEach((c) => expect(c.parentCategoryId).to.equal(null));
+  });
+}
+
+docs {
+  GET /article-categories?rootOnly=true
+
+  `rootOnly=true` returns only the categories without parent.
+}

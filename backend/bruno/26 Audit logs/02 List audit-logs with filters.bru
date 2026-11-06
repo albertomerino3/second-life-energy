@@ -1,0 +1,35 @@
+meta {
+  name: List audit-logs with filters
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/audit-logs?entity=Article
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("responds 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("returns an array", function () {
+    expect(res.getBody()).to.be.an("array");
+  });
+
+  test("only Article logs", function () {
+    res.getBody().forEach((l) => expect(l.entity).to.equal("Article"));
+  });
+}
+
+docs {
+  GET /audit-logs?entity=Article
+
+  Filters by `entity`, `entityId` and `userId`.
+}

@@ -1,0 +1,33 @@
+meta {
+  name: Update invitation
+  type: http
+  seq: 8
+}
+
+put {
+  url: {{baseUrl}}/invitations/{{invitationId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "usedAt": "2026-11-06T12:00:00.000Z"
+  }
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("responds 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+}
+
+docs {
+  PUT /invitations/{{invitationId}}
+
+  Updates only the editable fields of `invitations`.
+}

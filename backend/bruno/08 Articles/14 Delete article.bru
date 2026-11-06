@@ -1,0 +1,27 @@
+meta {
+  name: Delete article
+  type: http
+  seq: 14
+}
+
+delete {
+  url: {{baseUrl}}/articles/{{articleId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 204
+}
+
+tests {
+  test("responds 204", function () {
+    expect(res.getStatus()).to.equal(204);
+  });
+}
+
+docs {
+  DELETE /articles/{{articleId}}
+
+  Deletes the record created by this folder.
+}

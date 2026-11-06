@@ -1,0 +1,21 @@
+meta {
+  name: Get resource tag deleted (not found)
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{baseUrl}}/resource-tags/2/1
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 404
+}
+
+tests {
+  test("responds 404", function () {
+    expect(res.getStatus()).to.equal(404);
+  });
+}

@@ -1,0 +1,33 @@
+meta {
+  name: Update forum category
+  type: http
+  seq: 7
+}
+
+put {
+  url: {{baseUrl}}/forum-categories/{{forumCategoryId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "description": "Editada desde Bruno"
+  }
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("responds 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+}
+
+docs {
+  PUT /forum-categories/{{forumCategoryId}}
+
+  Updates only the editable fields of `forum-categories`.
+}

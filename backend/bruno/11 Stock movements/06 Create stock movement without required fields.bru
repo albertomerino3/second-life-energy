@@ -1,0 +1,25 @@
+meta {
+  name: Create stock movement without required fields
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/stock-movements
+  body: json
+  auth: none
+}
+
+body:json {
+  {}
+}
+
+assert {
+  res.status: eq 400
+}
+
+tests {
+  test("responds 400", function () {
+    expect(res.getStatus()).to.equal(400);
+  });
+}

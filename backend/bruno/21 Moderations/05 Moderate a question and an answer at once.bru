@@ -1,0 +1,31 @@
+meta {
+  name: Moderate a question and an answer at once
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/moderations
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "moderatorId": 2,
+    "questionId": 2,
+    "answerId": 3,
+    "action": "hide",
+    "reason": "x"
+  }
+}
+
+assert {
+  res.status: eq 400
+}
+
+tests {
+  test("responds 400", function () {
+    expect(res.getStatus()).to.equal(400);
+  });
+}

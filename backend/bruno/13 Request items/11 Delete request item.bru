@@ -1,0 +1,27 @@
+meta {
+  name: Delete request item
+  type: http
+  seq: 11
+}
+
+delete {
+  url: {{baseUrl}}/request-items/{{requestItemId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 204
+}
+
+tests {
+  test("responds 204", function () {
+    expect(res.getStatus()).to.equal(204);
+  });
+}
+
+docs {
+  DELETE /request-items/{{requestItemId}}
+
+  Deletes the record created by this folder.
+}

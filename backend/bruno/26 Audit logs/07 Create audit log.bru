@@ -1,0 +1,54 @@
+meta {
+  name: Create audit log
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/audit-logs
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "userId": 1,
+    "entity": "Article",
+    "entityId": 1,
+    "action": "update",
+    "previousValues": {
+      "stock": 4
+    },
+    "newValues": {
+      "stock": 5
+    }
+  }
+}
+
+assert {
+  res.status: eq 201
+}
+
+script:pre-request {
+  bru.setVar("uniq", Date.now());
+}
+
+script:post-response {
+  if (res.getStatus() < 300) { bru.setVar("auditLogId", res.getBody().id); }
+}
+
+tests {
+  test("responds 201", function () {
+    expect(res.getStatus()).to.equal(201);
+  });
+
+  test("returns the new id", function () {
+    expect(res.getBody().id).to.be.a("number");
+  });
+}
+
+docs {
+  POST /audit-logs
+
+  Creates a record in `audit-logs`. The id is saved in the variable `auditLogId`.
+}

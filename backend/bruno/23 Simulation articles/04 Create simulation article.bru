@@ -1,0 +1,38 @@
+meta {
+  name: Create simulation article
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/simulation-articles
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "simulationId": 3,
+    "articleId": 9
+  }
+}
+
+assert {
+  res.status: eq 201
+}
+
+tests {
+  test("responds 201", function () {
+    expect(res.getStatus()).to.equal(201);
+  });
+
+  test("returns the composite key", function () {
+    expect(res.getBody().simulationId).to.equal(3); expect(res.getBody().articleId).to.equal(9);
+  });
+}
+
+docs {
+  POST /simulation-articles
+
+  Creates the relationship. The composite key (simulationId, articleId) identifies it.
+}

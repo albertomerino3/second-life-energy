@@ -1,0 +1,25 @@
+meta {
+  name: Get user role by composite key
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/user-roles/5/2
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("responds 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("includes user and role", function () {
+    expect(res.getBody().user.id).to.equal(5); expect(res.getBody().role.id).to.equal(2);
+  });
+}

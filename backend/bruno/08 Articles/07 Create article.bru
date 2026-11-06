@@ -1,0 +1,55 @@
+meta {
+  name: Create article
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/articles
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "categoryId": 5,
+    "createdById": 3,
+    "name": "Componente Bruno {{uniq}}",
+    "description": "Componente creado desde Bruno",
+    "type": "component",
+    "specifications": "Prueba",
+    "stock": 5
+  }
+}
+
+assert {
+  res.status: eq 201
+}
+
+script:pre-request {
+  bru.setVar("uniq", Date.now());
+}
+
+script:post-response {
+  if (res.getStatus() < 300) { bru.setVar("articleId", res.getBody().id); }
+}
+
+tests {
+  test("responds 201", function () {
+    expect(res.getStatus()).to.equal(201);
+  });
+
+  test("returns the new id", function () {
+    expect(res.getBody().id).to.be.a("number");
+  });
+
+  test("is a draft by default", function () {
+    expect(res.getBody().status).to.equal("draft");
+  });
+}
+
+docs {
+  POST /articles
+
+  Creates a record in `articles`. The id is saved in the variable `articleId`.
+}

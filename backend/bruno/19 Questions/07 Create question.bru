@@ -1,0 +1,52 @@
+meta {
+  name: Create question
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/questions
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "categoryId": 3,
+    "authorId": 4,
+    "title": "Pregunta Bruno {{uniq}}",
+    "content": "¿Funciona la API?"
+  }
+}
+
+assert {
+  res.status: eq 201
+}
+
+script:pre-request {
+  bru.setVar("uniq", Date.now());
+}
+
+script:post-response {
+  if (res.getStatus() < 300) { bru.setVar("questionId", res.getBody().id); }
+}
+
+tests {
+  test("responds 201", function () {
+    expect(res.getStatus()).to.equal(201);
+  });
+
+  test("returns the new id", function () {
+    expect(res.getBody().id).to.be.a("number");
+  });
+
+  test("is open by default", function () {
+    expect(res.getBody().status).to.equal("open");
+  });
+}
+
+docs {
+  POST /questions
+
+  Creates a record in `questions`. The id is saved in the variable `questionId`.
+}

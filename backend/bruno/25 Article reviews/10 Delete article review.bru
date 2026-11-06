@@ -1,0 +1,27 @@
+meta {
+  name: Delete article review
+  type: http
+  seq: 10
+}
+
+delete {
+  url: {{baseUrl}}/article-reviews/{{articleReviewId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 204
+}
+
+tests {
+  test("responds 204", function () {
+    expect(res.getStatus()).to.equal(204);
+  });
+}
+
+docs {
+  DELETE /article-reviews/{{articleReviewId}}
+
+  Deletes the record created by this folder.
+}

@@ -1,0 +1,39 @@
+meta {
+  name: Get user by id
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/users/1
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("responds 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("has the requested id", function () {
+    expect(res.getBody().id).to.equal(1);
+  });
+
+  test("never returns the password hash", function () {
+    expect(res.getBody()).to.not.have.property("passwordHash");
+  });
+
+  test("includes the roles", function () {
+    expect(res.getBody().roles).to.be.an("array").that.is.not.empty;
+  });
+}
+
+docs {
+  GET /users/1
+
+  Returns one record of `users` with its relationships.
+}

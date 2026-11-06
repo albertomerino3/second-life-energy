@@ -1,0 +1,21 @@
+meta {
+  name: Delete answer again (not found)
+  type: http
+  seq: 11
+}
+
+delete {
+  url: {{baseUrl}}/answers/{{answerId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 404
+}
+
+tests {
+  test("responds 404", function () {
+    expect(res.getStatus()).to.equal(404);
+  });
+}

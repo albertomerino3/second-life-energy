@@ -1,0 +1,35 @@
+meta {
+  name: Get resource by id
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/resources/1
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("responds 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("has the requested id", function () {
+    expect(res.getBody().id).to.equal(1);
+  });
+
+  test("includes author, tags, articles and simulations", function () {
+    const r = res.getBody(); expect(r.author).to.be.an("object"); expect(r.tags).to.be.an("array").that.is.not.empty; expect(r.articles).to.be.an("array"); expect(r.simulations).to.be.an("array");
+  });
+}
+
+docs {
+  GET /resources/1
+
+  Returns one record of `resources` with its relationships.
+}

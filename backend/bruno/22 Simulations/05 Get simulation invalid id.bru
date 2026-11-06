@@ -1,0 +1,21 @@
+meta {
+  name: Get simulation invalid id
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/simulations/abc
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 400
+}
+
+tests {
+  test("responds 400", function () {
+    expect(res.getStatus()).to.equal(400);
+  });
+}

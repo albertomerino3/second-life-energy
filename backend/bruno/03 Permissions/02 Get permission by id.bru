@@ -1,0 +1,35 @@
+meta {
+  name: Get permission by id
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/permissions/1
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("responds 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("has the requested id", function () {
+    expect(res.getBody().id).to.equal(1);
+  });
+
+  test("includes the roles that grant it", function () {
+    expect(res.getBody().roles).to.be.an("array");
+  });
+}
+
+docs {
+  GET /permissions/1
+
+  Returns one record of `permissions` with its relationships.
+}

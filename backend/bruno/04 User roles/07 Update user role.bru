@@ -1,0 +1,27 @@
+meta {
+  name: Update user role
+  type: http
+  seq: 7
+}
+
+put {
+  url: {{baseUrl}}/user-roles/5/2
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "assignedAt": "2026-11-01T10:00:00.000Z"
+  }
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("responds 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

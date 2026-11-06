@@ -1,0 +1,21 @@
+meta {
+  name: Get simulation resource by composite key
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/simulation-resources/2/5
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("responds 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

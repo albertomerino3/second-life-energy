@@ -1,0 +1,37 @@
+meta {
+  name: Update request item
+  type: http
+  seq: 7
+}
+
+put {
+  url: {{baseUrl}}/request-items/{{requestItemId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "quantity": 4
+  }
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("responds 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("quantity updated", function () {
+    expect(res.getBody().quantity).to.equal(4);
+  });
+}
+
+docs {
+  PUT /request-items/{{requestItemId}}
+
+  Updates only the editable fields of `request-items`.
+}

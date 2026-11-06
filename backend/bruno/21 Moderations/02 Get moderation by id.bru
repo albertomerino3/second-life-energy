@@ -1,0 +1,25 @@
+meta {
+  name: Get moderation by id
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/moderations/1
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("responds 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("includes moderator and target", function () {
+    expect(res.getBody().moderator).to.be.an("object"); expect(res.getBody().question).to.be.an("object");
+  });
+}

@@ -1,0 +1,38 @@
+meta {
+  name: Create user role
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/user-roles
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "userId": 5,
+    "roleId": 2
+  }
+}
+
+assert {
+  res.status: eq 201
+}
+
+tests {
+  test("responds 201", function () {
+    expect(res.getStatus()).to.equal(201);
+  });
+
+  test("returns the composite key", function () {
+    expect(res.getBody().userId).to.equal(5); expect(res.getBody().roleId).to.equal(2);
+  });
+}
+
+docs {
+  POST /user-roles
+
+  Creates the relationship. The composite key (userId, roleId) identifies it.
+}

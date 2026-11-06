@@ -1,0 +1,34 @@
+meta {
+  name: Create simulation article duplicated
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/simulation-articles
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "simulationId": 3,
+    "articleId": 9
+  }
+}
+
+assert {
+  res.status: eq 409
+}
+
+tests {
+  test("responds 409", function () {
+    expect(res.getStatus()).to.equal(409);
+  });
+}
+
+docs {
+  POST /simulation-articles
+
+  The same relationship cannot be created twice (primary key).
+}

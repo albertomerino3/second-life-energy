@@ -1,0 +1,25 @@
+meta {
+  name: List questions of a category
+  type: http
+  seq: 9
+}
+
+get {
+  url: {{baseUrl}}/questions/category/3
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("responds 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("returns an array", function () {
+    expect(res.getBody()).to.be.an("array");
+  });
+}

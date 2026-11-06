@@ -1,0 +1,35 @@
+meta {
+  name: Get question by id
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/questions/1
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("responds 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("has the requested id", function () {
+    expect(res.getBody().id).to.equal(1);
+  });
+
+  test("includes answers and the accepted answer", function () {
+    const q = res.getBody(); expect(q.answers).to.be.an("array").that.is.not.empty; expect(q.acceptedAnswer.id).to.equal(q.acceptedAnswerId);
+  });
+}
+
+docs {
+  GET /questions/1
+
+  Returns one record of `questions` with its relationships.
+}

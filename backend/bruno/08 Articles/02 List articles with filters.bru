@@ -1,0 +1,39 @@
+meta {
+  name: List articles with filters
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/articles?type=component&available=true&sort=stock&order=desc
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("responds 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("returns an array", function () {
+    expect(res.getBody()).to.be.an("array");
+  });
+
+  test("only available components", function () {
+    res.getBody().forEach((a) => { expect(a.type).to.equal("component"); expect(a.stock).to.be.greaterThan(0); });
+  });
+
+  test("sorted by stock desc", function () {
+    const s = res.getBody().map((a) => a.stock); expect(s).to.deep.equal([...s].sort((x, y) => y - x));
+  });
+}
+
+docs {
+  GET /articles?type=component&available=true&sort=stock&order=desc
+
+  HU-03 catalogue: `search`, `categoryId`, `type` (kit|component), `status`, `available` (true|false), `sort` (id|name|stock|createdAt) and `order` (asc|desc).
+}

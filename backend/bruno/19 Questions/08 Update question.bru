@@ -1,0 +1,33 @@
+meta {
+  name: Update question
+  type: http
+  seq: 8
+}
+
+put {
+  url: {{baseUrl}}/questions/{{questionId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "title": "Pregunta Bruno editada"
+  }
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("responds 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+}
+
+docs {
+  PUT /questions/{{questionId}}
+
+  Updates only the editable fields of `questions`.
+}

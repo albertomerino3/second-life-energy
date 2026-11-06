@@ -1,0 +1,35 @@
+meta {
+  name: List request-items
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/request-items
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("responds 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("returns an array", function () {
+    expect(res.getBody()).to.be.an("array");
+  });
+
+  test("is not empty", function () {
+    expect(res.getBody().length).to.be.greaterThan(0);
+  });
+}
+
+docs {
+  GET /request-items
+
+  Returns every record of `request-items` ordered by id, with its related data (include).
+}

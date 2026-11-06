@@ -1,0 +1,33 @@
+meta {
+  name: Search articles by text
+  type: http
+  seq: 9
+}
+
+get {
+  url: {{baseUrl}}/articles?search=solar
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("responds 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("returns an array", function () {
+    expect(res.getBody()).to.be.an("array");
+  });
+
+  test("is not empty", function () {
+    expect(res.getBody().length).to.be.greaterThan(0);
+  });
+
+  test("matches the text", function () {
+    res.getBody().forEach((a) => expect((a.name + a.description).toLowerCase()).to.include("solar"));
+  });
+}

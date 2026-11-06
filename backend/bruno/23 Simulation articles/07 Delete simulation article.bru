@@ -1,0 +1,21 @@
+meta {
+  name: Delete simulation article
+  type: http
+  seq: 7
+}
+
+delete {
+  url: {{baseUrl}}/simulation-articles/3/9
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 204
+}
+
+tests {
+  test("responds 204", function () {
+    expect(res.getStatus()).to.equal(204);
+  });
+}

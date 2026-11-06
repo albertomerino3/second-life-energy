@@ -1,0 +1,21 @@
+meta {
+  name: Get role invalid id
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/roles/abc
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 400
+}
+
+tests {
+  test("responds 400", function () {
+    expect(res.getStatus()).to.equal(400);
+  });
+}

@@ -1,0 +1,33 @@
+meta {
+  name: Accept an answer of another question
+  type: http
+  seq: 10
+}
+
+put {
+  url: {{baseUrl}}/questions/{{questionId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "acceptedAnswerId": 1
+  }
+}
+
+assert {
+  res.status: eq 400
+}
+
+tests {
+  test("responds 400", function () {
+    expect(res.getStatus()).to.equal(400);
+  });
+}
+
+docs {
+  PUT /questions/{{questionId}}
+
+  The accepted answer must belong to the question.
+}

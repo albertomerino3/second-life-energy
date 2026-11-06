@@ -1,0 +1,35 @@
+meta {
+  name: Create user with duplicated email
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{baseUrl}}/users
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Duplicado",
+    "email": "admin@second-life-energy.test",
+    "passwordHash": "x"
+  }
+}
+
+assert {
+  res.status: eq 409
+}
+
+tests {
+  test("responds 409", function () {
+    expect(res.getStatus()).to.equal(409);
+  });
+}
+
+docs {
+  POST /users
+
+  The email is unique (UK in the ERD).
+}

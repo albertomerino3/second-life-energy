@@ -1,0 +1,28 @@
+meta {
+  name: Create tag with invalid slug
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{baseUrl}}/tags
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Slug malo",
+    "slug": "Slug Malo"
+  }
+}
+
+assert {
+  res.status: eq 400
+}
+
+tests {
+  test("responds 400", function () {
+    expect(res.getStatus()).to.equal(400);
+  });
+}
