@@ -5,18 +5,17 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("resources", {
       id: {
-        type: Sequelize.INTEGER.UNSIGNED,
+        type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
         allowNull: false,
       },
       author_id: {
-        type: Sequelize.INTEGER.UNSIGNED,
+        type: Sequelize.INTEGER,
         allowNull: false,
-        references: {
-          model: "users",
-          key: "id",
-        },
+        references: { model: "users", key: "id" },
+        onUpdate: "CASCADE",
+        onDelete: "RESTRICT",
       },
       title: {
         type: Sequelize.STRING(150),
@@ -26,39 +25,43 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: false,
       },
+      // "pdf" | "video" | "exercise" | "quiz" | "link"
       type: {
-        type: Sequelize.STRING(150),
+        type: Sequelize.STRING(20),
         allowNull: false,
       },
       topic: {
-        type: Sequelize.STRING(150),
+        type: Sequelize.STRING(100),
         allowNull: false,
       },
+      // "beginner" | "intermediate" | "advanced"
       difficulty: {
-        type: Sequelize.STRING(150),
+        type: Sequelize.STRING(20),
         allowNull: false,
       },
       url: {
         type: Sequelize.STRING(500),
         allowNull: false,
       },
+      // "draft" | "published"
       status: {
-        type: Sequelize.STRING(150),
+        type: Sequelize.STRING(20),
         allowNull: false,
+        defaultValue: "draft",
       },
       published_at: {
         type: Sequelize.DATE,
-        allowNull: false,
-        defaultValue: Sequelize.NOW,
+        allowNull: true,
       },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.NOW,
+        defaultValue: Sequelize.fn("NOW"),
       },
-    })
+    });
   },
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('resources');
-  }
+
+  async down(queryInterface) {
+    await queryInterface.dropTable("resources");
+  },
 };

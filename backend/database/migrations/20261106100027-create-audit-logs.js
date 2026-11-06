@@ -5,30 +5,29 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("audit_logs", {
       id: {
-        type: Sequelize.INTEGER.UNSIGNED,
+        type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
         allowNull: false,
       },
       user_id: {
-        type: Sequelize.INTEGER.UNSIGNED,
+        type: Sequelize.INTEGER,
         allowNull: true,
-        references: {
-          model: "users",
-          key: "id",
-        },
+        references: { model: "users", key: "id" },
+        onUpdate: "CASCADE",
         onDelete: "SET NULL",
       },
       entity: {
-        type: Sequelize.STRING(150),
+        type: Sequelize.STRING(100),
         allowNull: false,
       },
       entity_id: {
-        type: Sequelize.INTEGER.UNSIGNED,
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
+      // "create" | "update" | "delete" | "publish" | "permission_change"
       action: {
-        type: Sequelize.STRING(150),
+        type: Sequelize.STRING(30),
         allowNull: false,
       },
       previous_values: {
@@ -42,11 +41,12 @@ module.exports = {
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.NOW,
+        defaultValue: Sequelize.fn("NOW"),
       },
-    })
+    });
   },
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('audit_logs');
-  }
+
+  async down(queryInterface) {
+    await queryInterface.dropTable("audit_logs");
+  },
 };

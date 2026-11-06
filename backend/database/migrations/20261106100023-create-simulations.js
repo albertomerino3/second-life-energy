@@ -5,7 +5,7 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("simulations", {
       id: {
-        type: Sequelize.INTEGER.UNSIGNED,
+        type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
         allowNull: false,
@@ -18,8 +18,9 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: false,
       },
+      // "falstad" | "wokwi"
       platform: {
-        type: Sequelize.STRING(150),
+        type: Sequelize.STRING(20),
         allowNull: false,
       },
       url: {
@@ -34,9 +35,10 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: false,
       },
-    })
+    });
   },
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('simulations');
-  }
+
+  async down(queryInterface) {
+    await queryInterface.dropTable("simulations");
+  },
 };
