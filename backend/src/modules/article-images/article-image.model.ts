@@ -16,37 +16,41 @@ export class ArticleImage extends Model<
     declare articleId: number;
     declare url: string;
     declare altText: string;
-    declare sortOrder: number;
+    declare sortOrder: CreationOptional<number>;
 }
 
 ArticleImage.init(
     {
         id: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
             primaryKey: true,
-            allowNull: false,
         },
         articleId: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             allowNull: false,
         },
         url: {
-            type: DataTypes.STRING(250),
+            type: DataTypes.STRING(500),
             allowNull: false,
+            validate: { notEmpty: true },
         },
         altText: {
             type: DataTypes.STRING(300),
             allowNull: false,
+            validate: { notEmpty: true },
         },
         sortOrder: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             allowNull: false,
+            defaultValue: 0,
+            validate: { isInt: true, min: 0 },
         },
     },
     {
         sequelize,
         tableName: "article_images",
         modelName: "ArticleImage",
-        timestamps: true,
+        timestamps: false,
     }
 );

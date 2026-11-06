@@ -1,52 +1,73 @@
-import { DataTypes, Model } from 'sequelize';
-import {sequelize} from '../../config/database.js';
+import {
+    Model,
+    DataTypes,
+    InferAttributes,
+    InferCreationAttributes,
+    CreationOptional,
+} from "sequelize";
 
-export class Moderation extends Model {
-  public id!: number;
-  public moderatorId!: number;
-  public questionId!: number;
-  public answerId!: number;
-  public action!: string;
-  public reason!: string;
-  public createdAt!: Date;
+import { sequelize } from "../../config/database.js";
+
+export const MODERATION_ACTIONS = ["hide", "restore"] as const;
+
+export class Moderation extends Model<
+    InferAttributes<Moderation>,
+    InferCreationAttributes<Moderation>
+> {
+    declare id: CreationOptional<number>;
+    declare moderatorId: number;
+    declare questionId: number | null;
+    declare answerId: number | null;
+    declare action: string;
+    declare reason: string;
+    declare createdAt: CreationOptional<Date>;
 }
 
 Moderation.init(
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
+    {
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true,
+        },
+        moderatorId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        questionId: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+        },
+        answerId: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+        },
+        action: {
+            type: DataTypes.STRING(20),
+            allowNull: false,
+            validate: { isIn: [[...MODERATION_ACTIONS]] },
+        },
+        reason: {
+            type: DataTypes.STRING(255),
+            allowNull: false,
+            validate: { notEmpty: true },
+        },
+        createdAt: DataTypes.DATE,
     },
-    moderatorId: {
-      type: DataTypes.INTEGER,
-      allowNull: false, // Foreign key to User (moderator)
-    },
-    questionId: {
-      type: DataTypes.INTEGER,
-      allowNull: true, // Nullable: filled if a Question is being moderated
-    },
-    answerId: {
-      type: DataTypes.INTEGER,
-      allowNull: true, // Nullable: filled if an Answer is being moderated
-    },
-    action: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    reason: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-    },
-  },
-  {
-    sequelize,
-    tableName: 'moderations',
-    modelName: 'Moderation',
-    timestamps: false,
-  }
+    {
+        sequelize,
+        tableName: "moderations",
+        modelName: "Moderation",
+        timestamps: true,
+        updatedAt: false,
+        validate: {
+            exactlyOneTarget(this: Moderation) {
+                const hasQuestion = this.questionId !== null && this.questionId !== undefined;
+                const hasAnswer = this.answerId !== null && this.answerId !== undefined;
+                if (hasQuestion === hasAnswer) {
+                    throw new Error("Either questionId or answerId must be provided (not both)");
+                }
+            },
+        },
+    }
 );

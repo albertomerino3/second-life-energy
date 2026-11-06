@@ -13,7 +13,7 @@ export class AuditLog extends Model<
     InferCreationAttributes<AuditLog>
 > {
     declare id: CreationOptional<number>;
-    declare userId: CreationOptional<number> | null;
+    declare userId: number | null;
     declare entity: string;
     declare entityId: number;
     declare action: string;
@@ -21,32 +21,31 @@ export class AuditLog extends Model<
     declare newValues: object | null;
     declare createdAt: CreationOptional<Date>;
 }
+
 AuditLog.init(
     {
         id: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
         },
         userId: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             allowNull: true,
-            references: {
-                model: "users",
-                key: "id",
-            },
         },
         entity: {
-            type: DataTypes.STRING(150),
+            type: DataTypes.STRING(100),
             allowNull: false,
+            validate: { notEmpty: true },
         },
         entityId: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             allowNull: false,
         },
         action: {
-            type: DataTypes.STRING(150),
+            type: DataTypes.STRING(30),
             allowNull: false,
+            validate: { notEmpty: true },
         },
         previousValues: {
             type: DataTypes.JSON,
@@ -63,7 +62,6 @@ AuditLog.init(
         tableName: "audit_logs",
         modelName: "AuditLog",
         timestamps: true,
-        createdAt: "createdAt",
         updatedAt: false,
     }
 );

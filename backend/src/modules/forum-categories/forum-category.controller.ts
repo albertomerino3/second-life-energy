@@ -1,71 +1,71 @@
-import { Request, Response } from 'express';
-import { ForumCategoryService } from './forum-category.service.js';
-
-const forumCategoryService = new ForumCategoryService();
+import { Request, Response, NextFunction } from "express";
+import { ForumCategoryService } from "./forum-category.service.js";
 
 export class ForumCategoryController {
-  // GET /forum-categories
-  static async getAll(req: Request, res: Response): Promise<void> {
+  static async getAll(req: Request, res: Response, next: NextFunction) {
     try {
-      const items = await forumCategoryService.getAll();
-      res.status(200).json(items);
+      const items = await ForumCategoryService.findAll();
+      res.json(items);
     } catch (error) {
-      res.status(500).json({ message: 'Error retrieving forum categories', error });
+      next(error);
     }
   }
 
-  // GET /forum-categories/:id
-  static async getById(req: Request, res: Response): Promise<void> {
+  static async getById(req: Request, res: Response, next: NextFunction) {
     try {
       const id = Number(req.params.id);
-      const item = await forumCategoryService.getById(id);
+      const item = await ForumCategoryService.findById(id);
       if (!item) {
-        res.status(404).json({ message: 'Forum category not found' });
+        res.status(404).json({ message: "Forum category not found" });
         return;
       }
-      res.status(200).json(item);
+      res.json(item);
     } catch (error) {
-      res.status(500).json({ message: 'Error retrieving forum category', error });
+      next(error);
     }
   }
 
-  // POST /forum-categories
-  static async create(req: Request, res: Response): Promise<void> {
+  static async create(req: Request, res: Response, next: NextFunction) {
     try {
-      const created = await forumCategoryService.create(req.body);
+      const { name, description } = req.body;
+      if (!name) {
+        res.status(400).json({ message: "name is required" });
+        return;
+      }
+      const created = await ForumCategoryService.create({ name, description });
       res.status(201).json(created);
     } catch (error) {
-      res.status(400).json({ message: 'Error creating forum category', error });
+      next(error);
     }
   }
 
-  // PUT /forum-categories/:id
-  static async update(req: Request, res: Response): Promise<void> {
+  static async update(req: Request, res: Response, next: NextFunction) {
     try {
       const id = Number(req.params.id);
-      const updated = await forumCategoryService.update(id, req.body);
-      if (!updated) {
-        res.status(404).json({ message: 'Forum category not found' });
+      const item = await ForumCategoryService.findById(id);
+      if (!item) {
+        res.status(404).json({ message: "Forum category not found" });
         return;
       }
-      res.status(200).json(updated);
+      const updated = await ForumCategoryService.update(item, req.body);
+      res.json(updated);
     } catch (error) {
-      res.status(400).json({ message: 'Error updating forum category', error });
+      next(error);
     }
   }
 
-  // DELETE /forum-categories/:id
-  static async delete(req: Request, res: Response): Promise<void> {
+  static async delete(req: Request, res: Response, next: NextFunction) {
     try {
       const id = Number(req.params.id);
-      const deleted = await forumCategoryService.delete(id);
-      if (!deleted) {
-        res.status(404).json({ message: 'Forum category not found' });
+      const item = await ForumCategoryService.findById(id);
+      if (!item) {
+        res.status(404).json({ message: "Forum category not found" });
         return;
       }
+      await ForumCategoryService.delete(item);
       res.status(204).send();
     } catch (error) {
-      res.status(500).json({ message: 'Error deleting forum category', error });
+      next(error);
     }
   }
 }

@@ -12,37 +12,34 @@ export class KitComponent extends Model<
     InferAttributes<KitComponent>,
     InferCreationAttributes<KitComponent>
 > {
-    declare id: CreationOptional<number>;
     declare kitId: number;
     declare componentId: number;
-    declare quantity: number;
+    declare quantity: CreationOptional<number>;
 }
 
 KitComponent.init(
     {
-        id: {
-            type: DataTypes.INTEGER.UNSIGNED,
-            autoIncrement: true,
-            primaryKey: true,
-        },
         kitId: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
+            primaryKey: true,
             allowNull: false,
         },
         componentId: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
+            primaryKey: true,
             allowNull: false,
         },
         quantity: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             allowNull: false,
-            validate: { min: 1 },
+            defaultValue: 1,
+            validate: { isInt: true, min: 1 },
         },
     },
     {
         sequelize,
         tableName: "kit_components",
         modelName: "KitComponent",
-        timestamps: true,
+        timestamps: false,
     }
 );

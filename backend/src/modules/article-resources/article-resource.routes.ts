@@ -5,12 +5,10 @@ const router = Router();
 
 router.get("/", ArticleResourceController.getAll);
 
-router.get("/:id", ArticleResourceController.getById);
+router.get("/:articleId/:resourceId", ArticleResourceController.getById);
 
 router.post("/", ArticleResourceController.create);
 
-router.put("/:id", ArticleResourceController.update);
-
-router.delete("/:id", ArticleResourceController.delete);
+router.delete("/:articleId/:resourceId", ArticleResourceController.delete);
 
 export default router;

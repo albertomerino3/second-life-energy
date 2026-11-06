@@ -2,11 +2,13 @@ import { Request, Response, NextFunction } from "express";
 import { ResourceTagService } from "./resource-tag.service.js";
 
 export class ResourceTagController {
-
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const tag = await ResourceTagService.findAll();
-            res.json(tag);
+            const resourceTags = await ResourceTagService.findAll({
+                resourceId: Number(req.query.resourceId) || undefined,
+                tagId: Number(req.query.tagId) || undefined,
+            });
+            res.json(resourceTags);
         } catch (error) {
             next(error);
         }
@@ -14,15 +16,16 @@ export class ResourceTagController {
 
     static async getById(req: Request, res: Response, next: NextFunction) {
         try {
-            const id = Number(req.params.id);
-            const tag = await ResourceTagService.findById(id);
-            if (!tag) {
+            const resourceId = Number(req.params.resourceId);
+            const tagId = Number(req.params.tagId);
+            const resourceTag = await ResourceTagService.findById(resourceId, tagId);
+            if (!resourceTag) {
                 res.status(404).json({
                     message: "ResourceTag not found",
                 });
                 return;
             }
-            res.json(tag);
+            res.json(resourceTag);
         } catch (error) {
             next(error);
         }
@@ -47,37 +50,18 @@ export class ResourceTagController {
         }
     }
 
-    static async update(req: Request, res: Response, next: NextFunction) {
-        try {
-            const id = Number(req.params.id);
-            const tag = await ResourceTagService.findById(id);
-            if (!tag) {
-                res.status(404).json({
-                    message: "ResourceTagService not found",
-                });
-                return;
-            }
-            const updatedTag = await ResourceTagService.update(
-                tag,
-                req.body
-            );
-            res.json(updatedTag);
-        } catch (error) {
-            next(error);
-        }
-    }
-
     static async delete(req: Request, res: Response, next: NextFunction) {
         try {
-            const id = Number(req.params.id);
-            const tag = await ResourceTagService.findById(id);
-            if (!tag) {
+            const resourceId = Number(req.params.resourceId);
+            const tagId = Number(req.params.tagId);
+            const resourceTag = await ResourceTagService.findById(resourceId, tagId);
+            if (!resourceTag) {
                 res.status(404).json({
                     message: "ResourceTag not found",
                 });
                 return;
             }
-            await ResourceTagService.delete(tag);
+            await ResourceTagService.delete(resourceTag);
             res.status(204).send();
         } catch (error) {
             next(error);

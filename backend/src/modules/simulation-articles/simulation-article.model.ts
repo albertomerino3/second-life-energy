@@ -1,7 +1,16 @@
-import { Model, DataTypes } from "sequelize";
+import {
+    Model,
+    DataTypes,
+    InferAttributes,
+    InferCreationAttributes,
+} from "sequelize";
+
 import { sequelize } from "../../config/database.js";
 
-export class SimulationArticle extends Model {
+export class SimulationArticle extends Model<
+    InferAttributes<SimulationArticle>,
+    InferCreationAttributes<SimulationArticle>
+> {
     declare simulationId: number;
     declare articleId: number;
 }
@@ -9,12 +18,12 @@ export class SimulationArticle extends Model {
 SimulationArticle.init(
     {
         simulationId: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
         },
         articleId: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
         },

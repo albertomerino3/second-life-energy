@@ -13,36 +13,37 @@ export class ArticleCategory extends Model<
     InferCreationAttributes<ArticleCategory>
 > {
     declare id: CreationOptional<number>;
-    declare name: string | null;
-    declare description: string;
-    declare parentCategoryId: number;
+    declare name: string;
+    declare description: string | null;
+    declare parentCategoryId: number | null;
 }
 
 ArticleCategory.init(
     {
         id: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
         },
         name: {
             type: DataTypes.STRING(100),
-            allowNull: true,
+            allowNull: false,
             unique: true,
+            validate: { notEmpty: true },
         },
         description: {
-            type: DataTypes.STRING(200),
-            allowNull: false,
+            type: DataTypes.STRING(255),
+            allowNull: true,
         },
         parentCategoryId: {
-            type: DataTypes.INTEGER.UNSIGNED,
-            allowNull: false,
+            type: DataTypes.INTEGER,
+            allowNull: true,
         },
     },
     {
         sequelize,
         tableName: "article_categories",
         modelName: "ArticleCategory",
-        timestamps: true,
+        timestamps: false,
     }
 );

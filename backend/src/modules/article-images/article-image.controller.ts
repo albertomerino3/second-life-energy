@@ -2,11 +2,10 @@ import { Request, Response, NextFunction } from "express";
 import { ArticleImageService } from "./article-image.service.js";
 
 export class ArticleImageController {
-
-
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const articleImage = await ArticleImageService.findAll();
+            const articleId = Number(req.query.articleId) || undefined;
+            const articleImage = await ArticleImageService.findAll({ articleId });
             res.json(articleImage);
         } catch (error) {
             next(error);
@@ -14,14 +13,13 @@ export class ArticleImageController {
     }
 
     static async getById(req: Request, res: Response, next: NextFunction) {
-
         try{
             const id = Number(req.params.id);
             const articleImage = await ArticleImageService.findById(id);
 
             if (!articleImage) {
                 res.status(404).json({
-                    message: "Article Image not found :(",
+                    message: "Article Image not found",
                 });
                 return;
             }
@@ -32,15 +30,14 @@ export class ArticleImageController {
         }
     }
 
-
     static async create(req: Request, res: Response, next: NextFunction) {
-
         try{
             const { articleId, url, altText, sortOrder} = req.body;
-            if (!articleId || !url || !altText || !sortOrder) {
+            if (!articleId || !url || !altText) {
                 res.status(400).json({
-                    message: "articleId, url, altText and sortOrder are required",
+                    message: "articleId, url and altText are required",
                 });
+                return;
             }
         const articleImage = await ArticleImageService.create({
             articleId,
@@ -48,14 +45,13 @@ export class ArticleImageController {
             altText,
             sortOrder,
         });
-        
+
         res.status(201).json(articleImage);
 
         } catch (error) {
             next(error);
         }
     }
-
 
     static async update(req: Request, res: Response, next: NextFunction) {
         try{
@@ -65,7 +61,7 @@ export class ArticleImageController {
 
             if (!articleImage) {
                 res.status(404).json({
-                    message: "Article Image NOT FOUND",
+                    message: "Article Image not found",
                 });
                 return;
             }
@@ -81,7 +77,6 @@ export class ArticleImageController {
         }
     }
 
-
     static async delete(req: Request, res: Response, next: NextFunction) {
         try {
             const id = Number(req.params.id);
@@ -90,7 +85,7 @@ export class ArticleImageController {
 
             if (!articleImage) {
                 res.status(404).json({
-                    message: "Article Image not found :(",
+                    message: "Article Image not found",
                 });
                 return;
             }

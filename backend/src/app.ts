@@ -6,14 +6,14 @@ import { errorMiddleware } from "./middlewares/error.middleware.js";
 export const app = express();
 
 app.use(express.json());
-app.use("/api", apiRouter);
 
 app.get("/", (req, res) => {
     res.json({
-        message : "API running",
+        message: "API running",
     });
 });
 
 app.use("/api", apiRouter);
+
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);

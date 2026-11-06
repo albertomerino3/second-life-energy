@@ -16,26 +16,31 @@ export class Tag extends Model<
     declare name: string;
     declare slug: string;
 }
+
 Tag.init(
     {
         id: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
         },
         name: {
-            type: DataTypes.STRING(80),
+            type: DataTypes.STRING(100),
             allowNull: false,
+            unique: true,
+            validate: { notEmpty: true },
         },
         slug: {
-            type: DataTypes.STRING(150),
+            type: DataTypes.STRING(100),
             allowNull: false,
+            unique: true,
+            validate: { is: /^[a-z0-9]+(?:-[a-z0-9]+)*$/ },
         },
     },
     {
         sequelize,
         tableName: "tags",
         modelName: "Tag",
-        timestamps: true,
+        timestamps: false,
     }
 );

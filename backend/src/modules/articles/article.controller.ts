@@ -4,7 +4,16 @@ import { ArticleService } from "./article.service.js";
 export class ArticleController {
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const articles = await ArticleService.findAll();
+            const { search, categoryId, type, status, available, sort, order } = req.query;
+            const articles = await ArticleService.findAll({
+                search: typeof search === "string" ? search : undefined,
+                categoryId: Number(categoryId) || undefined,
+                type: typeof type === "string" ? type : undefined,
+                status: typeof status === "string" ? status : undefined,
+                available: available === undefined ? undefined : available === "true",
+                sort: typeof sort === "string" ? sort : undefined,
+                order: typeof order === "string" ? order : undefined,
+            });
             res.json(articles);
         } catch (error) {
             next(error);
@@ -30,20 +39,20 @@ export class ArticleController {
     static async create(req: Request, res: Response, next: NextFunction) {
         try {
             const { categoryId, createdById, name, description, type, specifications, stock, status } = req.body;
-            if (!categoryId || !createdById || !name || !description || !type || !specifications || stock === undefined || !status ) {
+            if (!categoryId || !createdById || !name || !description || !type) {
                 res.status(400).json({
-                    message: "CategoryId, createdById, name, description, type, specifications, stock and status are required",
+                    message: "categoryId, createdById, name, description and type are required",
                 });
                 return;
             }
             const article = await ArticleService.create({
-                categoryId, 
-                createdById, 
-                name, 
-                description, 
-                type, 
-                specifications, 
-                stock, 
+                categoryId,
+                createdById,
+                name,
+                description,
+                type,
+                specifications,
+                stock,
                 status,
             });
             res.status(201).json(article);

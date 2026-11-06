@@ -4,7 +4,15 @@ import { ResourceService } from "./resource.service.js";
 export class ResourceController {
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const resources = await ResourceService.findAll();
+            const resources = await ResourceService.findAll({
+                search: typeof req.query.search === "string" ? req.query.search : undefined,
+                type: typeof req.query.type === "string" ? req.query.type : undefined,
+                topic: typeof req.query.topic === "string" ? req.query.topic : undefined,
+                difficulty: typeof req.query.difficulty === "string" ? req.query.difficulty : undefined,
+                status: typeof req.query.status === "string" ? req.query.status : undefined,
+                authorId: Number(req.query.authorId) || undefined,
+                tag: typeof req.query.tag === "string" ? req.query.tag : undefined,
+            });
             res.json(resources);
         } catch (error) {
             next(error);
@@ -30,20 +38,20 @@ export class ResourceController {
     static async create(req: Request, res: Response, next: NextFunction) {
         try {
             const { authorId, title, description, type, topic, difficulty, url, status, publishedAt } = req.body;
-            if (!authorId || !title || !description || !type || !topic || !difficulty || !url || !status ) {
+            if (!authorId || !title || !description || !type || !topic || !difficulty || !url) {
                 res.status(400).json({
-                    message: "AuthorId, title, description, type, topic, difficulty, url and status are required",
+                    message: "authorId, title, description, type, topic, difficulty and url are required",
                 });
                 return;
             }
             const resource = await ResourceService.create({
-                authorId, 
-                title, 
-                description, 
-                type, 
-                topic, 
-                difficulty, 
-                url, 
+                authorId,
+                title,
+                description,
+                type,
+                topic,
+                difficulty,
+                url,
                 status,
                 publishedAt
             });

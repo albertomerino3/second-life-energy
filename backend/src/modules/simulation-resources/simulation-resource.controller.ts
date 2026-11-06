@@ -4,7 +4,10 @@ import { SimulationResourceService } from "./simulation-resource.service.js";
 export class SimulationResourceController {
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const items = await SimulationResourceService.findAll();
+            const items = await SimulationResourceService.findAll({
+                simulationId: Number(req.query.simulationId) || undefined,
+                resourceId: Number(req.query.resourceId) || undefined,
+            });
             res.json(items);
         } catch (error) {
             next(error);

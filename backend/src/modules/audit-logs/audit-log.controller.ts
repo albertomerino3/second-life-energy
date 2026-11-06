@@ -4,7 +4,11 @@ import { AuditLogService } from "./audit-log.service.js";
 export class AuditLogController {
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const auditLogs = await AuditLogService.findAll();
+            const auditLogs = await AuditLogService.findAll({
+                entity: typeof req.query.entity === "string" ? req.query.entity : undefined,
+                entityId: Number(req.query.entityId) || undefined,
+                userId: Number(req.query.userId) || undefined,
+            });
             res.json(auditLogs);
         } catch (error) {
             next(error);
@@ -30,18 +34,18 @@ export class AuditLogController {
     static async create(req: Request, res: Response, next: NextFunction) {
         try {
             const { userId, entity, entityId, action, previousValues, newValues } = req.body;
-            if (!entity|| !entityId || !action) {
+            if (!entity || !entityId || !action) {
                 res.status(400).json({
                     message: "Entity, entityId and action are required",
                 });
                 return;
             }
             const auditLog = await AuditLogService.create({
-                userId, 
-                entity, 
-                entityId, 
-                action, 
-                previousValues, 
+                userId,
+                entity,
+                entityId,
+                action,
+                previousValues,
                 newValues
             });
             res.status(201).json(auditLog);

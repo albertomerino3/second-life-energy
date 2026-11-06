@@ -1,72 +1,82 @@
-import { Request, Response } from 'express';
-import { AnswerService } from './answer.service.js';
-
-const answerService = new AnswerService();
+import { Request, Response, NextFunction } from "express";
+import { AnswerService } from "./answer.service.js";
 
 export class AnswerController {
-  // GET /answers/question/:questionId
-  static async getByQuestionId(req: Request, res: Response): Promise<void> {
+  static async getAll(req: Request, res: Response, next: NextFunction) {
+    try {
+      const questionId = Number(req.query.questionId) || undefined;
+      const items = await AnswerService.findAll({ questionId });
+      res.json(items);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getByQuestionId(req: Request, res: Response, next: NextFunction) {
     try {
       const questionId = Number(req.params.questionId);
-      const items = await answerService.getByQuestionId(questionId);
-      res.status(200).json(items);
+      const items = await AnswerService.findByQuestionId(questionId);
+      res.json(items);
     } catch (error) {
-      res.status(500).json({ message: 'Error retrieving answers', error });
+      next(error);
     }
   }
 
-  // GET /answers/:id
-  static async getById(req: Request, res: Response): Promise<void> {
+  static async getById(req: Request, res: Response, next: NextFunction) {
     try {
       const id = Number(req.params.id);
-      const item = await answerService.getById(id);
+      const item = await AnswerService.findById(id);
       if (!item) {
-        res.status(404).json({ message: 'Answer not found' });
+        res.status(404).json({ message: "Answer not found" });
         return;
       }
-      res.status(200).json(item);
+      res.json(item);
     } catch (error) {
-      res.status(500).json({ message: 'Error retrieving answer', error });
+      next(error);
     }
   }
 
-  // POST /answers
-  static async create(req: Request, res: Response): Promise<void> {
+  static async create(req: Request, res: Response, next: NextFunction) {
     try {
-      const created = await answerService.create(req.body);
+      const { questionId, authorId, content, status } = req.body;
+      if (!questionId || !authorId || !content) {
+        res.status(400).json({ message: "questionId, authorId and content are required" });
+        return;
+      }
+      const created = await AnswerService.create({ questionId, authorId, content, status });
       res.status(201).json(created);
     } catch (error) {
-      res.status(400).json({ message: 'Error creating answer', error });
+      next(error);
     }
   }
 
-  // PUT /answers/:id
-  static async update(req: Request, res: Response): Promise<void> {
+  static async update(req: Request, res: Response, next: NextFunction) {
     try {
       const id = Number(req.params.id);
-      const updated = await answerService.update(id, req.body);
-      if (!updated) {
-        res.status(404).json({ message: 'Answer not found' });
+      const item = await AnswerService.findById(id);
+      if (!item) {
+        res.status(404).json({ message: "Answer not found" });
         return;
       }
-      res.status(200).json(updated);
+      const updated = await AnswerService.update(item, req.body);
+      res.json(updated);
     } catch (error) {
-      res.status(400).json({ message: 'Error updating answer', error });
+      next(error);
     }
   }
 
-  // DELETE /answers/:id
-  static async delete(req: Request, res: Response): Promise<void> {
+  static async delete(req: Request, res: Response, next: NextFunction) {
     try {
       const id = Number(req.params.id);
-      const deleted = await answerService.delete(id);
-      if (!deleted) {
-        res.status(404).json({ message: 'Answer not found' });
+      const item = await AnswerService.findById(id);
+      if (!item) {
+        res.status(404).json({ message: "Answer not found" });
         return;
       }
+      await AnswerService.delete(item);
       res.status(204).send();
     } catch (error) {
-      res.status(500).json({ message: 'Error deleting answer', error });
+      next(error);
     }
   }
 }

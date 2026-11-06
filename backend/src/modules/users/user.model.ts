@@ -20,25 +20,29 @@ export class User extends Model<
     declare createdAt: CreationOptional<Date>;
     declare updatedAt: CreationOptional<Date>;
 }
+
 User.init(
     {
         id: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
         },
         name: {
             type: DataTypes.STRING(150),
             allowNull: false,
+            validate: { notEmpty: true },
         },
         email: {
             type: DataTypes.STRING(255),
             allowNull: false,
             unique: true,
+            validate: { isEmail: true },
         },
         passwordHash: {
             type: DataTypes.STRING(255),
             allowNull: false,
+            validate: { notEmpty: true },
         },
         isActive: {
             type: DataTypes.BOOLEAN,
@@ -53,5 +57,8 @@ User.init(
         tableName: "users",
         modelName: "User",
         timestamps: true,
+        defaultScope: {
+            attributes: { exclude: ["passwordHash"] },
+        },
     }
 );

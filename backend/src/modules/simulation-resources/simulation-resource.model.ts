@@ -1,7 +1,16 @@
-import { Model, DataTypes } from "sequelize";
+import {
+    Model,
+    DataTypes,
+    InferAttributes,
+    InferCreationAttributes,
+} from "sequelize";
+
 import { sequelize } from "../../config/database.js";
 
-export class SimulationResource extends Model {
+export class SimulationResource extends Model<
+    InferAttributes<SimulationResource>,
+    InferCreationAttributes<SimulationResource>
+> {
     declare simulationId: number;
     declare resourceId: number;
 }
@@ -9,12 +18,12 @@ export class SimulationResource extends Model {
 SimulationResource.init(
     {
         simulationId: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
         },
         resourceId: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
         },
@@ -22,6 +31,7 @@ SimulationResource.init(
     {
         sequelize,
         tableName: "simulation_resources",
+        modelName: "SimulationResource",
         timestamps: false,
     }
 );

@@ -1,16 +1,32 @@
 import { User } from "./user.model.js";
+import { Role } from "../roles/role.model.js";
+
+const includeRoles = [
+    {
+        model: Role,
+        as: "roles",
+        attributes: ["id", "name"],
+        through: { attributes: ["assignedAt"] },
+    },
+];
+
+function withoutPassword(user: User) {
+    const { passwordHash, ...safeUser } = user.toJSON();
+    return safeUser;
+}
 
 export class UserService {
-    static async findAll() {
+    static async findAll(filters: { isActive?: boolean } = {}) {
         return User.findAll({
-            attributes: { exclude: ["passwordHash"] },
+            where: filters.isActive === undefined ? {} : { isActive: filters.isActive },
+            include: includeRoles,
             order: [["id", "ASC"]],
         });
     }
 
     static async findById(id: number) {
         return User.findByPk(id, {
-            attributes: { exclude: ["passwordHash"] },
+            include: includeRoles,
         });
     }
 
@@ -21,8 +37,7 @@ export class UserService {
         isActive?: boolean;
     }) {
         const user = await User.create(data);
-        const { passwordHash, ...safeUser } = user.toJSON();
-        return safeUser;
+        return withoutPassword(user);
     }
 
     static async update(
@@ -34,9 +49,13 @@ export class UserService {
             isActive?: boolean;
         }
     ) {
-        const updatedUser = await user.update(data);
-        const { passwordHash, ...safeUser } = updatedUser.toJSON();
-        return safeUser;
+        const editableFields = ["name", "email", "passwordHash", "isActive"] as const;
+        const fields = editableFields.filter((field) => data[field] !== undefined);
+        if (fields.length === 0) {
+            return withoutPassword(user);
+        }
+        const updatedUser = await user.update(data, { fields: [...fields] });
+        return withoutPassword(updatedUser);
     }
 
     static async delete(user: User) {

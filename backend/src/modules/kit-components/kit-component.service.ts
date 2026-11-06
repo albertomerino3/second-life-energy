@@ -1,34 +1,44 @@
 import { KitComponent } from "./kit-component.model.js";
+import { Article } from "../articles/article.model.js";
+
+const includeRelations = [
+    { model: Article, as: "kit", attributes: ["id", "name", "type"] },
+    { model: Article, as: "component", attributes: ["id", "name", "type", "stock"] },
+];
 
 export class KitComponentService {
-
-    static async findAll() {
+    static async findAll(filters: { kitId?: number } = {}) {
         return KitComponent.findAll({
-            order: [["id", "ASC"]],
+            where: filters.kitId ? { kitId: filters.kitId } : {},
+            include: includeRelations,
+            order: [["kitId", "ASC"], ["componentId", "ASC"]],
         });
     }
 
-    static async findById(id: number) {
-        return KitComponent.findByPk(id);
+    static async findById(kitId: number, componentId: number) {
+        return KitComponent.findOne({
+            where: { kitId, componentId },
+            include: includeRelations,
+        });
     }
 
     static async create(data: {
         kitId: number,
         componentId: number,
-        quantity: number;
+        quantity?: number;
     }) {
-        return KitComponent.create(data);
+        await KitComponent.create(data);
+        return KitComponentService.findById(data.kitId, data.componentId);
     }
 
     static async update(
         kitComponent: KitComponent,
         data: {
-            kitId?: number;
-            componentId?: number;
             quantity?: number;
         }
     ) {
-        return kitComponent.update(data);
+        await kitComponent.update(data, { fields: ["quantity"] });
+        return KitComponentService.findById(kitComponent.kitId, kitComponent.componentId);
     }
 
     static async delete(kitComponent: KitComponent) {

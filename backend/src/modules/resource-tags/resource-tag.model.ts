@@ -3,7 +3,6 @@ import {
     DataTypes,
     InferAttributes,
     InferCreationAttributes,
-    CreationOptional,
 } from "sequelize";
 
 import { sequelize } from "../../config/database.js";
@@ -12,27 +11,27 @@ export class ResourceTag extends Model<
     InferAttributes<ResourceTag>,
     InferCreationAttributes<ResourceTag>
 > {
-    declare resourceId: CreationOptional<number>;
-    declare tagId: CreationOptional<number>;
+    declare resourceId: number;
+    declare tagId: number;
 }
+
 ResourceTag.init(
     {
         resourceId: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
         },
-    
         tagId: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
         },
     },
     {
         sequelize,
-        tableName: "tags",
-        modelName: "Tag",
-        timestamps: true,
+        tableName: "resource_tags",
+        modelName: "ResourceTag",
+        timestamps: false,
     }
 );

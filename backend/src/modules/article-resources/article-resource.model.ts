@@ -3,7 +3,6 @@ import {
     DataTypes,
     InferAttributes,
     InferCreationAttributes,
-    CreationOptional,
 } from "sequelize";
 
 import { sequelize } from "../../config/database.js";
@@ -19,20 +18,20 @@ export class ArticleResource extends Model<
 ArticleResource.init(
     {
         articleId: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
         },
         resourceId: {
-            type: DataTypes.INTEGER.UNSIGNED,
-            allowNull: false,
+            type: DataTypes.INTEGER,
             primaryKey: true,
+            allowNull: false,
         },
     },
     {
         sequelize,
         tableName: "article_resources",
         modelName: "ArticleResource",
-        timestamps: true,
+        timestamps: false,
     }
 );
