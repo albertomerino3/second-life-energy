@@ -1,20 +1,16 @@
 import { Router } from "express";
-import { BicycleController } from "./user.controller.js";
+import { UserController } from "./user.controller.js";
 
 const router = Router();
 
-router.get("/", BicycleController.getAll);
+router.get("/", UserController.getAll);
 
-router.get("/eagerly/frame-material/:frameMaterial", BicycleController.getAllEagerlyByFrameMaterial);
+router.get("/:id", UserController.getById);
 
-router.get("/:id", BicycleController.getById);
+router.post("/", UserController.create);
 
-router.get("/eagerly/:id", BicycleController.getEagerlyById);
+router.put("/:id", UserController.update);
 
-router.post("/", BicycleController.create);
-
-router.put("/:id", BicycleController.update);
-
-router.delete("/:id", BicycleController.delete);
+router.delete("/:id", UserController.delete);
 
 export default router;

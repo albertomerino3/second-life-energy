@@ -1,69 +1,64 @@
-import { Bicycle } from "./user.model.js";
-import { Brand } from "../resources/resource.model.js"
-import { BicycleDetail } from "../articles/article.model.js";
-import { FindOptions } from "sequelize";
+import { User } from "./user.model.js";
+import { Role } from "../roles/role.model.js";
 
-export class BicycleService {
-    static async findAll() {
-        return Bicycle.findAll({
+const includeRoles = [
+    {
+        model: Role,
+        as: "roles",
+        attributes: ["id", "name"],
+        through: { attributes: ["assignedAt"] },
+    },
+];
+
+function withoutPassword(user: User) {
+    const { passwordHash, ...safeUser } = user.toJSON();
+    return safeUser;
+}
+
+export class UserService {
+    static async findAll(filters: { isActive?: boolean } = {}) {
+        return User.findAll({
+            where: filters.isActive === undefined ? {} : { isActive: filters.isActive },
+            include: includeRoles,
             order: [["id", "ASC"]],
         });
     }
-    
-    static async findEagerlyById(id: number) {
-        return Bicycle.findByPk(id, {
-            include: [
-                {
-                    model: Brand,
-                    as: 'brand'
-                }
-            ]
+
+    static async findById(id: number) {
+        return User.findByPk(id, {
+            include: includeRoles,
         });
     }
 
-    static async findAllEagerlyByFrameMaterial(frameMaterial: string) {
-        return Bicycle.findAll({
-            include: [
-                {
-                    model: BicycleDetail,
-                    as: 'detail',
-                    where: {
-                        frameMaterial
-                    }
-                }
-            ],
-            order: [["id", "ASC"]]
-        });
-    }
-
-    static async findById(id: number, options?: FindOptions) {
-        return Bicycle.findByPk(id, options);
-    }
-    
     static async create(data: {
-        brandId: number;
-        model: string;
-        description?: string | null;
-        price: number;
-        stock: number;
+        name: string;
+        email: string;
+        passwordHash: string;
+        isActive?: boolean;
     }) {
-        return Bicycle.create(data);
+        const user = await User.create(data);
+        return withoutPassword(user);
     }
-    
+
     static async update(
-        bicycle: Bicycle,
+        user: User,
         data: {
-            brandId?: number;
-            model?: string;
-            description?: string | null;
-            price?: number;
-            stock?: number;
+            name?: string;
+            email?: string;
+            passwordHash?: string;
+            isActive?: boolean;
         }
     ) {
-        return bicycle.update(data);
+        const editableFields = ["name", "email", "passwordHash", "isActive"] as const;
+        const fields = editableFields.filter((field) => data[field] !== undefined);
+        if (fields.length === 0) {
+            return withoutPassword(user);
+        }
+        const updatedUser = await user.update(data, { fields: [...fields] });
+        return withoutPassword(updatedUser);
     }
-    
-    static async delete(bicycle: Bicycle) {
-        await bicycle.destroy();
+
+    static async delete(user: User) {
+        await user.destroy();
     }
 }

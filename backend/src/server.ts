@@ -1,37 +1,20 @@
 import { app } from "./app.js";
 import { sequelize } from "./config/database.js";
 import { env } from "./config/env.js";
-import { defineAssociations, defineDetails, defineCustomer, defineOrder } from "./models/associations.js";
-
-import "./modules/users/user.model.js";
-import "./modules/resources/resource.model.js";
-import "./modules/articles/article.model.js";
+import { setupAssociations } from "./models/associations.js";
 
 async function startServer() {
     try {
-
-        defineAssociations();
-        defineDetails();
-        defineCustomer();
-        defineOrder();
+        setupAssociations();
 
         await sequelize.authenticate();
-        console.log("MySQL connection established.");
-        
-        await sequelize.sync({ force: true });
-        console.log("Models synchronized.");
+        console.log(`Database connection established (${env.DB_DIALECT}://${env.DB_HOST}:${env.DB_PORT}/${env.DB_NAME}).`);
 
         app.listen(env.PORT, () => {
-            console.log(
-                `Server running at http://localhost:${env.PORT}`
-            );
+            console.log(`Server running at http://localhost:${env.PORT} (${env.NODE_ENV})`);
         });
-
     } catch (error) {
-        console.error(
-            "Could not start the application:",
-            error
-        );
+        console.error("Could not start the application:", error);
         process.exit(1);
     }
 }

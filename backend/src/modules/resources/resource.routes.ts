@@ -1,16 +1,16 @@
 import { Router } from "express";
-import { BrandController } from "./resource.controller.js";
+import { ResourceController } from "./resource.controller.js";
 
 const router = Router();
 
-router.get("/", BrandController.getAll);
+router.get("/", ResourceController.getAll);
 
-router.get("/:id", BrandController.getById);
+router.get("/:id", ResourceController.getById);
 
-router.post("/", BrandController.create);
+router.post("/", ResourceController.create);
 
-router.put("/:id", BrandController.update);
+router.put("/:id", ResourceController.update);
 
-router.delete("/:id", BrandController.delete);
+router.delete("/:id", ResourceController.delete);
 
 export default router;

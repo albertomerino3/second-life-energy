@@ -7,19 +7,33 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch src/server.ts",
+    "dev": "cross-env NODE_ENV=development tsx watch src/server.ts",
+    "dev:test": "cross-env NODE_ENV=test tsx src/server.ts",
     "build": "tsc",
-    "start": "node dist/server.js"
+    "typecheck": "tsc --noEmit",
+    "start": "node dist/server.js",
+    "db:create": "cd database && sequelize-cli db:create",
+    "db:drop": "cd database && sequelize-cli db:drop",
+    "db:migrate": "cd database && sequelize-cli db:migrate",
+    "db:migrate:undo": "cd database && sequelize-cli db:migrate:undo",
+    "db:migrate:undo:all": "cd database && sequelize-cli db:migrate:undo:all",
+    "db:migrate:status": "cd database && sequelize-cli db:migrate:status",
+    "db:seed": "cd database && sequelize-cli db:seed:all",
+    "db:seed:undo": "cd database && sequelize-cli db:seed:undo:all",
+    "db:reset": "npm run db:seed:undo && npm run db:migrate:undo:all && npm run db:migrate && npm run db:seed"
   },
+  "keywords": [],
   "dependencies": {
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "mysql2": "^3.24.4",
+    "pg": "^8.23.1",
     "sequelize": "^6.37.8"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
     "@types/node": "^22.20.3",
+    "cross-env": "^10.1.0",
     "sequelize-cli": "^6.6.5",
     "tsx": "^4.23.13",
     "typescript": "^7.0.2"
