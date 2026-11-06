@@ -50,9 +50,14 @@ export class UserService {
             isActive?: boolean;
         }
     ) {
-        const updatedUser = await user.update(data, {
-            fields: ["name", "email", "passwordHash", "isActive"],
-        });
+        // Only the fields sent in the body: the instance was loaded without
+        // passwordHash (default scope), so it must not be validated if absent
+        const editableFields = ["name", "email", "passwordHash", "isActive"] as const;
+        const fields = editableFields.filter((field) => data[field] !== undefined);
+        if (fields.length === 0) {
+            return withoutPassword(user);
+        }
+        const updatedUser = await user.update(data, { fields: [...fields] });
         return withoutPassword(updatedUser);
     }
 
