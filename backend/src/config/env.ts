@@ -25,6 +25,9 @@ export const env = {
     NODE_ENV,
     PORT: Number(process.env.PORT) || 3000,
 
+    JWT_SECRET: process.env.JWT_SECRET || "A_VERY_LARGE_AND_SECRET_KEY",
+    JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || "1h",
+
     DB_DIALECT: process.env.DB_DIALECT || "postgres",
     DB_HOST: process.env.DB_HOST || "localhost",
     DB_PORT: Number(process.env.DB_PORT) || 5432,

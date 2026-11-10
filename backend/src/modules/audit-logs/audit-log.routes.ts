@@ -1,16 +1,20 @@
 import { Router } from "express";
 import { AuditLogController } from "./audit-log.controller.js";
+import { bearerAuth } from "../../middlewares/bearer-auth-middleware.js";
+import { authorize } from "../rbac/authorize.middleware.js";
 
 const router = Router();
 
-router.get("/", AuditLogController.getAll);
+router.use(bearerAuth);
 
-router.get("/:id", AuditLogController.getById);
+router.get("/", authorize("audit-logs:read"), AuditLogController.getAll);
 
-router.post("/", AuditLogController.create);
+router.get("/:id", authorize("audit-logs:read"), AuditLogController.getById);
 
-router.put("/:id", AuditLogController.update);
+router.post("/", authorize("audit-logs:read"), AuditLogController.create);
 
-router.delete("/:id", AuditLogController.delete);
+router.put("/:id", authorize("audit-logs:read"), AuditLogController.update);
+
+router.delete("/:id", authorize("audit-logs:read"), AuditLogController.delete);
 
 export default router;

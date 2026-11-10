@@ -1,0 +1,39 @@
+import {
+  Model,
+  DataTypes,
+  InferAttributes,
+  InferCreationAttributes,
+  CreationOptional,
+} from "sequelize";
+
+import { sequelize } from "../../config/database.js";
+import { Role } from "../roles/role.model.js";
+
+export class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
+  declare id: CreationOptional<number>;
+  declare username: CreationOptional<String>;
+  declare passwordHash: CreationOptional<String>;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
+
+  declare roles?: Role[];
+}
+
+User.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+      allowNull: false },
+    username: {
+      type: DataTypes.STRING(100),
+      allowNull: false,
+      unique: true },
+    passwordHash: {
+      type: DataTypes.STRING(255),
+      allowNull: false },
+    createdAt: DataTypes.DATE, updatedAt: DataTypes.DATE,
+  },
+  { sequelize, tableName: "users", timestamps: true }
+);
