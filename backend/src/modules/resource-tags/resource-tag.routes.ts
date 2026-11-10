@@ -1,14 +1,18 @@
 import { Router } from "express";
 import { ResourceTagController } from "./resource-tag.controller.js";
+import { bearerAuth } from "../../middlewares/bearer-auth-middleware.js";
+import { authorize } from "../rbac/authorize.middleware.js";
 
 const router = Router();
 
-router.get("/", ResourceTagController.getAll);
+router.use(bearerAuth);
 
-router.get("/:resourceId/:tagId", ResourceTagController.getById);
+router.get("/", authorize("resource-tags:read"), ResourceTagController.getAll);
 
-router.post("/", ResourceTagController.create);
+router.get("/:resourceId/:tagId", authorize("resource-tags:read"), ResourceTagController.getById);
 
-router.delete("/:resourceId/:tagId", ResourceTagController.delete);
+router.post("/", authorize("resource-tags:read"), ResourceTagController.create);
+
+router.delete("/:resourceId/:tagId", authorize("resource-tags:read"), ResourceTagController.delete);
 
 export default router;

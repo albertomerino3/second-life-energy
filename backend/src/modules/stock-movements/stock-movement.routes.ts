@@ -1,16 +1,20 @@
 import { Router } from "express";
 import { StockMovementController } from "./stock-movement.controller.js";
+import { bearerAuth } from "../../middlewares/bearer-auth-middleware.js";
+import { authorize } from "../rbac/authorize.middleware.js";
 
 const router = Router();
 
-router.get("/", StockMovementController.getAll);
+router.use(bearerAuth);
 
-router.get("/:id", StockMovementController.getById);
+router.get("/", authorize("stock-movements:read"), StockMovementController.getAll);
 
-router.post("/", StockMovementController.create);
+router.get("/:id", authorize("stock-movements:read"), StockMovementController.getById);
 
-router.put("/:id", StockMovementController.update);
+router.post("/", authorize("stock-movements:read"), StockMovementController.create);
 
-router.delete("/:id", StockMovementController.delete);
+router.put("/:id", authorize("stock-movements:read"), StockMovementController.update);
+
+router.delete("/:id", authorize("stock-movements:read"), StockMovementController.delete);
 
 export default router;

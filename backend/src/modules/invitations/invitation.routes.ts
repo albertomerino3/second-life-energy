@@ -1,16 +1,20 @@
 import { Router } from "express";
 import { InvitationController } from "./invitation.controller.js";
+import { bearerAuth } from "../../middlewares/bearer-auth-middleware.js";
+import { authorize } from "../rbac/authorize.middleware.js";
 
 const router = Router();
 
-router.get("/", InvitationController.getAll);
+router.use(bearerAuth);
 
-router.get("/:id", InvitationController.getById);
+router.get("/", authorize("invitations:read"), InvitationController.getAll);
 
-router.post("/", InvitationController.create);
+router.get("/:id", authorize("invitations:read"), InvitationController.getById);
 
-router.put("/:id", InvitationController.update);
+router.post("/", authorize("invitations:read"), InvitationController.create);
 
-router.delete("/:id", InvitationController.delete);
+router.put("/:id", authorize("invitations:read"), InvitationController.update);
+
+router.delete("/:id", authorize("invitations:read"), InvitationController.delete);
 
 export default router;
