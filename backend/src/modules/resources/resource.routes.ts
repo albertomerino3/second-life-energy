@@ -11,10 +11,10 @@ router.get("/", authorize("resources:read"), ResourceController.getAll);
 
 router.get("/:id", authorize("resources:read"), ResourceController.getById);
 
-router.post("/", authorize("resources:read"), ResourceController.create);
+router.post("/", authorize("resources:create"), ResourceController.create);
 
-router.put("/:id", authorize("resources:read"), ResourceController.update);
+router.put("/:id", authorize("resources:update"), ResourceController.update);
 
-router.delete("/:id", authorize("resources:read"), ResourceController.delete);
+router.delete("/:id", authorize("resources:delete"), ResourceController.delete);
 
 export default router;

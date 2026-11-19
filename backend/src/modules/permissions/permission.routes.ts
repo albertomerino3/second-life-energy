@@ -9,8 +9,8 @@ router.use(bearerAuth);
 
 router.get('/', authorize("permissions:read"), PermissionController.getAll);
 router.get('/:id', authorize("permissions:read"), PermissionController.getById);
-router.post('/', authorize("permissions:read"), PermissionController.create);
-router.put('/:id', authorize("permissions:read"), PermissionController.update);
-router.delete('/:id', authorize("permissions:read"), PermissionController.delete);
+router.post('/', authorize("permissions:create"), PermissionController.create);
+router.put('/:id', authorize("permissions:update"), PermissionController.update);
+router.delete('/:id', authorize("permissions:delete"), PermissionController.delete);
 
 export default router;

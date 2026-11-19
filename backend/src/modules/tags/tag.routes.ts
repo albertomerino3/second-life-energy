@@ -11,10 +11,10 @@ router.get("/", authorize("tags:read"), TagController.getAll);
 
 router.get("/:id", authorize("tags:read"), TagController.getById);
 
-router.post("/", authorize("tags:read"), TagController.create);
+router.post("/", authorize("tags:create"), TagController.create);
 
-router.put("/:id", authorize("tags:read"), TagController.update);
+router.put("/:id", authorize("tags:update"), TagController.update);
 
-router.delete("/:id", authorize("tags:read"), TagController.delete);
+router.delete("/:id", authorize("tags:delete"), TagController.delete);
 
 export default router;

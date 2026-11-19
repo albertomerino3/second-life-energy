@@ -1,5 +1,18 @@
 import { Request, Response, NextFunction } from "express";
+import { unlink } from "node:fs/promises";
+import path from "node:path";
 import { UserService } from "./user.service.js";
+
+const UPLOADS_DIR = path.resolve("uploads");
+
+async function removeImage(filename?: string | null) {
+    if (!filename) return;
+    try {
+        await unlink(path.join(UPLOADS_DIR, filename));
+    } catch (error) {
+        console.error(`Failed to remove image (${filename}):`, error);
+    }
+}
 
 export class UserController {
     static async getAll(req: Request, res: Response, next: NextFunction) {
@@ -31,6 +44,7 @@ export class UserController {
     }
 
     static async create(req: Request, res: Response, next: NextFunction) {
+        let created = false;
         try {
             const { name, email, passwordHash, isActive } = req.body;
             if (!name || !email || !passwordHash) {
@@ -50,14 +64,23 @@ export class UserController {
                 email,
                 passwordHash,
                 isActive,
+                filename: req.file?.filename ?? null,
             });
+            created = true;
+
             res.status(201).json(user);
+
         } catch (error) {
             next(error);
+        } finally {
+            if (!created && req.file) {
+                await unlink(req.file.path).catch((error) => console.error("Failed to remove uploaded image", error));
+            }
         }
     }
 
     static async update(req: Request, res: Response, next: NextFunction) {
+        let updated = false;
         try {
             const id = Number(req.params.id);
             const user = await UserService.findById(id);
@@ -67,13 +90,19 @@ export class UserController {
                 });
                 return;
             }
-            const updatedUser = await UserService.update(
-                user,
-                req.body
-            );
+            const previousFilename = user.filename;
+            const data: Record<string, any> = { ...req.body };
+            if (req.file) { data.filename = req.file.filename };
+
+            const updatedUser = await UserService.update(user, data);
+            updated = true;
+            if (req.file && previousFilename) {await removeImage(previousFilename)};
+
             res.json(updatedUser);
         } catch (error) {
             next(error);
+        } finally {
+            if (!updated && req.file) await removeImage(req.file.filename);
         }
     }
 

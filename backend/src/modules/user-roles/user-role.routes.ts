@@ -9,8 +9,8 @@ router.use(bearerAuth);
 
 router.get("/", authorize("user-roles:read"), UserRoleController.getAll);
 router.get("/:userId/:roleId", authorize("user-roles:read"), UserRoleController.getById);
-router.post("/", authorize("user-roles:read"), UserRoleController.create);
-router.put("/:userId/:roleId", authorize("user-roles:read"), UserRoleController.update);
-router.delete("/:userId/:roleId", authorize("user-roles:read"), UserRoleController.delete);
+router.post("/", authorize("user-roles:create"), UserRoleController.create);
+router.put("/:userId/:roleId", authorize("user-roles:update"), UserRoleController.update);
+router.delete("/:userId/:roleId", authorize("user-roles:delete"), UserRoleController.delete);
 
 export default router;

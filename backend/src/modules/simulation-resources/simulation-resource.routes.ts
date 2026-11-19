@@ -9,7 +9,7 @@ router.use(bearerAuth);
 
 router.get("/", authorize("simulation-resources:read"), SimulationResourceController.getAll);
 router.get("/:simulationId/:resourceId", authorize("simulation-resources:read"), SimulationResourceController.getById);
-router.post("/", authorize("simulation-resources:read"), SimulationResourceController.create);
-router.delete("/:simulationId/:resourceId", authorize("simulation-resources:read"), SimulationResourceController.delete);
+router.post("/", authorize("simulation-resources:create"), SimulationResourceController.create);
+router.delete("/:simulationId/:resourceId", authorize("simulation-resources:delete"), SimulationResourceController.delete);
 
 export default router;

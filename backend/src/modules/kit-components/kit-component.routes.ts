@@ -11,10 +11,10 @@ router.get("/", authorize("kit-components:read"), KitComponentController.getAll)
 
 router.get("/:kitId/:componentId", authorize("kit-components:read"), KitComponentController.getById);
 
-router.post("/", authorize("kit-components:read"), KitComponentController.create);
+router.post("/", authorize("kit-components:create"), KitComponentController.create);
 
-router.put("/:kitId/:componentId", authorize("kit-components:read"), KitComponentController.update);
+router.put("/:kitId/:componentId", authorize("kit-components:update"), KitComponentController.update);
 
-router.delete("/:kitId/:componentId", authorize("kit-components:read"), KitComponentController.delete);
+router.delete("/:kitId/:componentId", authorize("kit-components:delete"), KitComponentController.delete);
 
 export default router;

@@ -11,10 +11,10 @@ router.get("/", authorize("simulations:read"), SimulationController.getAll);
 
 router.get("/:id", authorize("simulations:read"), SimulationController.getById);
 
-router.post("/", authorize("simulations:read"), SimulationController.create);
+router.post("/", authorize("simulations:create"), SimulationController.create);
 
-router.put("/:id", authorize("simulations:read"), SimulationController.update);
+router.put("/:id", authorize("simulations:update"), SimulationController.update);
 
-router.delete("/:id", authorize("simulations:read"), SimulationController.delete);
+router.delete("/:id", authorize("simulations:delete"), SimulationController.delete);
 
 export default router;

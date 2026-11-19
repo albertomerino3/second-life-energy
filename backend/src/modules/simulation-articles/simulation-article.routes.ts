@@ -9,7 +9,7 @@ router.use(bearerAuth);
 
 router.get("/", authorize("simulation-articles:read"), SimulationArticleController.getAll);
 router.get("/:simulationId/:articleId", authorize("simulation-articles:read"), SimulationArticleController.getById);
-router.post("/", authorize("simulation-articles:read"), SimulationArticleController.create);
-router.delete("/:simulationId/:articleId", authorize("simulation-articles:read"), SimulationArticleController.delete);
+router.post("/", authorize("simulation-articles:create"), SimulationArticleController.create);
+router.delete("/:simulationId/:articleId", authorize("simulation-articles:delete"), SimulationArticleController.delete);
 
 export default router;

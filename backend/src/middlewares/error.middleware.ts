@@ -5,6 +5,8 @@ import {
     UniqueConstraintError,
     ValidationError,
 } from "sequelize";
+import { MulterError } from "multer";
+import { InvalidImageError } from "./upload-middleware.js"
 
 export function errorMiddleware(
     error: Error,
@@ -15,6 +17,13 @@ export function errorMiddleware(
     if ("type" in error && error.type === "entity.parse.failed") {
         res.status(400).json({
             message: "Invalid JSON body",
+        });
+        return;
+    }
+
+    if (error instanceof MulterError || error instanceof InvalidImageError) {
+        res.status(error instanceof MulterError && error.code === "LIMIT_FILE_SIZE" ? 413 : 400).json({
+            message: error.message,
         });
         return;
     }

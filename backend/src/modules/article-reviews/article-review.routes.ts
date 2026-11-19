@@ -11,10 +11,10 @@ router.get("/", authorize("article-reviews:read"), ArticleReviewController.getAl
 
 router.get("/:id", authorize("article-reviews:read"), ArticleReviewController.getById);
 
-router.post("/", authorize("article-reviews:read"), ArticleReviewController.create);
+router.post("/", authorize("article-reviews:create"), ArticleReviewController.create);
 
-router.put("/:id", authorize("article-reviews:read"), ArticleReviewController.update);
+router.put("/:id", authorize("article-reviews:update"), ArticleReviewController.update);
 
-router.delete("/:id", authorize("article-reviews:read"), ArticleReviewController.delete);
+router.delete("/:id", authorize("article-reviews:delete"), ArticleReviewController.delete);
 
 export default router;

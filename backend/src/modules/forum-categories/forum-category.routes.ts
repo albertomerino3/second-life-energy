@@ -9,8 +9,8 @@ router.use(bearerAuth);
 
 router.get('/', authorize("forum-categories:read"), ForumCategoryController.getAll);
 router.get('/:id', authorize("forum-categories:read"), ForumCategoryController.getById);
-router.post('/', authorize("forum-categories:read"), ForumCategoryController.create);
-router.put('/:id', authorize("forum-categories:read"), ForumCategoryController.update);
-router.delete('/:id', authorize("forum-categories:read"), ForumCategoryController.delete);
+router.post('/', authorize("forum-categories:create"), ForumCategoryController.create);
+router.put('/:id', authorize("forum-categories:update"), ForumCategoryController.update);
+router.delete('/:id', authorize("forum-categories:delete"), ForumCategoryController.delete);
 
 export default router;

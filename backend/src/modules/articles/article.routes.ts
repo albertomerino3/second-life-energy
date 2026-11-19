@@ -11,10 +11,10 @@ router.get("/", authorize("articles:read"), ArticleController.getAll);
 
 router.get("/:id", authorize("articles:read"),  ArticleController.getById);
 
-router.post("/", authorize("articles:read"), ArticleController.create);
+router.post("/", authorize("articles:create"), ArticleController.create);
 
-router.put("/:id", authorize("articles:read"), ArticleController.update);
+router.put("/:id", authorize("articles:update"), ArticleController.update);
 
-router.delete("/:id", authorize("articles:read"), ArticleController.delete);
+router.delete("/:id", authorize("articles:delete"), ArticleController.delete);
 
 export default router;
