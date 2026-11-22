@@ -30,8 +30,11 @@ The backend reads `backend/.env.development` (local values: `localhost:5432`, us
 ```bash
 npm ci
 npm run db:create
-npm run db:migrate
-npm run db:seed
+
+Generar migración	npx sequelize-cli migration:generate --name create-comments
+- Ejecutar migraciones	npm run db:migrate
+Generar seeder	npx sequelize-cli seed:generate --name comments
+- Ejecutar seeders	npm run db:seed
 ```
 
 ### 5. Start the backend

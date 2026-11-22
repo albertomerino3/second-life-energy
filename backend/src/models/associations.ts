@@ -24,6 +24,8 @@ import { SimulationArticle } from "../modules/simulation-articles/simulation-art
 import { SimulationResource } from "../modules/simulation-resources/simulation-resource.model.js";
 import { ArticleReview } from "../modules/article-reviews/article-review.model.js";
 import { AuditLog } from "../modules/audit-logs/audit-log.model.js";
+import { Comment } from "../modules/comments/comment.model.js";
+import { QuestionReport } from "../modules/question-reports/question-reports.model.js";
 
 export function setupAssociations() {
     User.belongsToMany(Role, { through: UserRole, foreignKey: "userId", otherKey: "roleId", as: "roles" });
@@ -120,4 +122,20 @@ export function setupAssociations() {
 
     User.hasMany(AuditLog, { foreignKey: "userId", as: "auditLogs" });
     AuditLog.belongsTo(User, { foreignKey: "userId", as: "user" });
+
+
+    Article.hasMany(Comment, { foreignKey: "articleId", as: "comments" });
+    Comment.belongsTo(Article, { foreignKey: "articleId", as: "article" });
+    User.hasMany(Comment, { foreignKey: "userId", as: "comments" });
+    Comment.belongsTo(User, { foreignKey: "userId", as: "user" });
+
+    Question.hasMany(QuestionReport, {
+        foreignKey: "questionId",
+        as: "reports",
+    });
+
+    QuestionReport.belongsTo(Question, {
+        foreignKey: "questionId",
+        as: "question",
+    });
 }

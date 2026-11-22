@@ -27,6 +27,10 @@ import tagRoutes from "../modules/tags/tag.routes.js";
 import userRoleRoutes from "../modules/user-roles/user-role.routes.js";
 import userRoutes from "../modules/users/user.routes.js";
 
+import commentRoutes from "../modules/comments/comment.routes.js";
+import questionReportRoutes from "../modules/question-reports/question-reports.routes.js";
+
+
 const router = Router();
 
 router.use('/answers', answerRoutes);
@@ -55,5 +59,8 @@ router.use("/stock-movements", stockMovementRoutes);
 router.use("/tags", tagRoutes);
 router.use("/user-roles", userRoleRoutes);
 router.use("/users", userRoutes);
+
+router.use("/comments", commentRoutes);
+router.use("/question-reports", questionReportRoutes);
 
 export default router;
