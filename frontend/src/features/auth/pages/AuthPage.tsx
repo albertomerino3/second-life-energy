@@ -57,7 +57,7 @@ export default function AuthPage() {
                     </button>
                 </form>
                 <p className="mt-7 text-center text-sm text-slate-600">
-                    {register ? 'Already have an account? ' : 'Don’t have an account yet? '}
+                    {register ? 'Already have an account? ' : "Don't have an account yet? "}
                     <button type="button" disabled={pending} onClick={() => { setRegister(!register); setPassword(''); setConfirmation(''); setError('') }} className="font-semibold text-emerald-700 underline underline-offset-4 disabled:opacity-60">
                         {register ? 'Sign in' : 'Sign up'}
                     </button>
