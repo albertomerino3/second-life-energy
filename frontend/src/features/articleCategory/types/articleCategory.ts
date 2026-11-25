@@ -8,7 +8,6 @@ export interface ArticleCategory {
 }
 
 export interface ArticleCategoryPayload {
-    id : number
     name: string
     description: string
     parentCategoryId: number

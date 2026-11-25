@@ -9,7 +9,6 @@ export interface ArticleImage {
 }
 
 export interface ArticleImagePayload {
-    id : number
     articleId: number
     url: string
     altText: string
