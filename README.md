@@ -15,9 +15,11 @@ It contains:
     - It provides REST API endpoints for the frontend, one module per entity (model, service, controller and routes).
     - JWT authentication, with permissions checked on the server.
     - Middleware for Role-Based Access Control (RBAC) to manage user permissions.
-    - End-points documented and tested with BRUNO.
-    - Sequelize migrations and seeders for database initialization (26 tables).
-    - Sequelize models with relationships, and queries with eager loading for related data.
+    - End-points documented and tested with BRUNO (`backend/docs/second-life-energy.json`).
+    - 26 tables.
+    - Sequelize migrations and seeders for database initialization. Demo users use the password `Demo1234!`.
+    - Sequelize models for each table with relationships.
+    - Sequelize queries for CRUD operations, and eager loading for related data.
 
 ## Getting Started
 
@@ -35,31 +37,31 @@ You need a working environment with:
 
 Clone this project:
 
-```bash
+```
 git clone --branch develop https://github.com/albertomerino3/second-life-energy.git
 ```
 
 Now install all dependencies.
 
-```bash
+```
 cd second-life-energy/frontend
 npm ci
 cd ../backend
 npm ci
 ```
 
-Edit `backend/.env.development` to set the database connection parameters (local values: `localhost:5432`, user `postgres`, password `1234`). In production the variables come from the environment (see `.env.production.example`).
+Edit backend/.env.development to set the database connection parameters (local values: `localhost:5432`, user `postgres`, password `1234`). In production the variables come from the environment (see `.env.production.example`).
 
-Copy the `frontend/.env.example` file to `frontend/.env` and edit it to set the backend url (the default is `http://localhost:3000/api`).
+Copy the frontend/.env.example file to frontend/.env and edit it to set the backend url. (the default is http://localhost:3000/api)
 
-```bash
+```
 cd ../frontend
 cp .env.example .env
 ```
 
 Create the database in PostgreSQL and run the migrations and seeders to initialize it.
 
-```bash
+```
 cd ../backend
 npm run db:create
 npm run db:migrate
@@ -68,7 +70,7 @@ npm run db:seed
 
 Run the project to see the resulting page:
 
-```bash
+```
 cd backend
 npm run dev
 cd ../frontend
@@ -334,12 +336,6 @@ erDiagram
     }
 ```
 
-## Database
-
-- **Migrations** (`backend/database/migrations`): one migration per table of the ERD, ordered so that each table is created after the tables it references. Revert them with `npm run db:migrate:undo:all`.
-- **Seeders** (`backend/database/seeders`): demo data for every table (users and roles, kits and components, requests, resources, forum, simulations...). Demo users use the password `Demo1234!`.
-- `npm run db:reset` reverts and runs again all the migrations and seeders.
-
 ## RBAC (Role-Based Access Control)
 
 The application implements Role-Based Access Control (RBAC) to manage user permissions.
@@ -356,46 +352,43 @@ Visitors do not have an account or a role. They can browse the catalog, the reso
 
 ### RBAC Permissions Matrix
 
-| Capability | ADMIN | TEACHER | STUDENT |
+| Permission | ADMIN | TEACHER | STUDENT |
 |---|:---:|:---:|:---:|
-| Invite teachers | ✅ | ❌ | ❌ |
-| Invite students | ✅ | ✅* | ❌ |
-| Create, edit and publish own resources | ✅ | ✅ | ❌ |
-| Manage resources of other users | ✅ | ❌ | ❌ |
-| Ask, answer and edit own forum posts | ✅ | ✅ | ✅ |
-| Moderate the forum (hide or restore with a reason) | ✅ | ✅* | ❌ |
-| Create article drafts and send them to review | ✅ | ✅ | ✅* |
-| Approve or return articles in review | ✅ | ✅ | ❌ |
-| Manage users, roles, permissions and requests | ✅ | ❌ | ❌ |
-| View audit logs | ✅ | ❌ | ❌ |
+| `articles:read` | ✅ | ✅ | ✅ |
+| `articles:create` | ✅ | ✅ | ✅** |
+| `articles:update` | ✅ | ✅* | ✅*,** |
+| `articles:review` | ✅ | ✅ | ❌ |
+| `articles:delete` | ✅ | ❌ | ❌ |
+| `requests:read` | ✅ | ❌ | ❌ |
+| `requests:update` | ✅ | ❌ | ❌ |
+| `resources:read` | ✅ | ✅ | ✅ |
+| `resources:create` | ✅ | ✅ | ❌ |
+| `resources:update` | ✅ | ✅* | ❌ |
+| `resources:delete` | ✅ | ✅* | ❌ |
+| `forum:read` | ✅ | ✅ | ✅ |
+| `forum:create` | ✅ | ✅ | ✅ |
+| `forum:update` | ✅* | ✅* | ✅* |
+| `forum:moderate` | ✅ | ✅** | ❌ |
+| `simulations:read` | ✅ | ✅ | ✅ |
+| `simulations:manage` | ✅ | ❌ | ❌ |
+| `invitations:create_teacher` | ✅ | ❌ | ❌ |
+| `invitations:create_student` | ✅ | ✅** | ❌ |
+| `users:manage` | ✅ | ❌ | ❌ |
+| `roles:manage` | ✅ | ❌ | ❌ |
+| `audit:read` | ✅ | ❌ | ❌ |
 
 **Notes:**
 
 - `ADMIN` has all permissions.
-- (*) `TEACHER` can only invite students if the permission has been delegated to them, and moderates according to the permissions they have been given. `STUDENT` can only create drafts if authorized.
-- Teachers only manage their own resources. Administration can manage all of them without altering their authorship.
+- `TEACHER` can manage their own resources and review articles, but cannot delete articles or manage users, roles and requests.
+- `STUDENT` has limited permissions.
+- (*) Users only act on their own records (own resources, own drafts, own forum posts). This restriction is an ownership check on top of the permission. `ADMIN` can manage resources of any author without altering their authorship, but nobody edits another person's forum post: moderators hide or restore it with a reason.
+- (**) Delegated permission: it is not part of the role by default, an administrator grants it to a specific account by assigning an additional role that carries only that permission.
 - Articles follow the flow `draft` → `in_review` → `published`, or `returned` with comments.
-- Permissions (`Permission.code`) are assigned to roles through `RolePermission`, and roles are assigned to users through `UserRole`, so a user can hold more than one role.
+- Permissions are assigned to roles through `RolePermission`, and roles are assigned to users through `UserRole`, so a user can hold more than one role.
 - An `Invitation` stores the role (`roleId`) that the invited person will receive, who sent it (`invitedById`), a hashed token, an expiry date and the date it was used.
 - Authentication uses JWT Bearer Tokens, while authorization is enforced through RBAC middleware.
 - The backend is responsible for enforcing permissions, regardless of frontend restrictions.
-
-## API
-
-Each module in `backend/src/modules` has its model, service, controller and routes, with the basic CRUD:
-
-```text
-GET    /api/<module>        GET    /api/<module>/:id
-POST   /api/<module>        PUT    /api/<module>/:id        DELETE /api/<module>/:id
-```
-
-Modules: users, roles, permissions, user-roles, role-permissions, invitations, article-categories, articles, kit-components, article-images, stock-movements, requests, request-items, resources, tags, resource-tags, article-resources, forum-categories, questions, answers, moderations, simulations, simulation-articles, simulation-resources, article-reviews and audit-logs.
-
-The relationships between entities are defined in `backend/src/models/associations.ts` and the services use them in their queries (`include`). Some lists accept filters, for example `/api/articles?type=component&available=true` or `/api/resources?type=pdf`.
-
-## Bruno
-
-The endpoints are documented and tested in `backend/docs/second-life-energy.json`. Import it in Bruno (*Import Collection → Postman Collection*), start the backend and run the collection.
 
 ## Built With
 
