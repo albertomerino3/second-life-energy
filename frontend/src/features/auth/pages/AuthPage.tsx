@@ -35,9 +35,9 @@ export default function AuthPage() {
     return (
         <main className="flex min-h-screen items-center justify-center bg-slate-100 px-4 py-12 text-slate-900">
             <section className="w-full max-w-md rounded-3xl bg-white p-6 shadow-xl sm:p-10" aria-labelledby="auth-title">
-                <p className="mb-8 text-sm font-bold tracking-widest text-emerald-700">BICYCLE SHOP</p>
+                <p className="mb-8 text-sm font-bold tracking-widest text-emerald-700">SECOND LIFE ENERGY</p>
                 <h1 id="auth-title" className="text-3xl font-bold">{register ? 'Create your account' : 'Welcome back'}</h1>
-                <p className="mt-3 mb-8 text-slate-500">{register ? 'Sign up to access the bicycle shop.' : 'Sign in to manage your bicycles.'}</p>
+                <p className="mt-3 mb-8 text-slate-500">{register ? 'Sign up to manage electronic materials.' : 'Sign in to manage electronic materials.'}</p>
                 <form onSubmit={submit} className="space-y-5" aria-busy={pending}>
                     <div>
                         <label htmlFor="username" className="mb-2 block text-sm font-medium">Username</label>
