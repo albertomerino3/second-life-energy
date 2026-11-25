@@ -1,16 +1,20 @@
 import { Router } from "express";
 import { RequestItemController } from "./request-item.controller.js";
+import { bearerAuth } from "../../middlewares/bearer-auth-middleware.js";
+import { authorize } from "../rbac/authorize.middleware.js";
 
 const router = Router();
 
-router.get("/", RequestItemController.getAll);
+router.use(bearerAuth);
 
-router.get("/:id", RequestItemController.getById);
+router.get("/", authorize("request-items:read"), RequestItemController.getAll);
 
-router.post("/", RequestItemController.create);
+router.get("/:id", authorize("request-items:read"), RequestItemController.getById);
 
-router.put("/:id", RequestItemController.update);
+router.post("/", authorize("request-items:read"), RequestItemController.create);
 
-router.delete("/:id", RequestItemController.delete);
+router.put("/:id", authorize("request-items:read"), RequestItemController.update);
+
+router.delete("/:id", authorize("request-items:read"), RequestItemController.delete);
 
 export default router;

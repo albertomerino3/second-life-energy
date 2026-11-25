@@ -1,16 +1,20 @@
 import { Router } from "express";
 import { SimulationController } from "./simulation.controller.js";
+import { bearerAuth } from "../../middlewares/bearer-auth-middleware.js";
+import { authorize } from "../rbac/authorize.middleware.js";
 
 const router = Router();
 
-router.get("/", SimulationController.getAll);
+router.use(bearerAuth);
 
-router.get("/:id", SimulationController.getById);
+router.get("/", authorize("simulations:read"), SimulationController.getAll);
 
-router.post("/", SimulationController.create);
+router.get("/:id", authorize("simulations:read"), SimulationController.getById);
 
-router.put("/:id", SimulationController.update);
+router.post("/", authorize("simulations:read"), SimulationController.create);
 
-router.delete("/:id", SimulationController.delete);
+router.put("/:id", authorize("simulations:read"), SimulationController.update);
+
+router.delete("/:id", authorize("simulations:read"), SimulationController.delete);
 
 export default router;
