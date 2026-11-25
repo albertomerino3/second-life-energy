@@ -11,10 +11,10 @@ router.get("/", authorize("article-images:read"), ArticleImageController.getAll)
 
 router.get("/:id", authorize("article-images:read"), ArticleImageController.getById);
 
-router.post("/", authorize("article-images:read"), ArticleImageController.create);
+router.post("/", authorize("article-images:create"), ArticleImageController.create);
 
-router.put("/:id", authorize("article-images:read"), ArticleImageController.update);
+router.put("/:id", authorize("article-images:update"), ArticleImageController.update);
 
-router.delete("/:id", authorize("article-images:read"), ArticleImageController.delete);
+router.delete("/:id", authorize("article-images:delete"), ArticleImageController.delete);
 
 export default router;

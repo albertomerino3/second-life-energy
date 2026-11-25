@@ -11,8 +11,8 @@ router.get("/", authorize("article-resources:read"), ArticleResourceController.g
 
 router.get("/:articleId/:resourceId", authorize("article-resources:read"), ArticleResourceController.getById);
 
-router.post("/", authorize("article-resources:read"), ArticleResourceController.create);
+router.post("/", authorize("article-resources:create"), ArticleResourceController.create);
 
-router.delete("/:articleId/:resourceId", authorize("article-resources:read"), ArticleResourceController.delete);
+router.delete("/:articleId/:resourceId", authorize("article-resources:delete"), ArticleResourceController.delete);
 
 export default router;

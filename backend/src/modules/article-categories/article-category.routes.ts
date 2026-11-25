@@ -11,10 +11,10 @@ router.get("/", authorize("article-categories:read"), ArticleCategoryController.
 
 router.get("/:id", authorize("article-categories:read"), ArticleCategoryController.getById);
 
-router.post("/", authorize("article-categories:read"), ArticleCategoryController.create);
+router.post("/", authorize("article-categories:create"), ArticleCategoryController.create);
 
-router.put("/:id", authorize("article-categories:read"), ArticleCategoryController.update);
+router.put("/:id", authorize("article-categories:update"), ArticleCategoryController.update);
 
-router.delete("/:id", authorize("article-categories:read"), ArticleCategoryController.delete);
+router.delete("/:id", authorize("article-categories:delete"), ArticleCategoryController.delete);
 
 export default router;

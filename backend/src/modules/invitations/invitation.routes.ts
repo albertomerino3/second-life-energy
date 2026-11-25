@@ -11,10 +11,10 @@ router.get("/", authorize("invitations:read"), InvitationController.getAll);
 
 router.get("/:id", authorize("invitations:read"), InvitationController.getById);
 
-router.post("/", authorize("invitations:read"), InvitationController.create);
+router.post("/", authorize("invitations:create"), InvitationController.create);
 
-router.put("/:id", authorize("invitations:read"), InvitationController.update);
+router.put("/:id", authorize("invitations:update"), InvitationController.update);
 
-router.delete("/:id", authorize("invitations:read"), InvitationController.delete);
+router.delete("/:id", authorize("invitations:delete"), InvitationController.delete);
 
 export default router;

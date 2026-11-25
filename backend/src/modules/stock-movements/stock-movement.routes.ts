@@ -11,10 +11,10 @@ router.get("/", authorize("stock-movements:read"), StockMovementController.getAl
 
 router.get("/:id", authorize("stock-movements:read"), StockMovementController.getById);
 
-router.post("/", authorize("stock-movements:read"), StockMovementController.create);
+router.post("/", authorize("stock-movements:create"), StockMovementController.create);
 
-router.put("/:id", authorize("stock-movements:read"), StockMovementController.update);
+router.put("/:id", authorize("stock-movements:update"), StockMovementController.update);
 
-router.delete("/:id", authorize("stock-movements:read"), StockMovementController.delete);
+router.delete("/:id", authorize("stock-movements:delete"), StockMovementController.delete);
 
 export default router;
