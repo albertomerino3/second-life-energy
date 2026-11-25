@@ -16,14 +16,14 @@ function toFormData(payload: KitComponentPayload) {
 export const kitComponentService = {
     getAll: async () => {
         const [kitComponents,
-            //requests, articles
+            //kits, components
         ] = await Promise.all([
             apiFetch<KitComponent[]>('/request-items', {
                 headers: { 'Content-Type': 'application/json' },
                 method: 'GET',
             }),
-            //requestService.getAll(),
-            //articleService.getAll()
+            //kitService.getAll(),
+            //componentService.getAll()
         ]);
 
         //const names = new Map(brands.map(brand => [brand.id, brand.name]))
