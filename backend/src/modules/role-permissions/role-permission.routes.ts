@@ -10,7 +10,7 @@ router.use(bearerAuth);
 router.get("/", authorize("role-permissions:read"), RolePermissionController.getAll);
 router.get("/role/:roleId", authorize("role-permissions:read"), RolePermissionController.getByRoleId);
 router.get("/:roleId/:permissionId", authorize("role-permissions:read"), RolePermissionController.getById);
-router.post("/", authorize("role-permissions:read"), RolePermissionController.assign);
-router.delete("/:roleId/:permissionId", authorize("role-permissions:read"), RolePermissionController.revoke);
+router.post("/", authorize("role-permissions:create"), RolePermissionController.assign);
+router.delete("/:roleId/:permissionId", authorize("role-permissions:delete"), RolePermissionController.revoke);
 
 export default router;

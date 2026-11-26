@@ -5,13 +5,18 @@ export interface User {
     name: string
     email: string
     isActive: boolean
+    filename?: string | null
+    roles?: { id: number; name: string }[]
     createdAt?: string
     updatedAt?: string
 }
 
-// Lo que el formulario envía. No incluye id, passwordHash ni fechas (los gestiona el backend).
+// Lo que el formulario envía (como multipart/form-data, por la imagen).
+// password es obligatoria al crear; al editar, vacía = mantener la actual. El backend guarda solo el hash.
 export interface UserPayload {
     name: string
     email: string
     isActive: boolean
+    password?: string
+    image?: File
 }

@@ -51,7 +51,7 @@ export class UserService {
             filename?: string | null;
         }
     ) {
-        const editableFields = ["name", "email", "passwordHash", "isActive"] as const;
+        const editableFields = ["name", "email", "passwordHash", "isActive", "filename"] as const;
         const fields = editableFields.filter((field) => data[field] !== undefined);
         if (fields.length === 0) {
             return withoutPassword(user);

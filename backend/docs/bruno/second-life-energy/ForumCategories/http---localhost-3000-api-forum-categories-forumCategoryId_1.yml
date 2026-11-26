@@ -1,0 +1,26 @@
+info:
+  name: "http://localhost:3000/api/forum-categories/{{forumCategoryId}}_1"
+  type: http
+  seq: 5
+
+http:
+  method: DELETE
+  url: "http://localhost:3000/api/forum-categories/{{forumCategoryId}}"
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Status code is 204", function () {
+          expect(res.status).to.equal(204);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

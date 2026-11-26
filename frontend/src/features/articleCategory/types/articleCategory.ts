@@ -1,14 +1,13 @@
+// La tabla article_categories no tiene timestamps (timestamps: false en el modelo).
 export interface ArticleCategory {
-    id : number
+    id: number
     name: string
-    description: string
-    parentCategoryId: number
-    createdAt?: string
-    updatedAt?: string
+    description: string | null
+    parentCategoryId: number | null
 }
 
 export interface ArticleCategoryPayload {
     name: string
-    description: string
-    parentCategoryId: number
+    description: string | null
+    parentCategoryId: number | null
 }

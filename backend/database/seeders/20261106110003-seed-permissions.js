@@ -1,20 +1,45 @@
 'use strict';
 
+// Un permiso por cada authorize("entidad:acción") que usan las rutas (mismo patrón que "bicycles:read" en bicycle-shop).
+const CRUD = ["read", "create", "update", "delete"];
+const LINK = ["read", "create", "delete"]; // tablas intermedias sin update
+
+const ENTITY_ACTIONS = {
+  "users": CRUD,
+  "roles": CRUD,
+  "permissions": CRUD,
+  "user-roles": CRUD,
+  "role-permissions": LINK,
+  "invitations": CRUD,
+  "article-categories": CRUD,
+  "articles": CRUD,
+  "kit-components": CRUD,
+  "article-images": CRUD,
+  "stock-movements": CRUD,
+  "requests": CRUD,
+  "request-items": CRUD,
+  "resources": CRUD,
+  "tags": CRUD,
+  "resource-tags": LINK,
+  "article-resources": LINK,
+  "forum-categories": CRUD,
+  "questions": CRUD,
+  "answers": CRUD,
+  "moderations": CRUD,
+  "simulations": CRUD,
+  "simulation-articles": LINK,
+  "simulation-resources": LINK,
+  "article-reviews": CRUD,
+  "audit-logs": CRUD,
+};
+
 module.exports = {
   async up(queryInterface) {
-    await queryInterface.bulkInsert("permissions", [
-      { id: 1, code: "users.manage", description: "Gestionar usuarios y sus roles" },
-      { id: 2, code: "invitations.teachers", description: "Invitar profesorado" },
-      { id: 3, code: "invitations.students", description: "Invitar alumnado (permiso delegado)" },
-      { id: 4, code: "articles.create", description: "Crear borradores de kits y componentes" },
-      { id: 5, code: "articles.review", description: "Aprobar o devolver kits enviados a revisión" },
-      { id: 6, code: "articles.publish", description: "Publicar kits y componentes en el catálogo" },
-      { id: 7, code: "resources.manage_own", description: "Gestionar los recursos educativos propios" },
-      { id: 8, code: "resources.manage_all", description: "Gestionar todos los recursos educativos" },
-      { id: 9, code: "forum.write", description: "Publicar preguntas y respuestas en el foro" },
-      { id: 10, code: "forum.moderate", description: "Ocultar o restaurar mensajes del foro" },
-      { id: 11, code: "requests.manage", description: "Gestionar las solicitudes de material" },
-    ]);
+    const permissions = Object.entries(ENTITY_ACTIONS).flatMap(([entity, actions]) =>
+      actions.map((action) => ({ code: `${entity}:${action}`, description: `${action} ${entity}` }))
+    );
+
+    await queryInterface.bulkInsert("permissions", permissions.map((permission, index) => ({ id: index + 1, ...permission })));
 
     if (queryInterface.sequelize.getDialect() === "postgres") {
       await queryInterface.sequelize.query(`
@@ -28,6 +53,6 @@ module.exports = {
   },
 
   async down(queryInterface) {
-    await queryInterface.bulkDelete("permissions", { id: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] });
+    await queryInterface.bulkDelete("permissions", null, {});
   },
 };

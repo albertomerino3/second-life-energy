@@ -1,5 +1,8 @@
 import { Request, Response, NextFunction } from "express";
+import { createHash, randomBytes } from "node:crypto";
 import { InvitationService } from "./invitation.service.js";
+
+const INVITATION_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 
 export class InvitationController {
     static async getAll(req: Request, res: Response, next: NextFunction) {
@@ -29,20 +32,23 @@ export class InvitationController {
 
     static async create(req: Request, res: Response, next: NextFunction) {
             try {
-                const { invitedById, roleId, email, tokenHash, expiresAt, usedAt } = req.body;
-                if (invitedById === undefined || roleId === undefined || !email || !tokenHash || !expiresAt) {
+                const { roleId, email } = req.body;
+                if (roleId === undefined || !email) {
                     res.status(400).json({
-                        message: "InvitedByID, roleId, email, tokenHash and expiresAt are required",
+                        message: "roleId and email are required",
                     });
                     return;
                 }
+                // Lo genera el servidor: quién invita (usuario autenticado), el token de un solo uso
+                // (solo se guarda su hash) y la caducidad (7 días por defecto).
+                const token = randomBytes(32).toString("hex");
                 const invitation = await InvitationService.create({
-                    invitedById,
+                    invitedById: res.locals.authUser.user.id,
                     roleId,
                     email,
-                    tokenHash,
-                    expiresAt,
-                    usedAt,
+                    tokenHash: createHash("sha256").update(token).digest("hex"),
+                    expiresAt: req.body.expiresAt ? new Date(req.body.expiresAt) : new Date(Date.now() + INVITATION_TTL_MS),
+                    usedAt: null,
                 });
                 res.status(201).json(invitation);
             } catch (error) {

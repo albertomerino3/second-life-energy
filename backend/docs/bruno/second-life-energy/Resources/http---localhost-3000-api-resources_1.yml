@@ -1,0 +1,41 @@
+info:
+  name: "http://localhost:3000/api/resources_1"
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "http://localhost:3000/api/resources"
+  body:
+    type: json
+    data: |-
+      {
+        "title": "Introducción a Arduino",
+        "description": "Vídeo para empezar con Arduino",
+        "type": "video",
+        "topic": "Arduino",
+        "difficulty": "beginner",
+        "url": "https://www.youtube.com/results?search_query=arduino",
+        "status": "published"
+      }
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        bru.setVar("resourceId", res.body.id);
+    - type: tests
+      code: |-
+        test("Status code is 201", function () {
+          expect(res.status).to.equal(201);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

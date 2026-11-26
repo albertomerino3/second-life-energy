@@ -1,0 +1,37 @@
+info:
+  name: "http://localhost:3000/api/simulations/{{simulationId}}"
+  type: http
+  seq: 4
+
+http:
+  method: PUT
+  url: "http://localhost:3000/api/simulations/{{simulationId}}"
+  body:
+    type: json
+    data: |-
+      {
+        "title": "Simulation Test",
+        "description": "Test for simulations updated",
+        "platform": "wokwi",
+        "url": "https://wokwi.com/projects/new/arduino-uno",
+        "objectives": "Make simulations",
+        "materials": "Laptop, Internet"
+      }
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Status code is 200", function () {
+          expect(res.status).to.equal(200);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

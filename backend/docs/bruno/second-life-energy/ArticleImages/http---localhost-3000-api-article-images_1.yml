@@ -1,0 +1,38 @@
+info:
+  name: "http://localhost:3000/api/article-images_1"
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "http://localhost:3000/api/article-images"
+  body:
+    type: json
+    data: |-
+      {
+        "articleId": 4,
+        "url": "/images/articles/resistencias-1.jpg",
+        "altText": "Pack de resistencias variadas",
+        "sortOrder": 0
+      }
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        bru.setVar("articleImageId", res.body.id);
+    - type: tests
+      code: |-
+        test("Status code is 201", function () {
+          expect(res.status).to.equal(201);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

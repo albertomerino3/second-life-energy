@@ -1,0 +1,7 @@
+info:
+  name: Answers
+  type: folder
+  seq: 21
+
+request:
+  auth: inherit

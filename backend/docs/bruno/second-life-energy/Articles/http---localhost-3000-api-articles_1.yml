@@ -1,0 +1,41 @@
+info:
+  name: "http://localhost:3000/api/articles_1"
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "http://localhost:3000/api/articles"
+  body:
+    type: json
+    data: |-
+      {
+        "categoryId": 5,
+        "name": "Pantalla LCD 16x2",
+        "description": "Pantalla LCD recuperada",
+        "type": "component",
+        "specifications": "16x2, 5 V",
+        "stock": 10,
+        "status": "draft"
+      }
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        bru.setVar("articleId", res.body.id);
+    - type: tests
+      code: |-
+        test("Status code is 201", function () {
+          expect(res.status).to.equal(201);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

@@ -1,54 +1,26 @@
 import { apiFetch } from '../../../services/api'
-//import { articleService } from '../../requests/services/articleService'
-//import { resourceService } from '../../requests/services/resourceService'
 
-import type { ArticleResource, ArticleResourcePayload, } from '../types/articleResource'
+import type { ArticleResource, ArticleResourcePayload } from '../types/articleResource'
 
-function toFormData(payload: ArticleResourcePayload) {
-    const form = new FormData()
-    form.set('articleId', String(payload.articleId))
-    form.set('resourceId', String(payload.resourceId))
-    return form
-}
-
+// Tabla intermedia con clave compuesta (articleId + resourceId): no tiene update en el backend.
 export const articleResourceService = {
-    getAll: async () => {
-        const [articleResources,
-            //articleIds, resourceIds
-        ] = await Promise.all([
-            apiFetch<ArticleResource[]>('/request-items', {
-                headers: { 'Content-Type': 'application/json' },
-                method: 'GET',
-            }),
-            //parentCategoryService.getAll()
-            //articleService.getAll(), resourceService.getAll()
-        ]);
-
-        //const names = new Map(brands.map(brand => [brand.id, brand.name]))
-
-        return articleResources.map(articleResource => ({ ...articleResource,
-            //brand: names.get(articleresource.brandId) ?? 'Unknown brand' 
-        }))
-        //return articleresources.map(articleresource => ({ ...articleresource, brand: names.get(articleresource.brandId) ?? 'Unknown brand' }))
-
-    },
-
-    getById: (id: number) => apiFetch<ArticleResource>(`/request-items/${id}`, {
+    getAll: () => apiFetch<ArticleResource[]>('/article-resources', {
         headers: { 'Content-Type': 'application/json' },
         method: 'GET',
     }),
 
-    create: (payload: ArticleResourcePayload) => apiFetch<ArticleResource>('/request-items', {
+    getById: (articleId: number, resourceId: number) => apiFetch<ArticleResource>(`/article-resources/${articleId}/${resourceId}`, {
+        headers: { 'Content-Type': 'application/json' },
+        method: 'GET',
+    }),
+
+    create: (payload: ArticleResourcePayload) => apiFetch<ArticleResource>('/article-resources', {
+        headers: { 'Content-Type': 'application/json' },
         method: 'POST',
-        body: toFormData(payload),
+        body: JSON.stringify(payload),
     }),
 
-    update: (id: number, payload: ArticleResourcePayload) => apiFetch<ArticleResource>(`/request-items/${id}`, {
-        method: 'PUT',
-        body: toFormData(payload),
-    }),
-
-    remove: (id: number) => apiFetch<void>(`/request-items/${id}`, {
+    remove: (articleId: number, resourceId: number) => apiFetch<void>(`/article-resources/${articleId}/${resourceId}`, {
         headers: { 'Content-Type': 'application/json' },
         method: 'DELETE',
     }),

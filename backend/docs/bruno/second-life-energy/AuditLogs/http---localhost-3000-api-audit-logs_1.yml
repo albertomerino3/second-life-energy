@@ -1,0 +1,43 @@
+info:
+  name: "http://localhost:3000/api/audit-logs_1"
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "http://localhost:3000/api/audit-logs"
+  body:
+    type: json
+    data: |-
+      {
+        "userId": 1,
+        "entity": "Article",
+        "entityId": 1,
+        "action": "create",
+        "previousValues": null,
+        "newValues": {
+          "name": "Pantalla LCD 16x2",
+          "stock": 10
+        }
+      }
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        bru.setVar("auditLogId", res.body.id);
+    - type: tests
+      code: |-
+        test("Status code is 201", function () {
+          expect(res.status).to.equal(201);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

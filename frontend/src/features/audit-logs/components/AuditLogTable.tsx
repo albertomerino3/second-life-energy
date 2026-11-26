@@ -13,7 +13,7 @@ function actionStyle(action: string) {
 export default function AuditLogTable({ items, busy, onSelect }: {
     items: AuditLog[]; busy: boolean; onSelect: (log: AuditLog) => void
 }) {
-    return <div aria-busy={busy} className={`overflow-x-auto rounded-lg border border-gray-200 bg-white shadow-sm ${busy ? 'opacity-50' : ''}`}>
+    return <div aria-busy={busy} className={`relative overflow-x-auto rounded-lg border border-gray-200 bg-white shadow-sm ${busy ? 'opacity-50' : ''}`}>
         <table className="w-full text-left text-sm">
             <caption className="sr-only">Audit logs</caption>
             <thead className="border-b border-gray-200 bg-gray-50">

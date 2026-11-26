@@ -6,7 +6,7 @@ export default function SimulationList({ simulations, onEdit, onDelete }: {
     onEdit: (simulation: Simulation) => void
     onDelete: (simulation: Simulation) => void
 }) {
-    return <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white shadow-sm">
+    return <div className="relative overflow-x-auto rounded-lg border border-gray-200 bg-white shadow-sm">
         <table className="w-full text-left text-sm">
             <caption className="sr-only">Simulations</caption>
             <thead className="border-b border-gray-200 bg-gray-50">

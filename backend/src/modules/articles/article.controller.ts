@@ -38,10 +38,12 @@ export class ArticleController {
 
     static async create(req: Request, res: Response, next: NextFunction) {
         try {
-            const { categoryId, createdById, name, description, type, specifications, stock, status } = req.body;
-            if (!categoryId || !createdById || !name || !description || !type) {
+            const { categoryId, name, description, type, specifications, stock, status } = req.body;
+            // El autor es el usuario autenticado (lo deja bearerAuth en res.locals), no lo que mande el cliente.
+            const createdById = res.locals.authUser.user.id;
+            if (!categoryId || !name || !description || !type) {
                 res.status(400).json({
-                    message: "categoryId, createdById, name, description and type are required",
+                    message: "categoryId, name, description and type are required",
                 });
                 return;
             }

@@ -1,0 +1,38 @@
+info:
+  name: "http://localhost:3000/api/questions_1"
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "http://localhost:3000/api/questions"
+  body:
+    type: json
+    data: |-
+      {
+        "categoryId": 3,
+        "authorId": 4,
+        "title": "¿Cómo uso el sensor HC-SR04?",
+        "content": "No consigo leer la distancia con Arduino."
+      }
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        bru.setVar("questionId", res.body.id);
+    - type: tests
+      code: |-
+        test("Status code is 201", function () {
+          expect(res.status).to.equal(201);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

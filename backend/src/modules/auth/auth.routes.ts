@@ -4,8 +4,7 @@ import { extractBasicAuthHeader } from "../../middlewares/basic-auth-middleware.
 
 const router = Router();
 
+// No hay registro público: las cuentas se crean por invitación o desde la gestión de usuarios (HU-06).
 router.post("/login", extractBasicAuthHeader, AuthController.login);
-
-router.post("/register", extractBasicAuthHeader, AuthController.register);
 
 export default router;
