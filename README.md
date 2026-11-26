@@ -15,7 +15,7 @@ It contains:
     - It provides REST API endpoints for the frontend, one module per entity (model, service, controller and routes).
     - JWT authentication, with permissions checked on the server.
     - Middleware for Role-Based Access Control (RBAC) to manage user permissions.
-    - End-points documented and tested with BRUNO (`backend/docs/second-life-energy.json`).
+    - End-points documented and tested with BRUNO (`backend/docs/bruno/second-life-energy/`, OpenCollection YAML format). Run `Auth > login` first: it saves the token used by the other requests.
     - 26 tables.
     - Sequelize migrations and seeders for database initialization. Demo users use the password `Demo1234!`.
     - Sequelize models for each table with relationships.

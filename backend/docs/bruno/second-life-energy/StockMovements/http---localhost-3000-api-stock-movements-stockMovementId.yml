@@ -1,0 +1,36 @@
+info:
+  name: "http://localhost:3000/api/stock-movements/{{stockMovementId}}"
+  type: http
+  seq: 4
+
+http:
+  method: PUT
+  url: "http://localhost:3000/api/stock-movements/{{stockMovementId}}"
+  body:
+    type: json
+    data: |-
+      {
+        "articleId": 4,
+        "userId": 3,
+        "type": "in",
+        "quantity": 5,
+        "reason": "Donación del IES La Guancha"
+      }
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Status code is 200", function () {
+          expect(res.status).to.equal(200);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

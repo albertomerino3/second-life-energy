@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { User } from "../modules/auth/user.model.js";
+import { User } from "../modules/users/user.model.js";
 
 export async function bearerAuth(req: Request, res: Response, next: NextFunction): Promise<void> {
 
@@ -32,8 +32,8 @@ export async function bearerAuth(req: Request, res: Response, next: NextFunction
 
         const payload = decoded as JwtPayload;
         const user = await User.findByPk(payload.sub);
-        if (!user) {
-            res.status(401).json({ message: "User not found" });
+        if (!user || !user.isActive) {
+            res.status(401).json({ message: "User not found or inactive" });
             return;
         }
 

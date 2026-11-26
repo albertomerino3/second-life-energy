@@ -1,56 +1,32 @@
 import { apiFetch } from '../../../services/api'
-//import { kitService } from '../../articles/services/kitService
-//import { componentService } from '../../articles/services/componentService'
 
+import type { KitComponent, KitComponentPayload } from '../types/kitComponent'
 
-import type { KitComponent, KitComponentPayload, } from '../types/kitComponent'
-
-function toFormData(payload: KitComponentPayload) {
-    const form = new FormData()
-    form.set('kitId', String(payload.kitId))
-    form.set('componentId', String(payload.componentId))
-    form.set('quantity', String(payload.quantity))
-    return form
-}
-
+// Tabla intermedia con clave compuesta (kitId + componentId): las rutas llevan los dos ids.
 export const kitComponentService = {
-    getAll: async () => {
-        const [kitComponents,
-            //kits, components
-        ] = await Promise.all([
-            apiFetch<KitComponent[]>('/request-items', {
-                headers: { 'Content-Type': 'application/json' },
-                method: 'GET',
-            }),
-            //kitService.getAll(),
-            //componentService.getAll()
-        ]);
-
-        //const names = new Map(brands.map(brand => [brand.id, brand.name]))
-
-        return kitComponents.map(kitComponent => ({ ...kitComponent,
-            //brand: names.get(kitcomponent.brandId) ?? 'Unknown brand' 
-        }))
-        //return kitcomponents.map(kitcomponent => ({ ...kitcomponent, brand: names.get(kitcomponent.brandId) ?? 'Unknown brand' }))
-
-    },
-
-    getById: (id: number) => apiFetch<KitComponent>(`/request-items/${id}`, {
+    getAll: () => apiFetch<KitComponent[]>('/kit-components', {
         headers: { 'Content-Type': 'application/json' },
         method: 'GET',
     }),
 
-    create: (payload: KitComponentPayload) => apiFetch<KitComponent>('/request-items', {
+    getById: (kitId: number, componentId: number) => apiFetch<KitComponent>(`/kit-components/${kitId}/${componentId}`, {
+        headers: { 'Content-Type': 'application/json' },
+        method: 'GET',
+    }),
+
+    create: (payload: KitComponentPayload) => apiFetch<KitComponent>('/kit-components', {
+        headers: { 'Content-Type': 'application/json' },
         method: 'POST',
-        body: toFormData(payload),
+        body: JSON.stringify(payload),
     }),
 
-    update: (id: number, payload: KitComponentPayload) => apiFetch<KitComponent>(`/request-items/${id}`, {
+    update: (kitId: number, componentId: number, quantity: number) => apiFetch<KitComponent>(`/kit-components/${kitId}/${componentId}`, {
+        headers: { 'Content-Type': 'application/json' },
         method: 'PUT',
-        body: toFormData(payload),
+        body: JSON.stringify({ quantity }),
     }),
 
-    remove: (id: number) => apiFetch<void>(`/request-items/${id}`, {
+    remove: (kitId: number, componentId: number) => apiFetch<void>(`/kit-components/${kitId}/${componentId}`, {
         headers: { 'Content-Type': 'application/json' },
         method: 'DELETE',
     }),

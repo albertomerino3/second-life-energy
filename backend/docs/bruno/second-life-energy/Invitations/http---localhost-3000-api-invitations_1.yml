@@ -1,0 +1,36 @@
+info:
+  name: "http://localhost:3000/api/invitations_1"
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "http://localhost:3000/api/invitations"
+  body:
+    type: json
+    data: |-
+      {
+        "roleId": 2,
+        "email": "pepe@gmail.com"
+      }
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        bru.setVar("invitationId", res.body.id);
+    - type: tests
+      code: |-
+        test("Status code is 201", function () {
+          expect(res.status).to.equal(201);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

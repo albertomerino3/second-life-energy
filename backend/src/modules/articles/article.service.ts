@@ -127,7 +127,7 @@ export class ArticleService {
         }
     ) {
         await article.update(data, {
-            fields: ["categoryId", "createdById", "name", "description", "type", "specifications", "stock", "status"],
+            fields: ["categoryId", "name", "description", "type", "specifications", "stock", "status"],
         });
         return ArticleService.findById(article.id);
     }

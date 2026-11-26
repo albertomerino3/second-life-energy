@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { categoryService } from '../../categories/services/categoryService'
+import { articleCategoryService } from '../../articleCategory/services/articleCategory.Service'
 import { articleService } from '../services/articleService.js'
 import type { Article, ArticleListItem, ArticlePayload, CategoryOption } from '../types/article.js'
 
@@ -12,7 +12,7 @@ export function useArticles() {
     const load = useCallback(async () => {
         try {
             setError('')
-            const [articles, categoryList] = await Promise.all([articleService.getAll(), categoryService.getAll()])
+            const [articles, categoryList] = await Promise.all([articleService.getAll(), articleCategoryService.getAll()])
             setRawArticles(articles)
             setCategories(categoryList)
         } catch {

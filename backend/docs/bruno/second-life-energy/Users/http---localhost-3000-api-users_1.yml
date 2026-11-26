@@ -1,0 +1,49 @@
+info:
+  name: "http://localhost:3000/api/users_1"
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "http://localhost:3000/api/users"
+  body:
+    type: multipart-form
+    data:
+      - name: name
+        type: text
+        value: "Pepe"
+      - name: email
+        type: text
+        value: "pepe@gmail.com"
+      - name: password
+        type: text
+        value: "Demo1234!"
+      - name: isActive
+        type: text
+        value: "true"
+      - name: image
+        type: file
+        value:
+          - images/user.jpg
+        contentType: image/jpeg
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        bru.setVar("userId", res.body.id);
+    - type: tests
+      code: |-
+        test("Status code is 201", function () {
+          expect(res.status).to.equal(201);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

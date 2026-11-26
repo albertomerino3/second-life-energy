@@ -1,0 +1,35 @@
+info:
+  name: "http://localhost:3000/api/requests/{{requestId}}"
+  type: http
+  seq: 4
+
+http:
+  method: PUT
+  url: "http://localhost:3000/api/requests/{{requestId}}"
+  body:
+    type: json
+    data: |-
+      {
+        "contactName": "Pepe",
+        "contactEmail": "pepe@gmail.com",
+        "notes": "Solicitud de prueba",
+        "status": "confirmed"
+      }
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Status code is 200", function () {
+          expect(res.status).to.equal(200);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

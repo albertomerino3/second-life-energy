@@ -99,7 +99,7 @@ export class ResourceService {
             changes.publishedAt = new Date();
         }
         await resource.update(changes, {
-            fields: ["authorId", "title", "description", "type", "topic", "difficulty", "url", "status", "publishedAt"],
+            fields: ["title", "description", "type", "topic", "difficulty", "url", "status", "publishedAt"],
         });
         return ResourceService.findById(resource.id);
     }

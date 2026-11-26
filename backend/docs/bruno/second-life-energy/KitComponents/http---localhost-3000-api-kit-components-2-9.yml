@@ -1,0 +1,32 @@
+info:
+  name: "http://localhost:3000/api/kit-components/2/9"
+  type: http
+  seq: 4
+
+http:
+  method: PUT
+  url: "http://localhost:3000/api/kit-components/2/9"
+  body:
+    type: json
+    data: |-
+      {
+        "quantity": 3
+      }
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Status code is 200", function () {
+          expect(res.status).to.equal(200);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

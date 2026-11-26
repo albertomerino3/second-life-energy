@@ -1,0 +1,38 @@
+info:
+  name: "http://localhost:3000/api/articles/{{articleId}}"
+  type: http
+  seq: 4
+
+http:
+  method: PUT
+  url: "http://localhost:3000/api/articles/{{articleId}}"
+  body:
+    type: json
+    data: |-
+      {
+        "categoryId": 5,
+        "name": "Pantalla LCD 16x2",
+        "description": "Pantalla LCD recuperada y revisada",
+        "type": "component",
+        "specifications": "16x2, 5 V",
+        "stock": 25,
+        "status": "published"
+      }
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Status code is 200", function () {
+          expect(res.status).to.equal(200);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

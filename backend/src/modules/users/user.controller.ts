@@ -1,17 +1,14 @@
 import { Request, Response, NextFunction } from "express";
-import { unlink } from "node:fs/promises";
-import path from "node:path";
+import bcrypt from "bcryptjs";
 import { UserService } from "./user.service.js";
+import { removeImage } from "../../middlewares/upload-middleware.js";
 
-const UPLOADS_DIR = path.resolve("uploads");
-
-async function removeImage(filename?: string | null) {
-    if (!filename) return;
-    try {
-        await unlink(path.join(UPLOADS_DIR, filename));
-    } catch (error) {
-        console.error(`Failed to remove image (${filename}):`, error);
-    }
+// Con multipart/form-data (imagen) todo llega como texto: "true"/"false" hay que convertirlo.
+function parseBoolean(value: unknown): boolean | undefined | null {
+    if (value === undefined || value === "") return undefined;
+    if (value === true || value === "true") return true;
+    if (value === false || value === "false") return false;
+    return null;
 }
 
 export class UserController {
@@ -46,23 +43,24 @@ export class UserController {
     static async create(req: Request, res: Response, next: NextFunction) {
         let created = false;
         try {
-            const { name, email, passwordHash, isActive } = req.body;
-            if (!name || !email || !passwordHash) {
+            const { name, email, password } = req.body ?? {};
+            const isActive = parseBoolean(req.body?.isActive);
+            if (!name || !email || !password) {
                 res.status(400).json({
-                    message: "Name, email and passwordHash are required",
+                    message: "Name, email and password are required",
                 });
                 return;
             }
-            if (isActive !== undefined && typeof isActive !== "boolean") {
+            if (isActive === null || String(password).length < 8) {
                 res.status(400).json({
-                    message: "isActive must be a boolean",
+                    message: "isActive must be a boolean and password must have at least 8 characters",
                 });
                 return;
             }
             const user = await UserService.create({
-                name,
-                email,
-                passwordHash,
+                name: String(name).trim(),
+                email: String(email).trim(),
+                passwordHash: await bcrypt.hash(String(password), 10),
                 isActive,
                 filename: req.file?.filename ?? null,
             });
@@ -73,9 +71,7 @@ export class UserController {
         } catch (error) {
             next(error);
         } finally {
-            if (!created && req.file) {
-                await unlink(req.file.path).catch((error) => console.error("Failed to remove uploaded image", error));
-            }
+            if (!created && req.file) await removeImage(req.file.filename);
         }
     }
 
@@ -90,13 +86,29 @@ export class UserController {
                 });
                 return;
             }
+
+            const { name, email, password } = req.body ?? {};
+            const isActive = parseBoolean(req.body?.isActive);
+            if (isActive === null || (password !== undefined && password !== "" && String(password).length < 8)) {
+                res.status(400).json({
+                    message: "isActive must be a boolean and password must have at least 8 characters",
+                });
+                return;
+            }
+
+            const data: Parameters<typeof UserService.update>[1] = {};
+            if (name !== undefined) data.name = String(name).trim();
+            if (email !== undefined) data.email = String(email).trim();
+            if (isActive !== undefined) data.isActive = isActive;
+            // Contraseña vacía al editar = mantener la actual.
+            if (password) data.passwordHash = await bcrypt.hash(String(password), 10);
+
             const previousFilename = user.filename;
-            const data: Record<string, any> = { ...req.body };
-            if (req.file) { data.filename = req.file.filename };
+            if (req.file) data.filename = req.file.filename;
 
             const updatedUser = await UserService.update(user, data);
             updated = true;
-            if (req.file && previousFilename) {await removeImage(previousFilename)};
+            if (req.file) await removeImage(previousFilename);
 
             res.json(updatedUser);
         } catch (error) {
@@ -116,7 +128,9 @@ export class UserController {
                 });
                 return;
             }
+            const filename = user.filename;
             await UserService.delete(user);
+            await removeImage(filename);
             res.status(204).send();
         } catch (error) {
             next(error);

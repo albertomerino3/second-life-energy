@@ -2,7 +2,8 @@ import { clearSession, getSession } from './session'
 
 const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000/api')
 
-export function bicycleImageUrl(filename: string): string {
+// Las imágenes subidas se sirven en <backend>/images/<filename> (express.static en app.ts).
+export function imageUrl(filename: string): string {
     return `${API_URL.replace(/\/api\/?$/, '')}/images/${encodeURIComponent(filename)}`
 }
 
@@ -23,7 +24,7 @@ export async function apiFetch<T>(
         const body = await response.json().catch(() => null)
         const message = typeof body?.message === 'string' ? body.message : null
         throw new Error(response.status === 401 ?
-            'Incorrect username or password. Please sign in again.'
+            'Incorrect email or password. Please sign in again.'
             : message || `Could not complete the request (${response.status}).`);
     }
 

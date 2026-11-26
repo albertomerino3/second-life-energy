@@ -1,7 +1,10 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import type { FormEvent } from 'react'
 import Button from '../../../components/ui/Button'
+import { imageUrl } from '../../../services/api'
 import type { User, UserPayload } from '../types/user.js'
+
+const IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/avif']
 
 export default function UserFormDialog({ user, onSave, onClose }: {
     user: User | null
@@ -10,14 +13,18 @@ export default function UserFormDialog({ user, onSave, onClose }: {
 }) {
     const dialog = useRef<HTMLDialogElement>(null)
     const heading = useId()
+    const imageId = useId()
     const submitting = useRef(false)
     const [busy, setBusy] = useState(false)
     const [error, setError] = useState('')
     const [values, setValues] = useState(() => ({
         name: user?.name ?? '',
         email: user?.email ?? '',
+        password: '',
         isActive: user?.isActive ?? true,
     }))
+    const [image, setImage] = useState<File | undefined>()
+    const [preview, setPreview] = useState<string | undefined>()
 
     useEffect(() => {
         const element = dialog.current
@@ -25,11 +32,16 @@ export default function UserFormDialog({ user, onSave, onClose }: {
         return () => element?.close()
     }, [])
 
+    useEffect(() => {
+        return () => { if (preview) URL.revokeObjectURL(preview) }
+    }, [preview])
+
+    const currentImage = image ? preview : user?.filename ? imageUrl(user.filename) : undefined
+
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
         if (submitting.current) return
 
-        // find() devuelve el valor ya tipado como unión (o undefined si no es válido), sin necesidad de `as`.
         const name = values.name.trim()
         const email = values.email.trim()
 
@@ -37,12 +49,17 @@ export default function UserFormDialog({ user, onSave, onClose }: {
             setError('Check the name and the email.')
             return
         }
+        // Al crear la contraseña es obligatoria; al editar, vacía significa mantener la actual.
+        if ((!user && !values.password) || (values.password && values.password.length < 8)) {
+            setError('The password must have at least 8 characters.')
+            return
+        }
 
         submitting.current = true
         setBusy(true)
         setError('')
         try {
-            await onSave({ name, email, isActive: values.isActive })
+            await onSave({ name, email, isActive: values.isActive, password: values.password || undefined, image })
             onClose()
         } catch (caught) {
             setError(caught instanceof Error ? caught.message : 'Could not save the user. Please try again.')
@@ -71,11 +88,40 @@ export default function UserFormDialog({ user, onSave, onClose }: {
                         className={inputClass} value={values.email}
                         onChange={event => setValues(previous => ({ ...previous, email: event.target.value }))} />
                 </label>
+                <label className="block">
+                    {user ? 'New password (optional)' : 'Password'}
+                    <input name="password" type="password" autoComplete="new-password" required={!user} minLength={8}
+                        className={inputClass} value={values.password}
+                        onChange={event => setValues(previous => ({ ...previous, password: event.target.value }))} />
+                </label>
                 <label className="flex items-center gap-2">
                     <input name="isActive" type="checkbox" checked={values.isActive}
                         onChange={event => setValues(previous => ({ ...previous, isActive: event.target.checked }))} />
                     Active
                 </label>
+                <div className="space-y-2">
+                    <label htmlFor={imageId} className="block font-medium">Profile image</label>
+                    {currentImage && <img src={currentImage} alt="User preview" className="h-32 w-32 rounded-full border border-gray-200 object-cover" />}
+                    <input id={imageId} type="file" accept={IMAGE_TYPES.join(',')} className="block w-full text-sm"
+                        aria-describedby={`${imageId}-help`}
+                        onChange={event => {
+                            const file = event.target.files?.[0]
+                            if (file && (!IMAGE_TYPES.includes(file.type) || file.size > 5 * 1024 * 1024)) {
+                                setError('Choose a JPEG, PNG, WebP, GIF or AVIF image up to 5 MB.')
+                                event.target.value = ''
+                                setImage(undefined)
+                                setPreview(undefined)
+                                return
+                            }
+                            setError('')
+                            setImage(file)
+                            setPreview(file ? URL.createObjectURL(file) : undefined)
+                        }} />
+                    <p id={`${imageId}-help`} className="text-sm text-gray-600">
+                        JPEG, PNG, WebP, GIF or AVIF. Maximum 5 MB.
+                        {user && ' Leave empty to keep the current image.'}
+                    </p>
+                </div>
             </fieldset>
             {error && <p role="alert" className="text-red-600">{error}</p>}
             <div className="flex justify-end gap-2">

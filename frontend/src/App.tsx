@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
+import ArticleCategoriesPage from './features/articleCategory/pages/ArticleCategoriesPage'
 import ArticlesPage from './features/articles/pages/ArticlesPage'
 import AuditLogsPage from './features/audit-logs/pages/AuditLogsPage'
 import AuthPage from './features/auth/pages/AuthPage'
 import InvitationsPage from './features/invitations/pages/InvitationsPage'
 import ResourcesPage from './features/resources/pages/ResourcesPage'
+import RolesPage from './features/roles/pages/RolesPage'
 import SimulationsPage from './features/simulations/pages/SimulationsPage'
 import UsersPage from './features/users/pages/UsersPage'
 import { clearSession, getSession, SESSION_EVENT } from './services/session'
@@ -11,9 +13,11 @@ import { clearSession, getSession, SESSION_EVENT } from './services/session'
 // Una sola fuente de verdad: añadir una sección es añadir una línea aquí.
 const PAGES = {
   articles: { label: 'Articles', Component: ArticlesPage },
+  categories: { label: 'Categories', Component: ArticleCategoriesPage },
   resources: { label: 'Resources', Component: ResourcesPage },
   simulations: { label: 'Simulations', Component: SimulationsPage },
   invitations: { label: 'Invitations', Component: InvitationsPage },
+  roles: { label: 'Roles', Component: RolesPage },
   users: { label: 'Users', Component: UsersPage },
   'audit-logs': { label: 'Audit logs', Component: AuditLogsPage },
 } as const
@@ -38,7 +42,7 @@ function App() {
   const CurrentPage = PAGES[page].Component
   return <>
     <header className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 px-6 py-4">
-      <span className="font-semibold text-emerald-700">Bicycle Shop · {session.username}</span>
+      <span className="font-semibold text-emerald-700">Second Life Energy · {session.username}</span>
       <button type="button" onClick={clearSession} className="rounded-lg border border-slate-300 px-4 py-2 hover:bg-slate-100">Sign out</button>
     </header>
     <nav aria-label="Shop management" className="mx-auto flex max-w-6xl flex-wrap gap-2 px-4 pt-6 sm:px-6">

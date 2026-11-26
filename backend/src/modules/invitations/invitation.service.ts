@@ -57,7 +57,7 @@ export class InvitationService {
         }
     ) {
         return invitation.update(data, {
-            fields: ["invitedById", "roleId", "email", "tokenHash", "expiresAt", "usedAt"],
+            fields: ["roleId", "email", "expiresAt", "usedAt"],
         });
     }
 

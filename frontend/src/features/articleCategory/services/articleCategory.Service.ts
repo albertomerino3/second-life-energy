@@ -1,53 +1,31 @@
 import { apiFetch } from '../../../services/api'
-//import { parentCategoryService } from '../../requests/services/parentCategoryService'
 
-import type { ArticleCategory, ArticleCategoryPayload, } from '../types/articleCategory'
-
-function toFormData(payload: ArticleCategoryPayload) {
-    const form = new FormData()
-    form.set('name', String(payload.name))
-    form.set('description', String(payload.description))
-    form.set('parentCategoryId', String(payload.parentCategoryId))
-    return form
-}
+import type { ArticleCategory, ArticleCategoryPayload } from '../types/articleCategory'
 
 export const articleCategoryService = {
-    getAll: async () => {
-        const [articleCategorys,
-            //parentCategories
-        ] = await Promise.all([
-            apiFetch<ArticleCategory[]>('/request-items', {
-                headers: { 'Content-Type': 'application/json' },
-                method: 'GET',
-            }),
-            //parentCategoryService.getAll()
-        ]);
-
-        //const names = new Map(brands.map(brand => [brand.id, brand.name]))
-
-        return articleCategorys.map(articleCategory => ({ ...articleCategory,
-            //brand: names.get(articlecategory.brandId) ?? 'Unknown brand' 
-        }))
-        //return articlecategorys.map(articlecategory => ({ ...articlecategory, brand: names.get(articlecategory.brandId) ?? 'Unknown brand' }))
-
-    },
-
-    getById: (id: number) => apiFetch<ArticleCategory>(`/request-items/${id}`, {
+    getAll: () => apiFetch<ArticleCategory[]>('/article-categories', {
         headers: { 'Content-Type': 'application/json' },
         method: 'GET',
     }),
 
-    create: (payload: ArticleCategoryPayload) => apiFetch<ArticleCategory>('/request-items', {
+    getById: (id: number) => apiFetch<ArticleCategory>(`/article-categories/${id}`, {
+        headers: { 'Content-Type': 'application/json' },
+        method: 'GET',
+    }),
+
+    create: (payload: ArticleCategoryPayload) => apiFetch<ArticleCategory>('/article-categories', {
+        headers: { 'Content-Type': 'application/json' },
         method: 'POST',
-        body: toFormData(payload),
+        body: JSON.stringify(payload),
     }),
 
-    update: (id: number, payload: ArticleCategoryPayload) => apiFetch<ArticleCategory>(`/request-items/${id}`, {
+    update: (id: number, payload: ArticleCategoryPayload) => apiFetch<ArticleCategory>(`/article-categories/${id}`, {
+        headers: { 'Content-Type': 'application/json' },
         method: 'PUT',
-        body: toFormData(payload),
+        body: JSON.stringify(payload),
     }),
 
-    remove: (id: number) => apiFetch<void>(`/request-items/${id}`, {
+    remove: (id: number) => apiFetch<void>(`/article-categories/${id}`, {
         headers: { 'Content-Type': 'application/json' },
         method: 'DELETE',
     }),

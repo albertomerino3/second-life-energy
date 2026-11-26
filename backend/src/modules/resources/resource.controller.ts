@@ -37,10 +37,12 @@ export class ResourceController {
 
     static async create(req: Request, res: Response, next: NextFunction) {
         try {
-            const { authorId, title, description, type, topic, difficulty, url, status, publishedAt } = req.body;
-            if (!authorId || !title || !description || !type || !topic || !difficulty || !url) {
+            const { title, description, type, topic, difficulty, url, status, publishedAt } = req.body;
+            // El autor es el usuario autenticado (HU-08: cada docente gestiona sus propios recursos).
+            const authorId = res.locals.authUser.user.id;
+            if (!title || !description || !type || !topic || !difficulty || !url) {
                 res.status(400).json({
-                    message: "authorId, title, description, type, topic, difficulty and url are required",
+                    message: "title, description, type, topic, difficulty and url are required",
                 });
                 return;
             }

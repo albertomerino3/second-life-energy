@@ -26,7 +26,7 @@ export default function AuditLogFilterBar({ onApply }: { onApply: (filters: Audi
 
     return <form onSubmit={submit} aria-label="Filter audit logs" className="mb-6 grid items-end gap-3 sm:grid-cols-2 lg:grid-cols-6">
         <label className="block text-sm">Entity
-            <input {...bind('entity')} maxLength={100} placeholder="e.g. Bicycle" className={inputClass} />
+            <input {...bind('entity')} maxLength={100} placeholder="e.g. Article" className={inputClass} />
         </label>
         <label className="block text-sm">Action
             <input {...bind('action')} maxLength={30} placeholder="e.g. UPDATE" className={inputClass} />

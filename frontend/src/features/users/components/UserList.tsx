@@ -1,4 +1,5 @@
 import Button from '../../../components/ui/Button'
+import { imageUrl } from '../../../services/api'
 import type { User } from '../types/user'
 
 export default function UserList({ users, onEdit, onDelete }: {
@@ -13,6 +14,7 @@ export default function UserList({ users, onEdit, onDelete }: {
                 <tr>
                     <th scope="col" className="px-4 py-3 font-semibold">Name</th>
                     <th scope="col" className="px-4 py-3 font-semibold">Email</th>
+                    <th scope="col" className="px-4 py-3 font-semibold">Roles</th>
                     <th scope="col" className="px-4 py-3 font-semibold">Status</th>
                     <th scope="col" className="px-4 py-3 font-semibold">Created</th>
                     <th scope="col" className="px-4 py-3"><span className="sr-only">Actions</span></th>
@@ -20,8 +22,16 @@ export default function UserList({ users, onEdit, onDelete }: {
             </thead>
             <tbody className="divide-y divide-gray-100">
                 {users.map(user => <tr key={user.id}>
-                    <th scope="row" className="px-4 py-3 font-medium [overflow-wrap:anywhere]">{user.name}</th>
+                    <th scope="row" className="px-4 py-3 font-medium [overflow-wrap:anywhere]">
+                        <div className="flex items-center gap-3">
+                            {user.filename
+                                ? <img src={imageUrl(user.filename)} alt="" loading="lazy" className="h-10 w-10 shrink-0 rounded-full border border-gray-200 object-cover" />
+                                : <span aria-hidden="true" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-100 font-semibold text-emerald-800">{user.name.charAt(0).toUpperCase()}</span>}
+                            {user.name}
+                        </div>
+                    </th>
                     <td className="px-4 py-3 [overflow-wrap:anywhere]">{user.email}</td>
+                    <td className="px-4 py-3 capitalize">{user.roles?.map(role => role.name).join(', ') || '—'}</td>
                     <td className="px-4 py-3">
                         <span className={`rounded px-2 py-1 text-xs font-semibold ${user.isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
                             {user.isActive ? 'Active' : 'Inactive'}
