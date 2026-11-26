@@ -7,7 +7,7 @@ export default function UserList({ users, onEdit, onDelete }: {
     onEdit: (user: User) => void
     onDelete: (user: User) => void
 }) {
-    return <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white shadow-sm">
+    return <div className="relative overflow-x-auto rounded-lg border border-gray-200 bg-white shadow-sm">
         <table className="w-full text-left text-sm">
             <caption className="sr-only">Users</caption>
             <thead className="border-b border-gray-200 bg-gray-50">
@@ -22,7 +22,7 @@ export default function UserList({ users, onEdit, onDelete }: {
             </thead>
             <tbody className="divide-y divide-gray-100">
                 {users.map(user => <tr key={user.id}>
-                    <th scope="row" className="px-4 py-3 font-medium [overflow-wrap:anywhere]">
+                    <th scope="row" className="min-w-56 px-4 py-3 font-medium">
                         <div className="flex items-center gap-3">
                             {user.filename
                                 ? <img src={imageUrl(user.filename)} alt="" loading="lazy" className="h-10 w-10 shrink-0 rounded-full border border-gray-200 object-cover" />
@@ -30,7 +30,7 @@ export default function UserList({ users, onEdit, onDelete }: {
                             {user.name}
                         </div>
                     </th>
-                    <td className="px-4 py-3 [overflow-wrap:anywhere]">{user.email}</td>
+                    <td className="min-w-48 px-4 py-3 [overflow-wrap:anywhere]">{user.email}</td>
                     <td className="px-4 py-3 capitalize">{user.roles?.map(role => role.name).join(', ') || '—'}</td>
                     <td className="px-4 py-3">
                         <span className={`rounded px-2 py-1 text-xs font-semibold ${user.isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
