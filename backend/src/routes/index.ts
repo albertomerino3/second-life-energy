@@ -26,6 +26,7 @@ import stockMovementRoutes from "../modules/stock-movements/stock-movement.route
 import tagRoutes from "../modules/tags/tag.routes.js";
 import userRoleRoutes from "../modules/user-roles/user-role.routes.js";
 import userRoutes from "../modules/users/user.routes.js";
+import authRoutes from "../modules/auth/auth.routes.js";
 
 const router = Router();
 
@@ -55,5 +56,6 @@ router.use("/stock-movements", stockMovementRoutes);
 router.use("/tags", tagRoutes);
 router.use("/user-roles", userRoleRoutes);
 router.use("/users", userRoutes);
+router.use("/auth", authRoutes);
 
 export default router;

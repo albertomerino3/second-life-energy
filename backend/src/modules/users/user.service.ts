@@ -35,6 +35,7 @@ export class UserService {
         email: string;
         passwordHash: string;
         isActive?: boolean;
+        filename?: string | null;
     }) {
         const user = await User.create(data);
         return withoutPassword(user);
@@ -47,6 +48,7 @@ export class UserService {
             email?: string;
             passwordHash?: string;
             isActive?: boolean;
+            filename?: string | null;
         }
     ) {
         const editableFields = ["name", "email", "passwordHash", "isActive"] as const;

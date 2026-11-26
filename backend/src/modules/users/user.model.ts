@@ -17,6 +17,7 @@ export class User extends Model<
     declare email: string;
     declare passwordHash: string;
     declare isActive: CreationOptional<boolean>;
+    declare filename: string | null;
     declare createdAt: CreationOptional<Date>;
     declare updatedAt: CreationOptional<Date>;
 }
@@ -48,6 +49,10 @@ User.init(
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: true,
+        },
+        filename: {
+            type: DataTypes.TEXT,
+            allowNull: true,
         },
         createdAt: DataTypes.DATE,
         updatedAt: DataTypes.DATE,
